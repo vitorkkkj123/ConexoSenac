@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Co.Nexo SENAC - Funil de Leads, Diagnóstico & Mentorados</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#003163",
+            "primary-container": "#004587",
+            "on-primary": "#ffffff",
+            "secondary": "#954100",
+            "secondary-container": "#f37021",
+            "surface": "#f8f9fa",
+            "surface-container-low": "#f3f4f5",
+            "surface-container": "#edeeef",
+            "surface-container-highest": "#e1e3e4",
+            "on-surface": "#191c1d",
+            "on-surface-variant": "#414751",
+            "outline-variant": "#c1c7d3"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+    body { font-family: 'Inter', sans-serif; background-color: #f4f6f9; color: #191c1d; }
+    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f4f6f9] text-on-surface antialiased">
+  <div class="flex min-h-screen">
+    <!-- Sidebar Institucional -->
+    <aside class="w-64 h-screen shrink-0 bg-white border-r border-slate-200/80 flex flex-col fixed lg:sticky inset-y-0 top-0 left-0 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-50 shadow-sm">
+      <div class="p-5 flex flex-col h-full">
+        <!-- Logo Co.Nexo SENAC -->
+        <div class="flex items-center justify-between gap-3 mb-6 px-2">
+          <img src="img/logo-conexo.png" alt="Co.Nexo SENAC" class="h-12 w-auto object-contain"/>
+        </div>
+
+        <!-- Botão de Ação Rápida (Exclusivo Max) -->
+        <button data-role-only="atendimento" onclick="abrirModalImportarCSV()" class="mb-6 w-full py-3 px-4 bg-[#f37021] hover:bg-[#d95f16] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-orange-500/20 transition-all">
+          <span class="material-symbols-outlined text-lg">upload_file</span>
+          <span>Importar CSV (RD Station)</span>
+        </button>
+
+        <!-- Menu de Navegação (Renderizado via layout.js) -->
+        <nav class="flex-1 space-y-1.5"></nav>
+
+        <!-- Rodapé do Usuário Logado -->
+        <div class="pt-4 border-t border-slate-200 space-y-3">
+          <div id="sidebar-user-profile"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <div class="flex-1 min-w-0 flex flex-col min-h-screen w-full">
+      <!-- Top Header -->
+      <header class="sticky top-0 z-30 flex flex-wrap justify-between items-center gap-3 px-4 sm:px-8 py-3 min-h-[4rem] bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+        <div class="flex items-center gap-3 flex-1 min-w-[200px] max-w-md">
+          <div class="relative w-full">
+            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+            <input id="inputBusca" oninput="renderizarLista()" class="w-full pl-10 pr-4 py-2 bg-slate-100 hover:bg-slate-200/70 focus:bg-white rounded-xl text-xs font-medium border border-transparent focus:border-[#004587] focus:ring-2 focus:ring-[#004587]/15 outline-none transition-all" placeholder="Buscar por nome, WhatsApp, empresa ou CPF..." type="text"/>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <!-- Botões de Cabeçalho para Max (Atendimento) -->
+          <div data-role-only="atendimento" class="flex flex-wrap items-center gap-2">
+            <button onclick="abrirModalImportarCSV()" class="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all">
+              <span class="material-symbols-outlined text-base">cloud_upload</span>
+              <span class="hidden sm:inline">Importar CSV do RD Station</span>
+              <span class="sm:hidden">CSV RD</span>
+            </button>
+            <button onclick="abrirModalNovoAluno()" class="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-[#004587] hover:bg-[#003163] text-white rounded-xl text-xs font-bold shadow-sm transition-all">
+              <span class="material-symbols-outlined text-base">person_add</span>
+              <span class="hidden sm:inline">+ Cadastrar Lead Manual</span>
+              <span class="sm:hidden">+ Lead</span>
+            </button>
+          </div>
+
+          <!-- Botão Exportar CSV -->
+          <button onclick="exportarBaseCSV()" class="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors">
+            <span class="material-symbols-outlined text-base">download</span>
+            <span class="hidden sm:inline">Exportar Planilha</span>
+            <span class="sm:hidden">Exportar</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="p-4 sm:p-8 space-y-6 max-w-[1440px] w-full mx-auto">
+        <!-- ========================================================================= -->
+        <!-- VISÃO 1: MAX (ATENDIMENTO) - FUNIL GUIADO PASSO A PASSO                   -->
+        <!-- ========================================================================= -->
+        <section id="headerMax" data-role-only="atendimento" class="space-y-6">
+          <div class="bg-gradient-to-r from-[#003163] via-[#004587] to-[#005bb5] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div class="space-y-1.5 max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-[11px] font-bold uppercase tracking-wider">
+                  <span class="material-symbols-outlined text-sm">bolt</span>
+                  Central de Operações do Atendimento (Max)
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight">Jornada do Lead: RD Station ➔ 1º Encontro ➔ Mentoria</h1>
+                <p class="text-xs text-blue-100 leading-relaxed">
+                  Siga os <strong>3 passos abaixo</strong>: importe os cadastros vindos da Landing Page/RD Station, convide o empreendedor no WhatsApp para o <strong>1º Encontro (Diagnóstico)</strong> e, estando tudo certo, agende a <strong>Mentoria com a Professora Aline</strong>.
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 shrink-0">
+                <button onclick="abrirModalImportarCSV()" class="px-5 py-3 bg-[#f37021] hover:bg-[#e06012] text-white rounded-xl font-bold text-xs flex items-center gap-2 shadow-lg transition-all">
+                  <span class="material-symbols-outlined text-lg">upload_file</span>
+                  1. Importar CSV do RD Station
+                </button>
+                <a href="agenda.html" class="px-4 py-3 bg-white/15 hover:bg-white/25 text-white border border-white/25 rounded-xl font-bold text-xs flex items-center gap-2 transition-all">
+                  <span class="material-symbols-outlined text-lg">calendar_month</span>
+                  Ver Grade dos Professores
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 Cartões de Etapa Interativos (Funcionam como Filtro do Funil) -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Etapa 1: Leads RD Station -->
+            <button onclick="selecionarEtapaFunil('inscrito')" id="tabEtapa-inscrito" class="text-left p-5 rounded-2xl border-2 transition-all bg-white hover:shadow-md relative group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 font-extrabold text-[11px] uppercase tracking-wider">Passo 1 • Captação</span>
+                <span id="countEtapa-inscrito" class="text-2xl font-extrabold text-amber-600">0</span>
+              </div>
+              <h3 class="text-sm font-extrabold text-slate-900 mb-1 flex items-center gap-1.5">
+                Leads RD Station
+                <span class="material-symbols-outlined text-base text-amber-600">arrow_forward</span>
+              </h3>
+              <p class="text-[11px] text-slate-500 leading-snug">Cadastros da Landing Page aguardando seu contato no WhatsApp para o 1º encontro.</p>
+            </button>
+
+            <!-- Etapa 2: 1º Encontro / Diagnóstico -->
+            <button onclick="selecionarEtapaFunil('em_diagnostico')" id="tabEtapa-em_diagnostico" class="text-left p-5 rounded-2xl border-2 transition-all bg-white hover:shadow-md relative group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-blue-100 text-blue-900 font-extrabold text-[11px] uppercase tracking-wider">Passo 2 • Triagem Max</span>
+                <span id="countEtapa-em_diagnostico" class="text-2xl font-extrabold text-[#004587]">0</span>
+              </div>
+              <h3 class="text-sm font-extrabold text-slate-900 mb-1 flex items-center gap-1.5">
+                1º Encontro & Diagnóstico
+                <span class="material-symbols-outlined text-base text-[#004587]">arrow_forward</span>
+              </h3>
+              <p class="text-[11px] text-slate-500 leading-snug">Empreendedores convidados. Valide o diagnóstico inicial para liberar a mentoria.</p>
+            </button>
+
+            <!-- Etapa 3: Em Mentoria com Professor -->
+            <button onclick="selecionarEtapaFunil('em_mentoria')" id="tabEtapa-em_mentoria" class="text-left p-5 rounded-2xl border-2 transition-all bg-white hover:shadow-md relative group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 font-extrabold text-[11px] uppercase tracking-wider">Passo 3 • Mentoria</span>
+                <span id="countEtapa-em_mentoria" class="text-2xl font-extrabold text-emerald-600">0</span>
+              </div>
+              <h3 class="text-sm font-extrabold text-slate-900 mb-1 flex items-center gap-1.5">
+                Organizar Mentoria (Prof.)
+                <span class="material-symbols-outlined text-base text-emerald-600">check_circle</span>
+              </h3>
+              <p class="text-[11px] text-slate-500 leading-snug">Diagnóstico aprovado! Agende o horário do empreendedor com a Profa. Aline.</p>
+            </button>
+
+            <!-- Todos -->
+            <button onclick="selecionarEtapaFunil('todos')" id="tabEtapa-todos" class="text-left p-5 rounded-2xl border-2 transition-all bg-white hover:shadow-md relative group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-extrabold text-[11px] uppercase tracking-wider">Visão Completa</span>
+                <span id="countEtapa-todos" class="text-2xl font-extrabold text-slate-800">0</span>
+              </div>
+              <h3 class="text-sm font-extrabold text-slate-900 mb-1">Todos os Cadastros</h3>
+              <p class="text-[11px] text-slate-500 leading-snug">Visualizar simultaneamente todas as etapas do funil de atendimento.</p>
+            </button>
+          </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- VISÃO 2: ALINE (PROFESSORA / CONSULTORA)                                  -->
+        <!-- ========================================================================= -->
+        <section id="headerAline" data-role-only="consultor" class="space-y-6 hidden">
+          <div class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-700 rounded-2xl p-6 text-white shadow-lg">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div class="space-y-1.5">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-[11px] font-bold uppercase tracking-wider">
+                  <span class="material-symbols-outlined text-sm">school</span>
+                  Ambiente Exclusivo do Professor / Consultor
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight">Meus Mentorados & Diário de Evolução</h1>
+                <p class="text-xs text-emerald-100 max-w-2xl">
+                  Aqui estão os empreendedores que passaram pelo diagnóstico inicial com o Atendimento (Max) e foram encaminhados para sua mentoria. Clique em <strong>"Abrir Diário & Mentoria"</strong> para registrar os 5 encontros e a formalização MEI.
+                </p>
+              </div>
+              <div class="grid grid-cols-3 gap-3 shrink-0">
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-center">
+                  <p id="kpiAlineAgendados" class="text-2xl font-extrabold">0</p>
+                  <p class="text-[10px] uppercase tracking-wider font-bold text-emerald-100">Sessões Agendadas</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-center">
+                  <p id="kpiAlineMentoria" class="text-2xl font-extrabold">0</p>
+                  <p class="text-[10px] uppercase tracking-wider font-bold text-emerald-100">Em Mentoria</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-center">
+                  <p id="kpiAlineMEI" class="text-2xl font-extrabold">0</p>
+                  <p class="text-[10px] uppercase tracking-wider font-bold text-emerald-100">MEIs Formalizados</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- VISÃO 3: REGIS (COORDENAÇÃO)                                              -->
+        <!-- ========================================================================= -->
+        <section id="headerRegis" data-role-only="coordenador" class="space-y-4 hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-widest text-[#004587]">Visão da Coordenação (Regis)</span>
+              <h1 class="text-2xl font-extrabold text-slate-900 mt-0.5">Base Geral de Empreendedores & Auditoria</h1>
+              <p class="text-xs text-slate-500 mt-1">Consulte o andamento de todos os participantes do programa, filtre por etapa e exporte relatórios gerenciais.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <select id="filtroStatusRegis" onchange="selecionarEtapaFunil(this.value)" class="px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 outline-none">
+                <option value="todos">Todas as Etapas do Funil</option>
+                <option value="inscrito">1. Leads RD Station (Inscritos)</option>
+                <option value="em_diagnostico">2. Em 1º Encontro / Diagnóstico</option>
+                <option value="em_mentoria">3. Em Mentoria com Professor</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- LISTAGEM DE EMPREENDEDORES (TABELA INTELIGENTE ORIENTADA À AÇÃO)          -->
+        <!-- ========================================================================= -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <!-- Barra de Subtítulo da Lista -->
+          <div class="px-6 py-4 bg-slate-50/80 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span id="badgeEtapaAtiva" class="w-2.5 h-2.5 rounded-full bg-[#004587]"></span>
+              <h2 id="tituloListaAtiva" class="text-sm font-extrabold text-slate-800">Carregando empreendedores...</h2>
+            </div>
+            <div class="flex items-center gap-3">
+              <select id="filtroMei" onchange="renderizarLista()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 outline-none">
+                <option value="">Situação CNPJ/MEI: Todos</option>
+                <option value="informal">Informal (Sem CNPJ)</option>
+                <option value="mei_aberto">MEI Formalizado (Ativo)</option>
+                <option value="mei_inadimplente">MEI Inadimplente</option>
+              </select>
+              <span id="contadorRegistros" class="text-xs font-bold text-slate-500">0 registros</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50/50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <th class="py-3.5 px-6">Empreendedor / Origem</th>
+                  <th class="py-3.5 px-4">Contato WhatsApp</th>
+                  <th class="py-3.5 px-4">Negócio & Segmento</th>
+                  <th class="py-3.5 px-4">Etapa Atual no Funil</th>
+                  <th class="py-3.5 px-4">Próximo Encontro / Mentoria</th>
+                  <th class="py-3.5 px-6 text-right">Próximo Passo Recomendado</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaEmpreendedores" class="divide-y divide-slate-200/70 text-sm">
+                <tr>
+                  <td colspan="6" class="py-12 text-center text-slate-400 text-xs">Carregando base de empreendedores...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: IMPORTAR CSV DO RD STATION (COM PREVIEW E PLANILHA MODELO)       -->
+  <!-- ========================================================================= -->
+  <div id="modalImportarCSV" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl border border-slate-200">
+      <div class="p-6 bg-gradient-to-r from-[#003163] to-[#004587] text-white flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+            <span class="material-symbols-outlined text-2xl">cloud_upload</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-extrabold">Importar Leads do RD Station (.CSV)</h3>
+            <p class="text-xs text-blue-100">Traga todos os cadastros da Landing Page para o Co.Nexo em 1 clique</p>
+          </div>
+        </div>
+        <button onclick="fecharModalImportarCSV()" class="text-white/70 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+        <!-- Passo a Passo + Botão Planilha Exemplo -->
+        <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <p class="text-xs font-extrabold text-[#003163] flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">info</span>
+              Compatível com exportação padrão do RD Station Marketing / CRM
+            </p>
+            <p class="text-[11px] text-slate-600">
+              Reconhece automaticamente colunas como: <strong>Nome, Email, Telefone/Celular/WhatsApp, Empresa/Nome Fantasia, Ramo/Segmento e CPF</strong>.
+            </p>
+          </div>
+          <button type="button" onclick="baixarModeloCSVRDStation()" class="shrink-0 px-3.5 py-2 bg-white hover:bg-blue-100 text-[#004587] border border-blue-300 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-colors">
+            <span class="material-symbols-outlined text-base">download</span>
+            Baixar CSV Exemplo do RD Station
+          </button>
+        </div>
+
+        <!-- Área de Upload -->
+        <label for="inputArquivoCSV" class="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-[#f37021] bg-slate-50 hover:bg-orange-50/30 rounded-2xl p-6 cursor-pointer transition-all text-center">
+          <span class="material-symbols-outlined text-4xl text-[#f37021] mb-2">upload_file</span>
+          <span class="text-sm font-extrabold text-slate-800">Clique para selecionar o arquivo .CSV exportado do RD Station</span>
+          <span class="text-xs text-slate-500 mt-1">Aceita arquivos separados por vírgula (,) ou ponto-e-vírgula (;)</span>
+          <input id="inputArquivoCSV" type="file" accept=".csv,.txt" class="hidden" onchange="processarArquivoCSV(event)"/>
+        </label>
+
+        <!-- Preview dos Leads Lidos -->
+        <div id="boxPreviewCSV" class="hidden space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base text-emerald-600">check_circle</span>
+              Pré-visualização dos Leads Encontrados (<span id="countLeadsCSV">0</span>)
+            </h4>
+            <button type="button" onclick="limparPreviewCSV()" class="text-xs font-bold text-red-600 hover:underline">Trocar arquivo</button>
+          </div>
+          <div class="max-h-52 overflow-y-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-600 font-bold uppercase text-[10px] sticky top-0">
+                <tr>
+                  <th class="py-2 px-3">Nome Completo</th>
+                  <th class="py-2 px-3">WhatsApp</th>
+                  <th class="py-2 px-3">E-mail</th>
+                  <th class="py-2 px-3">Negócio / Segmento</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaPreviewCSV" class="divide-y divide-slate-200"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex justify-end gap-3">
+          <button type="button" onclick="fecharModalImportarCSV()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600 hover:bg-slate-100">Cancelar</button>
+          <button type="button" id="btnConfirmarImportacaoCSV" onclick="confirmarImportacaoCSV()" disabled class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-xs font-extrabold shadow-md flex items-center gap-2 transition-all">
+            <span class="material-symbols-outlined text-base">cloud_done</span>
+            Importar Leads para o Passo 1
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: REGISTRAR 1º ENCONTRO & APROVAR DIAGNÓSTICO (MAX)                -->
+  <!-- ========================================================================= -->
+  <div id="modalDiagnosticoMax" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200">
+      <div class="p-5 sm:p-6 bg-[#004587] text-white flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-2xl">fact_check</span>
+          <div>
+            <h3 class="text-base font-extrabold">1º Encontro: Diagnóstico Inicial (Max)</h3>
+            <p id="subtituloDiagnosticoMax" class="text-xs text-blue-100">Valide a triagem para liberar a Mentoria com o Professor</p>
+          </div>
+        </div>
+        <button onclick="fecharModalDiagnosticoMax()" class="text-white/70 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="formDiagnosticoMax" onsubmit="salvarDiagnosticoEAprovar(event)" class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <input type="hidden" id="diagEmpreendedorId"/>
+
+        <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 space-y-1">
+          <p class="font-bold">Como funciona esta etapa:</p>
+          <p class="text-[11px] leading-relaxed">Após conversar com o Lead vindo do RD Station e realizar o diagnóstico inicial de 1h, registre abaixo a percepção inicial do negócio. Ao aprovar, o empreendedor avança para o <strong>Passo 3 (Em Mentoria)</strong>.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Finanças & Controle (1 a 5)</label>
+            <select id="diagNotaFinancas" class="w-full px-3 py-2 bg-slate-100 rounded-lg text-xs font-bold">
+              <option value="1">1 - Inexistente / Informal</option>
+              <option value="2" selected>2 - Básico / Anotações</option>
+              <option value="3">3 - Intermediário</option>
+              <option value="4">4 - Estruturado</option>
+              <option value="5">5 - Avançado</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Marketing & Vendas (1 a 5)</label>
+            <select id="diagNotaMarketing" class="w-full px-3 py-2 bg-slate-100 rounded-lg text-xs font-bold">
+              <option value="1">1 - Sem divulgação</option>
+              <option value="2" selected>2 - Boca a boca / WhatsApp</option>
+              <option value="3">3 - Redes Sociais ativas</option>
+              <option value="4">4 - Funil estruturado</option>
+              <option value="5">5 - Escala digital</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Operações & Processos (1 a 5)</label>
+            <select id="diagNotaProcessos" class="w-full px-3 py-2 bg-slate-100 rounded-lg text-xs font-bold">
+              <option value="1">1 - Improvisado</option>
+              <option value="2" selected>2 - Em organização</option>
+              <option value="3">3 - Padronizado</option>
+              <option value="4">4 - Otimizado</option>
+              <option value="5">5 - Gestão completa</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Gestão & MEI (1 a 5)</label>
+            <select id="diagNotaGestao" class="w-full px-3 py-2 bg-slate-100 rounded-lg text-xs font-bold">
+              <option value="1">1 - Sem metas / Informal</option>
+              <option value="2" selected>2 - Quer formalizar MEI</option>
+              <option value="3">3 - Em estruturação</option>
+              <option value="4">4 - Metas claras</option>
+              <option value="5">5 - Alta maturidade</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Resumo do 1º Encontro / Dor Principal do Empreendedor *</label>
+          <textarea id="diagResumoMax" rows="3" required placeholder="Ex: Empreendedora tem boa clientela no bairro, mas mistura contas pessoais com as da loja e deseja ajuda na precificação e abertura do MEI..." class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs border border-slate-200 focus:bg-white focus:border-[#004587] outline-none"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex justify-end gap-2.5">
+          <button type="button" onclick="fecharModalDiagnosticoMax()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancelar</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-md flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base">verified</span>
+            Aprovar Diagnóstico e Liberar Mentoria
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: ORGANIZAR / AGENDAR MENTORIA COM O PROFESSOR (MAX)               -->
+  <!-- ========================================================================= -->
+  <div id="modalAgendarMentoriaMax" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200">
+      <div class="p-5 sm:p-6 bg-emerald-700 text-white flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-2xl">event_available</span>
+          <div>
+            <h3 class="text-base font-extrabold">Organizar Mentoria com o Professor</h3>
+            <p id="subtituloAgendarMax" class="text-xs text-emerald-100">Aloque o empreendedor na agenda da Professora Aline</p>
+          </div>
+        </div>
+        <button onclick="fecharModalAgendarMentoriaMax()" class="text-white/70 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="formAgendarMentoriaMax" onsubmit="confirmarAgendamentoMentoriaMax(event)" class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <input type="hidden" id="agendarAccessToken"/>
+        <input type="hidden" id="agendarEmpreendedorNome"/>
+        <input type="hidden" id="agendarEmpreendedorWhatsapp"/>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Professor(a) / Consultor(a) Responsável *</label>
+          <select id="selectProfessorMentoria" class="w-full px-3.5 py-2.5 bg-slate-100 rounded-xl text-xs font-bold text-slate-800 border border-slate-200"></select>
+        </div>
+
+        <!-- Opção A: Escolher um horário já aberto OU Criar horário na hora -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-slate-700">Escolha um Horário Disponível ou Defina Data/Hora *</label>
+            <button type="button" onclick="alternarModoNovoHorario()" id="btnAlternarNovoHorario" class="text-[11px] font-extrabold text-[#004587] hover:underline">
+              + Definir nova data/hora manualmente
+            </button>
+          </div>
+
+          <div id="boxSelectSlotExistente">
+            <select id="selectSlotDisponivelMax" class="w-full px-3.5 py-2.5 bg-slate-100 rounded-xl text-xs font-semibold text-slate-800 border border-slate-200"></select>
+          </div>
+
+          <div id="boxCriarSlotNaHora" class="hidden p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <p class="text-[11px] font-bold text-slate-700">Abrir horário na agenda da Professora e já alocar o aluno:</p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Data da Mentoria *</label>
+                <input id="inputDataMentoriaDireta" type="date" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold"/>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Horário de Início *</label>
+                <input id="inputHoraMentoriaDireta" type="time" value="14:00" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900">
+          Ao confirmar, a sessão de <strong>Mentoria (2h)</strong> será agendada com a Professora e você poderá enviar a confirmação com o link do Portal do Aluno via WhatsApp.
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex justify-end gap-2.5">
+          <button type="button" onclick="fecharModalAgendarMentoriaMax()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancelar</button>
+          <button type="submit" id="btnSubmitAgendarMentoriaMax" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-md flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base">check_circle</span>
+            Confirmar Agendamento da Mentoria
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: CADASTRAR LEAD MANUALMENTE                                       -->
+  <!-- ========================================================================= -->
+  <div id="modalNovoAluno" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200">
+      <div class="p-5 sm:p-6 bg-[#004587] text-white flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-2xl">person_add</span>
+          <div>
+            <h3 class="text-base font-extrabold">Cadastrar Lead Manualmente</h3>
+            <p class="text-xs text-blue-100">Inserir novo empreendedor no Passo 1 do Funil</p>
+          </div>
+        </div>
+        <button onclick="fecharModalNovoAluno()" class="text-white/70 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="formNovoAluno" onsubmit="salvarNovoAluno(event)" class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo *</label>
+            <input name="nomeCompleto" required minlength="3" placeholder="Ex: Maria Oliveira Santos" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-medium border border-transparent focus:bg-white focus:border-[#004587] outline-none"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">CPF (11 dígitos) *</label>
+            <input name="cpf" required placeholder="000.000.000-00" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-medium border border-transparent focus:bg-white focus:border-[#004587] outline-none"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp (com DDD) *</label>
+            <input name="whatsapp" required placeholder="(71) 99999-9999" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-medium border border-transparent focus:bg-white focus:border-[#004587] outline-none"/>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">E-mail</label>
+            <input name="email" type="email" placeholder="contato@exemplo.com.br" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-medium border border-transparent focus:bg-white focus:border-[#004587] outline-none"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Negócio</label>
+            <input name="nomeFantasia" placeholder="Ex: Doceria da Maria" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-medium border border-transparent focus:bg-white focus:border-[#004587] outline-none"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Ramo / Segmento</label>
+            <input name="ramoAtividade" placeholder="Ex: Gastronomia" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-medium border border-transparent focus:bg-white focus:border-[#004587] outline-none"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Origem do Cadastro</label>
+            <select name="origemLead" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-bold">
+              <option value="RD_Station">RD Station / Landing Page</option>
+              <option value="Balcao">Atendimento Balcão SENAC</option>
+              <option value="Indicacao">Indicação</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Situação CNPJ / MEI</label>
+            <select name="situacaoAtual" id="selectSituacaoNovoAluno" onchange="alternarCampoCnpjNovoAluno()" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-bold">
+              <option value="informal">Informal (Sem CNPJ)</option>
+              <option value="mei_aberto">MEI Formalizado (Com CNPJ)</option>
+              <option value="mei_inadimplente">MEI Inadimplente (Com CNPJ)</option>
+            </select>
+          </div>
+          <div class="md:col-span-2" id="boxCnpjNovoAluno">
+            <label id="labelCnpjNovoAluno" class="block text-xs font-bold text-slate-700 mb-1">CNPJ (14 dígitos — Obrigatório para MEI Formalizado/Inadimplente)</label>
+            <input name="cnpj" id="inputCnpjNovoAluno" placeholder="00.000.000/0001-00 (Deixe em branco se Informal)" class="w-full px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-medium border border-transparent focus:bg-white focus:border-[#004587] outline-none"/>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex justify-end gap-2.5">
+          <button type="button" onclick="fecharModalNovoAluno()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancelar</button>
+          <button type="submit" id="btnSalvarAluno" class="px-5 py-2.5 rounded-xl bg-[#004587] hover:bg-[#003163] text-white text-xs font-extrabold shadow-md">Salvar Cadastro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script>
+    let todosEmpreendedores = [];
+    let agendamentosAtivosPorAluno = {};
+    let etapaSelecionada = 'todos';
+    let leadsCSVBuffer = [];
+    let modoCriacaoDiretaSlot = false;
+
+    async function carregarBaseCompleta() {
+      try {
+        const user = getCurrentUser();
+        const role = user?.role || 'coordenador';
+
+        // Define a aba inicial inteligente conforme o perfil
+        if (etapaSelecionada === 'todos' && role === 'atendimento' && !window.__abaInicializada) {
+          etapaSelecionada = 'inscrito';
+          window.__abaInicializada = true;
+        }
+
+        const [resEmp, resAgendamentos] = await Promise.all([
+          apiFetch('/empreendedores'),
+          apiFetch('/agendamentos/todos?status=agendado').catch(() => ({ dados: [] }))
+        ]);
+
+        todosEmpreendedores = resEmp.dados || resEmp.itens || [];
+        agendamentosAtivosPorAluno = {};
+        (resAgendamentos.dados || []).forEach(ag => {
+          const empId = ag.empreendedorId?._id || ag.empreendedorId;
+          if (empId) {
+            agendamentosAtivosPorAluno[empId] = ag;
+          }
+        });
+
+        atualizarContadoresFunil();
+        renderizarLista();
+      } catch (err) {
+        console.error('Erro ao carregar base:', err);
+      }
+    }
+
+    function atualizarContadoresFunil() {
+      const cInscrito = todosEmpreendedores.filter(e => e.statusPrograma === 'inscrito').length;
+      const cDiag = todosEmpreendedores.filter(e => e.statusPrograma === 'em_diagnostico').length;
+      const cMentoria = todosEmpreendedores.filter(e => ['em_mentoria', 'concluido'].includes(e.statusPrograma)).length;
+      const cTodos = todosEmpreendedores.length;
+
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setEl('countEtapa-inscrito', cInscrito);
+      setEl('countEtapa-em_diagnostico', cDiag);
+      setEl('countEtapa-em_mentoria', cMentoria);
+      setEl('countEtapa-todos', cTodos);
+
+      // KPIs da Professora Aline
+      const qtdAgendados = Object.keys(agendamentosAtivosPorAluno).length;
+      const qtdMei = todosEmpreendedores.filter(e => e.negocio?.situacaoAtual === 'mei_aberto').length;
+      setEl('kpiAlineAgendados', qtdAgendados);
+      setEl('kpiAlineMentoria', cMentoria);
+      setEl('kpiAlineMEI', qtdMei);
+
+      // Destaca visualmente o card da etapa ativa no painel do Max
+      ['inscrito', 'em_diagnostico', 'em_mentoria', 'todos'].forEach(etapa => {
+        const card = document.getElementById(`tabEtapa-${etapa}`);
+        if (!card) return;
+        if (etapaSelecionada === etapa) {
+          card.className = 'text-left p-5 rounded-2xl border-2 border-[#004587] bg-blue-50/40 shadow-md transition-all relative group ring-2 ring-[#004587]/15';
+        } else {
+          card.className = 'text-left p-5 rounded-2xl border-2 border-slate-200/80 bg-white hover:border-slate-300 hover:shadow-sm transition-all relative group';
+        }
+      });
+    }
+
+    function selecionarEtapaFunil(etapa) {
+      etapaSelecionada = etapa;
+      atualizarContadoresFunil();
+      renderizarLista();
+    }
+
+    function filtrarDadosAtuais() {
+      const user = getCurrentUser();
+      const role = user?.role || 'coordenador';
+      const termo = (document.getElementById('inputBusca')?.value || '').toLowerCase().trim();
+      const situacaoMei = document.getElementById('filtroMei')?.value || '';
+
+      return todosEmpreendedores.filter(emp => {
+        const matchTexto = !termo ||
+          (emp.nomeCompleto || '').toLowerCase().includes(termo) ||
+          (emp.cpf || '').includes(termo) ||
+          (emp.whatsapp || '').includes(termo) ||
+          (emp.negocio?.nomeFantasia || '').toLowerCase().includes(termo) ||
+          (emp.negocio?.ramoAtividade || '').toLowerCase().includes(termo);
+
+        const matchMei = !situacaoMei || emp.negocio?.situacaoAtual === situacaoMei;
+
+        let matchEtapa = true;
+        if (etapaSelecionada === 'inscrito') {
+          matchEtapa = emp.statusPrograma === 'inscrito';
+        } else if (etapaSelecionada === 'em_diagnostico') {
+          matchEtapa = emp.statusPrograma === 'em_diagnostico';
+        } else if (etapaSelecionada === 'em_mentoria') {
+          matchEtapa = ['em_mentoria', 'concluido'].includes(emp.statusPrograma);
+        }
+
+        return matchTexto && matchMei && matchEtapa;
+      });
+    }
+
+    function renderizarLista() {
+      const user = getCurrentUser();
+      const role = user?.role || 'coordenador';
+      const filtrados = filtrarDadosAtuais();
+
+      // Atualiza título contextual da barra
+      const titulosEtapa = {
+        inscrito: 'Passo 1: Novos Leads do RD Station (Aguardando Convite para 1º Encontro)',
+        em_diagnostico: 'Passo 2: Em 1º Encontro / Diagnóstico Inicial com Max',
+        em_mentoria: 'Passo 3: Aprovados em Mentoria (Agendamento e Acompanhamento com Professor)',
+        todos: role === 'consultor' ? 'Empreendedores da Mentoria SENAC' : 'Todos os Empreendedores Cadastrados'
+      };
+      document.getElementById('tituloListaAtiva').textContent = titulosEtapa[etapaSelecionada] || titulosEtapa.todos;
+      document.getElementById('contadorRegistros').textContent = `${filtrados.length} participante(s)`;
+
+      const tbody = document.getElementById('tabelaEmpreendedores');
+      if (filtrados.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-12 px-6 text-center">
+              <div class="max-w-md mx-auto space-y-3">
+                <span class="material-symbols-outlined text-4xl text-slate-300">inbox</span>
+                <p class="text-sm font-bold text-slate-700">Nenhum empreendedor nesta etapa no momento.</p>
+                ${role === 'atendimento' && etapaSelecionada === 'inscrito' ? `
+                  <p class="text-xs text-slate-500">Importe a planilha CSV do RD Station ou cadastre um novo lead manualmente para iniciar o fluxo.</p>
+                  <button onclick="abrirModalImportarCSV()" class="mt-2 inline-flex items-center gap-1.5 px-4 py-2 bg-[#f37021] text-white rounded-xl text-xs font-bold shadow-sm">
+                    <span class="material-symbols-outlined text-sm">upload_file</span>
+                    Importar CSV do RD Station
+                  </button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtrados.map(emp => {
+        const agendamentoAtivo = agendamentosAtivosPorAluno[emp._id];
+        const nomeSeguro = (emp.nomeCompleto || '').replace(/'/g, "\\'");
+
+        // Badge de Origem
+        const isRD = emp.origemLead === 'RD_Station' || emp.origemLead === 'LandingPage_SENAC';
+        const badgeOrigem = isRD
+          ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-orange-100 text-orange-800 text-[10px] font-extrabold">RD Station</span>`
+          : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-semibold">${emp.origemLead || 'Balcão'}</span>`;
+
+        // Badge de Etapa do Funil
+        let badgeEtapa = '';
+        if (emp.statusPrograma === 'inscrito') {
+          badgeEtapa = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 font-bold text-xs"><span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>1. Lead RD (Novo)</span>`;
+        } else if (emp.statusPrograma === 'em_diagnostico') {
+          badgeEtapa = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-100 text-blue-900 font-bold text-xs"><span class="w-1.5 h-1.5 rounded-full bg-[#004587]"></span>2. Em Diagnóstico</span>`;
+        } else if (emp.statusPrograma === 'em_mentoria') {
+          badgeEtapa = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 font-bold text-xs"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>3. Em Mentoria</span>`;
+        } else if (emp.statusPrograma === 'concluido') {
+          badgeEtapa = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-100 text-purple-900 font-bold text-xs">Concluído</span>`;
+        } else {
+          badgeEtapa = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-100 text-red-800 font-bold text-xs">Bloqueado</span>`;
+        }
+
+        // Badge MEI
+        const isMei = emp.negocio?.situacaoAtual === 'mei_aberto';
+        const badgeMei = isMei
+          ? `<span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">✓ MEI Formalizado</span>`
+          : `<span class="inline-block mt-1 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-semibold">Informal (Sem CNPJ)</span>`;
+
+        // Coluna Próximo Encontro
+        let infoAgendamento = `<span class="text-xs text-slate-400">Sem horário marcado</span>`;
+        if (agendamentoAtivo) {
+          const dtStr = formatDate(agendamentoAtivo.dataHoraInicio);
+          const profNome = agendamentoAtivo.consultorId?.nome || 'Profa. Aline';
+          infoAgendamento = `
+            <div class="space-y-0.5">
+              <span class="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-700">
+                <span class="material-symbols-outlined text-sm">event_available</span>
+                ${dtStr}
+              </span>
+              <p class="text-[11px] text-slate-500">${profNome}</p>
+            </div>
+          `;
+        }
+
+        // Coluna de Ações Guiadas por Perfil e Etapa
+        let botoesAcao = '';
+
+        if (role === 'atendimento') {
+          if (emp.statusPrograma === 'inscrito') {
+            // PASSO 1 -> Convidar no WhatsApp para o 1º Encontro e avançar para Passo 2
+            botoesAcao = `
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="convidarLeadParaDiagnostico('${emp._id}', '${nomeSeguro}', '${emp.whatsapp}')" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all" title="Envia convite no WhatsApp e move para o Passo 2">
+                  <span class="material-symbols-outlined text-base">chat</span>
+                  1. Convidar no WhatsApp
+                </button>
+                <button onclick="abrirModalDiagnosticoMax('${emp._id}', '${nomeSeguro}')" class="px-3 py-2 rounded-xl bg-[#004587] hover:bg-[#003163] text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-all" title="Registrar 1º Encontro e aprovar para Mentoria">
+                  <span class="material-symbols-outlined text-base">fact_check</span>
+                  Registrar Diagnóstico
+                </button>
+              </div>
+            `;
+          } else if (emp.statusPrograma === 'em_diagnostico') {
+            // PASSO 2 -> Validar Diagnóstico e Liberar para Mentoria
+            botoesAcao = `
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="abrirModalDiagnosticoMax('${emp._id}', '${nomeSeguro}')" class="px-3.5 py-2 rounded-xl bg-[#004587] hover:bg-[#003163] text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition-all">
+                  <span class="material-symbols-outlined text-base">verified</span>
+                  2. Aprovar Diagnóstico ➔ Mentoria
+                </button>
+              </div>
+            `;
+          } else {
+            // PASSO 3 -> Em Mentoria: Agendar com Professor (Aline) ou Enviar Link do Portal
+            botoesAcao = `
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="abrirModalAgendarMentoriaMax('${emp.accessToken}', '${nomeSeguro}', '${emp.whatsapp}')" class="px-3.5 py-2 rounded-xl bg-[#f37021] hover:bg-[#d95f16] text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition-all">
+                  <span class="material-symbols-outlined text-base">calendar_add_on</span>
+                  ${agendamentoAtivo ? 'Novo Agendamento' : '3. Agendar c/ Professor'}
+                </button>
+                <button onclick="enviarPortalAlunoWhatsApp('${nomeSeguro}', '${emp.whatsapp}', '${emp.accessToken}')" class="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors" title="Enviar Link do Portal Mobile para o Aluno">
+                  <span class="material-symbols-outlined text-base">share</span>
+                </button>
+              </div>
+            `;
+          }
+        } else if (role === 'consultor') {
+          // AÇÃO EXCLUSIVA DA PROFESSORA ALINE: Abrir o Diário de Mentoria
+          botoesAcao = `
+            <div class="flex items-center justify-end gap-2">
+              <a href="ficha.html?id=${emp._id}" class="px-4 py-2 rounded-xl bg-[#004587] hover:bg-[#003163] text-white text-xs font-extrabold inline-flex items-center gap-1.5 shadow-sm transition-all">
+                <span class="material-symbols-outlined text-base">menu_book</span>
+                Abrir Diário & Mentoria ➔
+              </a>
+            </div>
+          `;
+        } else {
+          // AÇÃO DO COORDENADOR REGIS: Visualizar status
+          botoesAcao = `
+            <span class="text-xs font-semibold text-slate-500">Registrado em ${formatOnlyDate(emp.createdAt)}</span>
+          `;
+        }
+
+        return `
+          <tr class="hover:bg-slate-50/90 transition-colors">
+            <td class="py-4 px-6">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-[#004587]/10 text-[#004587] flex items-center justify-center font-headline font-extrabold text-xs shrink-0">
+                  ${(emp.nomeCompleto || 'E').substring(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <p class="font-bold text-slate-900 text-xs">${emp.nomeCompleto}</p>
+                    ${badgeOrigem}
+                  </div>
+                  <p class="text-[11px] text-slate-500">CPF: ${formatCPF(emp.cpf)} ${emp.email ? `• ${emp.email}` : ''}</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-4 px-4">
+              <p class="text-xs font-bold text-slate-800">${formatPhone(emp.whatsapp)}</p>
+            </td>
+            <td class="py-4 px-4">
+              <p class="font-bold text-slate-800 text-xs">${emp.negocio?.nomeFantasia || 'Negócio em Estruturação'}</p>
+              <p class="text-[11px] text-slate-500">${emp.negocio?.ramoAtividade || 'Segmento Geral'}</p>
+              ${badgeMei}
+            </td>
+            <td class="py-4 px-4">
+              ${badgeEtapa}
+            </td>
+            <td class="py-4 px-4">
+              ${infoAgendamento}
+            </td>
+            <td class="py-4 px-6 text-right">
+              ${botoesAcao}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // FLUXO GUIADO DO MAX: PASSO 1 -> PASSO 2 -> PASSO 3
+    // =========================================================================
+
+    // Passo 1: Max clica em "1. Convidar no WhatsApp" -> Abre WhatsApp e já move o Lead para "Em Diagnóstico" (Passo 2)
+    async function convidarLeadParaDiagnostico(id, nome, whatsapp) {
+      const msg = `Olá, *${nome}*! Tudo bem? Aqui é o *Max*, do atendimento do programa *Co.Nexo SENAC*.\n\nRecebemos o seu cadastro na nossa página e queremos convidar você para o nosso *1º Encontro de Diagnóstico Empresarial Gratuito* (1h) aqui no SENAC!\n\nQual o melhor dia e turno para agendarmos essa nossa primeira conversa?`;
+      window.open(gerarLinkWhatsApp(whatsapp, msg), '_blank');
+
+      try {
+        await apiFetch(`/empreendedores/${id}/etapa`, {
+          method: 'PATCH',
+          body: JSON.stringify({ statusPrograma: 'em_diagnostico' })
+        });
+        showToast(`${nome} convidado(a) e movido(a) para o Passo 2 (1º Encontro & Diagnóstico)!`, 'success');
+        await carregarBaseCompleta();
+      } catch (err) {}
+    }
+
+    // Passo 2: Modal para Max registrar o 1º Encontro (Diagnóstico) e Aprovar para Mentoria
+    function abrirModalDiagnosticoMax(id, nome) {
+      document.getElementById('diagEmpreendedorId').value = id;
+      document.getElementById('subtituloDiagnosticoMax').textContent = `Empreendedor(a): ${nome}`;
+      document.getElementById('diagResumoMax').value = '';
+      const modal = document.getElementById('modalDiagnosticoMax');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function fecharModalDiagnosticoMax() {
+      const modal = document.getElementById('modalDiagnosticoMax');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function salvarDiagnosticoEAprovar(event) {
+      event.preventDefault();
+      const id = document.getElementById('diagEmpreendedorId').value;
+      const resumo = document.getElementById('diagResumoMax').value.trim();
+
+      const notasIniciais = {
+        financas: Number(document.getElementById('diagNotaFinancas').value),
+        vendas: Number(document.getElementById('diagNotaMarketing').value),
+        operacoes: Number(document.getElementById('diagNotaProcessos').value),
+        formalizacao: Number(document.getElementById('diagNotaGestao').value)
+      };
+
+      try {
+        // 1. Registra o 1º Encontro (Diagnóstico Inicial realizado com Max) no Diário
+        await apiFetch(`/diarios/${id}/encontro/1`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            status: 'realizado',
+            diagnosticoSituacional: `[1º Encontro / Diagnóstico Inicial - Max] ${resumo}`,
+            checklistPlanoAcao: [
+              { descricao: 'Comparecer à 1ª sessão de Mentoria Especializada com a Professora Aline', concluido: false }
+            ]
+          })
+        });
+
+        // 2. Atualiza statusPrograma para 'em_mentoria' e salva a maturidade inicial
+        await apiFetch(`/empreendedores/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            statusPrograma: 'em_mentoria',
+            maturidadeInicial: notasIniciais,
+            maturidade: notasIniciais
+          })
+        });
+
+        fecharModalDiagnosticoMax();
+        showToast('Diagnóstico aprovado! O empreendedor foi liberado para o Passo 3 (Mentoria com Professor).', 'success');
+        etapaSelecionada = 'em_mentoria';
+        await carregarBaseCompleta();
+      } catch (err) {}
+    }
+
+    // Passo 3: Max agenda a Mentoria com a Professora Aline direto da tela
+    async function abrirModalAgendarMentoriaMax(accessToken, nome, whatsapp) {
+      document.getElementById('agendarAccessToken').value = accessToken;
+      document.getElementById('agendarEmpreendedorNome').value = nome;
+      document.getElementById('agendarEmpreendedorWhatsapp').value = whatsapp;
+      document.getElementById('subtituloAgendarMax').textContent = `Agendar mentoria de ${nome}`;
+
+      // Data padrão: amanhã
+      const amanha = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      document.getElementById('inputDataMentoriaDireta').value = amanha;
+
+      const modal = document.getElementById('modalAgendarMentoriaMax');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      // Carrega professores (Aline) e slots disponíveis
+      try {
+        const [resProf, resSlots] = await Promise.all([
+          apiFetch('/auth/consultores'),
+          apiFetch('/agendamentos/disponiveis')
+        ]);
+
+        const profs = resProf.dados || [];
+        const selectProf = document.getElementById('selectProfessorMentoria');
+        selectProf.innerHTML = profs.map(p => `<option value="${p._id}">${p.nome}</option>`).join('');
+
+        const slots = (resSlots.dados || []).filter(s => s.tipo === 'mentoria_2h');
+        const selectSlot = document.getElementById('selectSlotDisponivelMax');
+
+        if (slots.length === 0) {
+          // Se não houver vaga aberta na grade, já abre automaticamente o criador de horário na hora!
+          modoCriacaoDiretaSlot = true;
+          atualizarVisibilidadeModoSlot();
+        } else {
+          modoCriacaoDiretaSlot = false;
+          atualizarVisibilidadeModoSlot();
+          selectSlot.innerHTML = slots.map(s => {
+            const dt = formatDate(s.dataHoraInicio);
+            const prof = s.consultorId?.nome || 'Profa. Aline';
+            return `<option value="${s._id}">${dt} — Mentoria (2h) com ${prof}</option>`;
+          }).join('');
+        }
+      } catch (err) {}
+    }
+
+    function alternarModoNovoHorario() {
+      modoCriacaoDiretaSlot = !modoCriacaoDiretaSlot;
+      atualizarVisibilidadeModoSlot();
+    }
+
+    function atualizarVisibilidadeModoSlot() {
+      const boxExistente = document.getElementById('boxSelectSlotExistente');
+      const boxNovo = document.getElementById('boxCriarSlotNaHora');
+      const btn = document.getElementById('btnAlternarNovoHorario');
+
+      if (modoCriacaoDiretaSlot) {
+        boxExistente.classList.add('hidden');
+        boxNovo.classList.remove('hidden');
+        btn.textContent = 'Escolher horário já existente na grade';
+      } else {
+        boxExistente.classList.remove('hidden');
+        boxNovo.classList.add('hidden');
+        btn.textContent = '+ Definir nova data/hora manualmente';
+      }
+    }
+
+    function fecharModalAgendarMentoriaMax() {
+      const modal = document.getElementById('modalAgendarMentoriaMax');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function confirmarAgendamentoMentoriaMax(event) {
+      event.preventDefault();
+      const accessToken = document.getElementById('agendarAccessToken').value;
+      const nome = document.getElementById('agendarEmpreendedorNome').value;
+      const whatsapp = document.getElementById('agendarEmpreendedorWhatsapp').value;
+      const consultorId = document.getElementById('selectProfessorMentoria').value;
+      let slotId = document.getElementById('selectSlotDisponivelMax').value;
+
+      try {
+        // Se Max escolheu definir data e hora na hora, cria o slot da Profa. Aline primeiro
+        if (modoCriacaoDiretaSlot || !slotId) {
+          const dataStr = document.getElementById('inputDataMentoriaDireta').value;
+          const horaStr = document.getElementById('inputHoraMentoriaDireta').value;
+          const dataHoraInicio = new Date(`${dataStr}T${horaStr}:00`).toISOString();
+
+          const novoSlotRes = await apiFetch('/agendamentos/slots', {
+            method: 'POST',
+            body: JSON.stringify({
+              consultorId,
+              tipo: 'mentoria_2h',
+              dataHoraInicio,
+              observacoesAtendimento: `Horário organizado por Max para ${nome}`
+            })
+          });
+          slotId = novoSlotRes.dados._id;
+        }
+
+        // Reserva o slot para o empreendedor
+        const resReserva = await apiFetch(`/agendamentos/reservar`, {
+          method: 'POST',
+          body: JSON.stringify({ slotId, accessToken })
+        });
+
+        fecharModalAgendarMentoriaMax();
+        showToast(`Mentoria de ${nome} agendada com sucesso com a Professora!`, 'success');
+        await carregarBaseCompleta();
+
+        // Oferece envio imediato no WhatsApp
+        const dtFormatada = formatDate(resReserva.dados?.agendamento?.dataHoraInicio);
+        const linkPortal = `${window.location.origin}/agendar.html?token=${accessToken}`;
+        const msg = `Olá, *${nome}*! Aqui é do *Co.Nexo SENAC*.\n\nSua *Mentoria Empresarial (2h)* com a Professora foi agendada para *${dtFormatada}*!\n\nAcesse seu Portal do Aluno para confirmar presença e acompanhar suas tarefas:\n${linkPortal}`;
+        window.open(gerarLinkWhatsApp(whatsapp, msg), '_blank');
+      } catch (err) {}
+    }
+
+    function enviarPortalAlunoWhatsApp(nome, whatsapp, token) {
+      const link = `${window.location.origin}/agendar.html?token=${token}`;
+      const msg = `Olá, *${nome}*! Acesse seu Portal do Empreendedor *Co.Nexo SENAC* para acompanhar seus horários de mentoria e tarefas:\n\n${link}`;
+      window.open(gerarLinkWhatsApp(whatsapp, msg), '_blank');
+    }
+
+    // =========================================================================
+    // IMPORTADOR DE CSV DO RD STATION
+    // =========================================================================
+    function abrirModalImportarCSV() {
+      limparPreviewCSV();
+      const modal = document.getElementById('modalImportarCSV');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function fecharModalImportarCSV() {
+      const modal = document.getElementById('modalImportarCSV');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function limparPreviewCSV() {
+      leadsCSVBuffer = [];
+      document.getElementById('inputArquivoCSV').value = '';
+      document.getElementById('boxPreviewCSV').classList.add('hidden');
+      document.getElementById('btnConfirmarImportacaoCSV').disabled = true;
+    }
+
+    function baixarModeloCSVRDStation() {
+      const cabecalhos = ['Nome', 'Email', 'Celular', 'Empresa', 'Segmento', 'CPF'];
+      const linhasExemplo = [
+        ['Camila Rocha Lima', 'camila.rocha@email.com', '71991234567', 'Ateliê Doce Encanto', 'Confeitaria & Eventos', '12345678909'],
+        ['Marcos Vinícius Souza', 'marcos.souza@email.com', '71988776655', 'MV Tech Assistência', 'Tecnologia & Reparos', '98765432100'],
+        ['Juliana Ferreira Costa', 'juliana.costa@email.com', '71992345678', 'Estética Bela Pele', 'Beleza & Estética', '45678912301'],
+        ['Roberto Carlos Santana', 'roberto.santana@email.com', '71987654321', 'Padaria Pão Quente', 'Panificação', '32165498702']
+      ];
+      exportarParaCSV('rd-station-leads-conexo-exemplo.csv', cabecalhos, linhasExemplo);
+    }
+
+    function parseLinhaCSV(linha, delimitador) {
+      const resultado = [];
+      let atual = '';
+      let dentroAspas = false;
+      for (let i = 0; i < linha.length; i++) {
+        const char = linha[i];
+        if (char === '"') {
+          dentroAspas = !dentroAspas;
+        } else if (char === delimitador && !dentroAspas) {
+          resultado.push(atual.trim());
+          atual = '';
+        } else {
+          atual += char;
+        }
+      }
+      resultado.push(atual.trim());
+      return resultado;
+    }
+
+    function processarArquivoCSV(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const texto = e.target.result || '';
+        const linhas = texto.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        if (linhas.length < 2) {
+          showToast('O arquivo CSV está vazio ou não contém linhas de dados.', 'danger');
+          return;
+        }
+
+        // Detecta delimitador (; ou ,)
+        const delimitador = linhas[0].includes(';') ? ';' : ',';
+        const cabecalhos = parseLinhaCSV(linhas[0], delimitador).map(h =>
+          h.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '')
+        );
+
+        const acharIndice = (possiveis) => cabecalhos.findIndex(c => possiveis.some(p => c.includes(p)));
+        const idxNome = acharIndice(['nome', 'name', 'lead', 'empreendedor', 'participante']);
+        const idxEmail = acharIndice(['email', 'mail']);
+        const idxTel = acharIndice(['celular', 'whatsapp', 'telefone', 'phone', 'fone', 'contato']);
+        const idxEmpresa = acharIndice(['empresa', 'fantasia', 'negocio', 'company']);
+        const idxRamo = acharIndice(['segmento', 'ramo', 'setor', 'atividade', 'area']);
+        const idxCpf = acharIndice(['cpf', 'documento']);
+
+        leadsCSVBuffer = [];
+        for (let i = 1; i < linhas.length; i++) {
+          const cols = parseLinhaCSV(linhas[i], delimitador);
+          if (cols.length === 0) continue;
+
+          const nomeCompleto = (idxNome >= 0 ? cols[idxNome] : cols[0]) || '';
+          const email = (idxEmail >= 0 ? cols[idxEmail] : '') || '';
+          const whatsapp = (idxTel >= 0 ? cols[idxTel] : cols[1] || '71999990000') || '71999990000';
+          const nomeFantasia = (idxEmpresa >= 0 ? cols[idxEmpresa] : '') || '';
+          const ramoAtividade = (idxRamo >= 0 ? cols[idxRamo] : '') || '';
+          const cpf = (idxCpf >= 0 ? cols[idxCpf] : '') || '';
+
+          if (nomeCompleto && nomeCompleto.length >= 2) {
+            leadsCSVBuffer.push({
+              nomeCompleto,
+              email,
+              whatsapp,
+              nomeFantasia,
+              ramoAtividade,
+              cpf
+            });
+          }
+        }
+
+        if (leadsCSVBuffer.length === 0) {
+          showToast('Não foi possível identificar leads válidos na planilha.', 'danger');
+          return;
+        }
+
+        document.getElementById('countLeadsCSV').textContent = leadsCSVBuffer.length;
+        document.getElementById('tabelaPreviewCSV').innerHTML = leadsCSVBuffer.map(l => `
+          <tr>
+            <td class="py-2 px-3 font-bold text-slate-800">${l.nomeCompleto}</td>
+            <td class="py-2 px-3 text-slate-600">${formatPhone(l.whatsapp)}</td>
+            <td class="py-2 px-3 text-slate-500">${l.email || '-'}</td>
+            <td class="py-2 px-3 text-slate-600">${l.nomeFantasia || '-'} ${l.ramoAtividade ? `(${l.ramoAtividade})` : ''}</td>
+          </tr>
+        `).join('');
+
+        document.getElementById('boxPreviewCSV').classList.remove('hidden');
+        document.getElementById('btnConfirmarImportacaoCSV').disabled = false;
+      };
+      reader.readAsText(file, 'UTF-8');
+    }
+
+    async function confirmarImportacaoCSV() {
+      if (leadsCSVBuffer.length === 0) return;
+      const btn = document.getElementById('btnConfirmarImportacaoCSV');
+      btn.disabled = true;
+      btn.innerHTML = 'Importando...';
+
+      try {
+        const res = await apiFetch('/empreendedores/importar-csv', {
+          method: 'POST',
+          body: JSON.stringify({ leads: leadsCSVBuffer })
+        });
+        showToast(res.mensagem || 'Leads do RD Station importados com sucesso!', 'success');
+        fecharModalImportarCSV();
+        etapaSelecionada = 'inscrito';
+        await carregarBaseCompleta();
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined text-base">cloud_done</span> Importar Leads para o Passo 1';
+      }
+    }
+
+    // =========================================================================
+    // CADASTRO MANUAL & EXPORTAÇÃO
+    // =========================================================================
+    function alternarCampoCnpjNovoAluno() {
+      const sit = document.getElementById('selectSituacaoNovoAluno')?.value || 'informal';
+      const inputCnpj = document.getElementById('inputCnpjNovoAluno');
+      const labelCnpj = document.getElementById('labelCnpjNovoAluno');
+      if (!inputCnpj) return;
+
+      if (sit === 'informal') {
+        inputCnpj.required = false;
+        inputCnpj.placeholder = 'Opcional para Informal (Sem CNPJ)';
+        labelCnpj.textContent = 'CNPJ (Opcional — Negócio Informal)';
+      } else {
+        inputCnpj.required = true;
+        inputCnpj.placeholder = 'Digite os 14 números do CNPJ (Ex: 12.345.678/0001-99)';
+        labelCnpj.textContent = 'CNPJ do MEI (14 dígitos) *';
+      }
+    }
+
+    function abrirModalNovoAluno() {
+      const m = document.getElementById('modalNovoAluno');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      alternarCampoCnpjNovoAluno();
+    }
+
+    function fecharModalNovoAluno() {
+      const m = document.getElementById('modalNovoAluno');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+      document.getElementById('formNovoAluno').reset();
+      alternarCampoCnpjNovoAluno();
+    }
+
+    async function salvarNovoAluno(event) {
+      event.preventDefault();
+      const form = event.target;
+      const btn = document.getElementById('btnSalvarAluno');
+      const situacaoAtual = form.situacaoAtual.value;
+      const cnpjLimpo = (form.cnpj?.value || '').replace(/\D/g, '');
+
+      if (situacaoAtual !== 'informal' && cnpjLimpo.length !== 14) {
+        showToast('Para MEI Formalizado ou Inadimplente, informe um CNPJ válido com 14 dígitos.', 'danger');
+        return;
+      }
+
+      const payload = {
+        nomeCompleto: form.nomeCompleto.value.trim(),
+        cpf: form.cpf.value.replace(/\D/g, ''),
+        whatsapp: form.whatsapp.value.replace(/\D/g, ''),
+        email: form.email.value.trim(),
+        origemLead: form.origemLead.value,
+        aceiteLGPD: true,
+        negocio: {
+          nomeFantasia: form.nomeFantasia.value.trim(),
+          ramoAtividade: form.ramoAtividade.value.trim(),
+          situacaoAtual,
+          cnpj: situacaoAtual === 'informal' ? null : cnpjLimpo
+        }
+      };
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
+        await apiFetch('/empreendedores', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        showToast('Lead cadastrado com sucesso no Passo 1!', 'success');
+        fecharModalNovoAluno();
+        etapaSelecionada = 'inscrito';
+        await carregarBaseCompleta();
+      } catch (err) {
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Salvar Cadastro';
+      }
+    }
+
+    function exportarBaseCSV() {
+      const filtrados = filtrarDadosAtuais();
+      if (filtrados.length === 0) {
+        showToast('Nenhum registro para exportar.', 'danger');
+        return;
+      }
+
+      const cabecalhos = ['Nome Completo', 'CPF', 'WhatsApp', 'E-mail', 'Origem', 'Nome Fantasia', 'Segmento', 'Situação MEI', 'Etapa no Programa'];
+      const linhas = filtrados.map(emp => [
+        emp.nomeCompleto,
+        formatCPF(emp.cpf),
+        formatPhone(emp.whatsapp),
+        emp.email || '-',
+        emp.origemLead || 'RD_Station',
+        emp.negocio?.nomeFantasia || '-',
+        emp.negocio?.ramoAtividade || '-',
+        emp.negocio?.situacaoAtual || 'informal',
+        emp.statusPrograma
+      ]);
+
+      exportarParaCSV(`relatorio-conexo-${new Date().toISOString().slice(0, 10)}.csv`, cabecalhos, linhas);
+    }
+
+    document.addEventListener('DOMContentLoaded', carregarBaseCompleta);
+  </script>
+</body>
+</html>

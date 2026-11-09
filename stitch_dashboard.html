@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Co.Nexo SENAC - Painel Dashboard Executivo</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#a8c8ff",
+            "on-secondary-fixed": "#341000",
+            "error": "#ba1a1a",
+            "secondary-fixed-dim": "#ffb693",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "inverse-on-surface": "#eaf1ff",
+            "tertiary-fixed-dim": "#81d1f0",
+            "on-tertiary-fixed-variant": "#004d62",
+            "tertiary": "#003443",
+            "primary": "#002f5f",
+            "surface-variant": "#d3e4fe",
+            "surface-container": "#e5eeff",
+            "inverse-primary": "#a8c8ff",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#6dbedc",
+            "on-tertiary-fixed": "#001f29",
+            "secondary-fixed": "#ffdbcb",
+            "secondary-container": "#fc7728",
+            "on-error": "#ffffff",
+            "surface": "#f8f9ff",
+            "inverse-surface": "#213145",
+            "surface-container-highest": "#d3e4fe",
+            "surface-bright": "#f8f9ff",
+            "on-surface-variant": "#424750",
+            "on-tertiary": "#ffffff",
+            "secondary": "#a04100",
+            "surface-container-high": "#dce9ff",
+            "on-surface": "#0b1c30",
+            "primary-fixed": "#d5e3ff",
+            "tertiary-container": "#004c60",
+            "surface-tint": "#2c5fa2",
+            "tertiary-fixed": "#b9eaff",
+            "surface-dim": "#cbdbf5",
+            "outline": "#737782",
+            "on-primary-fixed": "#001b3c",
+            "background": "#f8f9ff",
+            "on-secondary-fixed-variant": "#7a3000",
+            "on-secondary-container": "#5d2300",
+            "on-background": "#0b1c30",
+            "on-primary-fixed-variant": "#034688",
+            "outline-variant": "#c2c6d2",
+            "primary-container": "#004587",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-container": "#87b5fe",
+            "surface-container-low": "#eff4ff",
+            "on-secondary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "gutter-mobile": "0.75rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "margin": "2rem",
+            "margin-mobile": "1rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "data-metric": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "display-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "data-metric": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "display-sm": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md min-h-screen flex">
+<!-- Side Navigation Bar (Shared Component Anchor) -->
+<aside class="h-screen w-64 flex flex-col shrink-0 sticky top-0 left-0 bg-surface-container-low border-r border-outline-variant z-30">
+<div class="flex flex-col justify-between h-full p-4">
+<!-- SideNav Header & Brand -->
+<div class="space-y-6">
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-headline-xl" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<div>
+<h1 class="text-headline-xl font-headline-xl font-bold text-primary tracking-tight leading-none">Co.Nexo</h1>
+<p class="text-label-sm font-label-sm text-outline font-semibold tracking-wider uppercase mt-0.5">SENAC São Paulo</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant shadow-sm">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase font-semibold">Painel de Controle MEI</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface font-medium mt-1">Ciclo Regional Ativo</p>
+</div>
+<!-- Primary Navigation Links (Shared Component) -->
+<nav class="space-y-1">
+<!-- Active Tab: Dashboard Executivo -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-primary text-on-primary font-semibold shadow-sm transition-transform active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard Executivo</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+<span class="text-label-md font-label-md">Esteira de Formalização</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-[20px]">supervised_user_circle</span>
+<span class="text-label-md font-label-md">Ciclos de Mentoria</span>
+</a>
+<a class="flex items-center justify-between px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+<span class="text-label-md font-label-md">Risco & Bloqueios</span>
+</div>
+<span class="px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-secondary-container text-on-primary">3</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="text-label-md font-label-md">Base Empreendedores</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="text-label-md font-label-md">Auditoria & Conformidade</span>
+</a>
+</nav>
+</div>
+<!-- SideNav Footer Actions & Meta -->
+<div class="pt-4 border-t border-outline-variant space-y-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span class="text-label-sm font-label-sm">Configurações</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">headset_mic</span>
+<span class="text-label-sm font-label-sm">Central de Suporte</span>
+</a>
+<!-- Senac Ecosystem Indicator -->
+<div class="mt-4 px-3 py-2.5 rounded-lg bg-primary-fixed/40 border border-primary-fixed flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">domain</span>
+<span class="text-label-sm font-label-sm text-primary font-bold">Unidade Operacional</span>
+</div>
+<span class="text-[10px] bg-primary text-on-primary font-bold px-1.5 py-0.5 rounded">SP-01</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Administrative Canvas Area -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- Top Navigation Bar (Shared Component Anchor) -->
+<header class="docked full-width top-0 sticky z-40 bg-surface-container-lowest border-b border-outline-variant shadow-sm">
+<div class="w-full px-6 py-3 flex justify-between items-center gap-4">
+<!-- Brand Subtitle / Search Bar Cluster -->
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-3 pr-6 border-r border-outline-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container"></span>
+<div>
+<p class="text-headline-md font-headline-md font-bold text-primary tracking-tight leading-snug">Co.Nexo SENAC</p>
+<p class="text-label-sm font-label-sm text-outline">Programa de Mentoria & Formalização MEI</p>
+</div>
+</div>
+<!-- Quick Filters: Unidade, Ciclo, Periodo -->
+<div class="flex items-center gap-2">
+<!-- Filter 1: Unidade SENAC -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-outline text-[16px]">location_on</span>
+<span class="text-label-sm font-label-sm text-on-surface font-semibold">Regional SP - Centro</span>
+<span class="material-symbols-outlined text-outline text-[16px]">arrow_drop_down</span>
+</div>
+<!-- Filter 2: Ciclo de Mentoria -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-outline text-[16px]">cached</span>
+<span class="text-label-sm font-label-sm text-on-surface font-semibold">Ciclo 2024.2 - Edição Empreenda</span>
+<span class="material-symbols-outlined text-outline text-[16px]">arrow_drop_down</span>
+</div>
+<!-- Filter 3: Data / Calendário -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-outline text-[16px]">event</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-medium">Hoje, 24 de Outubro</span>
+</div>
+</div>
+</div>
+<!-- Trailing Navigation & Gestor Profile Cluster -->
+<div class="flex items-center gap-3">
+<!-- Trailing Secondary: Filtros -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="text-label-md font-label-md">Filtros</span>
+</button>
+<!-- Trailing Primary Action: Emitir Certificado -->
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-surface-container border border-primary-fixed text-primary font-semibold hover:bg-primary-fixed transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+<span class="text-label-md font-label-md">Emitir Certificado</span>
+</button>
+<!-- Quick CTA: Novo Atendimento (Laranja SENAC) -->
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-secondary-container text-on-primary font-semibold hover:bg-secondary transition-colors shadow-sm active:scale-95 duration-100">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="text-label-md font-label-md">+ Novo Atendimento</span>
+</button>
+<!-- Divider -->
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<!-- Notification & Help Icons (Shared Component) -->
+<div class="flex items-center gap-1">
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150" title="Notificações">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary-container ring-2 ring-surface-container-lowest"></span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150" title="Ajuda">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+</button>
+</div>
+<!-- Divider -->
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<!-- Gestor Profile Widget -->
+<div class="flex items-center gap-3 pl-1">
+<img class="w-9 h-9 rounded-full object-cover ring-2 ring-primary-fixed shadow-sm" data-alt="Professional corporate headshot of Carlos Mendes, a Senior Program Manager at SENAC, dressed in an executive navy blue blazer against a bright modern educational architectural interior with diffused natural sunlight and pristine clean finish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSway8HMnWirqBY047us4TtH5b5z_pzwTZKnhbDrIAN_S8ZX52hDHoAsceLkco8tkYdYAJHIMf42gANRCAZ7otw-3cxxivAxV_oOUMkNC0f_lCKbVkkj1ZAaI77mPEg8aenky51lMW3_uxEviVGjuZ2wwt6776Pdntm2KwzVSeCkpzQLwx5x1_tblRctUQdTbd6c0DZClHDZdLbIki5v3oGhZHybWq85jMx4wPDCG34Qc9KNMljLZc-3GmzZv6kOfJoWzR9JzKdvSz"/>
+<div class="hidden xl:block text-left">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-on-surface font-bold leading-tight">Carlos Mendes</span>
+<span class="bg-primary text-on-primary text-[9px] font-bold px-1.5 py-0.2 rounded font-label-sm uppercase tracking-wide">Admin SENAC</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline">Gestor Executivo</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Scrollable) -->
+<main class="flex-1 p-6 space-y-6 max-w-[1600px] w-full mx-auto">
+<!-- Executive Overview Title Bar & Critical Alert Ticker -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="text-display-sm font-display-sm text-primary tracking-tight">Painel Executivo de Gestão MEI</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mt-0.5">
+            Monitoramento de formalização, conversão de CNPJ e alocação de mentores especializados SENAC.
+          </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant shadow-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>Ambiente Integrado: <strong>SLA Receita Federal & Portal GOV.BR</strong></span>
+</div>
+<button class="p-2 rounded-lg bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-on-surface-variant shadow-sm transition-colors" title="Atualizar Métricas">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+</button>
+</div>
+</div>
+<!-- Priority Alert Banner (Dual-tone Intelligent Banner) -->
+<div class="bg-surface-container-lowest border-l-4 border-secondary-container rounded-lg p-4 border border-outline-variant shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-start gap-3">
+<div class="p-2 rounded-lg bg-secondary-fixed text-secondary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">notification_important</span>
+</div>
+<div>
+<h3 class="text-label-md font-label-md text-on-surface font-bold">Atenção Gerencial: Fechamento de Metas do 3º Trimestre</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">
+              18 empreendedores com planos de negócio concluídos aguardam validação final para outorga do CCMEI e linha de crédito facilitada.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-semibold text-label-sm font-label-sm transition-colors">
+            Dispensar
+          </button>
+<button class="px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-semibold text-label-sm font-label-sm hover:bg-primary-container transition-colors flex items-center gap-1">
+<span>Acessar Fila Prioritária</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- KPI Reel: 4 Executive Metric Cards -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+<!-- KPI 1: Total Empreendedores Atendidos -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-primary-fixed transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+<div>
+<div class="flex items-center justify-between text-outline">
+<span class="text-label-sm font-label-sm uppercase font-semibold tracking-wider">Total Atendidos</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">people_alt</span>
+</div>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-data-metric font-data-metric text-on-surface tracking-tight">1.482</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-emerald-100 text-emerald-800">
+<span class="material-symbols-outlined text-[12px] mr-0.5">trending_up</span>
+                +18.4%
+              </span>
+</div>
+<p class="text-body-sm font-body-sm text-outline mt-1">vs. mês anterior (1.252 participantes)</p>
+</div>
+<!-- Sparkline representation -->
+<div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant font-medium">Capacidade do Ciclo</span>
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-3 bg-primary-fixed rounded-sm"></span>
+<span class="w-1.5 h-4 bg-primary-fixed rounded-sm"></span>
+<span class="w-1.5 h-5 bg-primary-fixed rounded-sm"></span>
+<span class="w-1.5 h-6 bg-primary-container rounded-sm"></span>
+<span class="w-1.5 h-7 bg-primary rounded-sm"></span>
+<span class="text-label-sm font-label-sm font-bold text-primary ml-1.5">92%</span>
+</div>
+</div>
+</div>
+<!-- KPI 2: Taxa de Formalização MEI -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-secondary-fixed transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary-container"></div>
+<div>
+<div class="flex items-center justify-between text-outline">
+<span class="text-label-sm font-label-sm uppercase font-semibold tracking-wider">Formalização MEI</span>
+<div class="w-8 h-8 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-data-metric font-data-metric text-on-surface tracking-tight">78.5%</span>
+<span class="text-label-sm font-label-sm font-semibold text-outline">Meta: 80.0%</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary font-semibold mt-1">
+              1.163 MEIs formalizados com CNPJ emitido
+            </p>
+</div>
+<!-- Progress bar in SENAC Orange / Navy -->
+<div class="mt-4 pt-3 border-t border-slate-100">
+<div class="w-full bg-surface-container rounded-full h-2 overflow-hidden flex">
+<div class="bg-gradient-to-r from-secondary-container to-primary h-2 rounded-full" style="width: 78.5%"></div>
+</div>
+<div class="flex justify-between text-[11px] text-outline mt-1.5 font-medium">
+<span>Em processo: 319</span>
+<span>Concluídos: 1.163</span>
+</div>
+</div>
+</div>
+<!-- KPI 3: Índice de Assiduidade -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-primary-fixed transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary-container"></div>
+<div>
+<div class="flex items-center justify-between text-outline">
+<span class="text-label-sm font-label-sm uppercase font-semibold tracking-wider">Índice de Assiduidade</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+</div>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-data-metric font-data-metric text-on-surface tracking-tight">92.3%</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-amber-100 text-amber-800">
+<span class="material-symbols-outlined text-[12px] mr-0.5">trending_down</span>
+                -1.2% (7d)
+              </span>
+</div>
+<p class="text-body-sm font-body-sm text-outline mt-1">Meta operacional estipulada: ≥ 90%</p>
+</div>
+<div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-emerald-700 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+              Conformidade Operacional
+            </span>
+<span class="text-label-sm font-label-sm text-outline">Faltas totais: 46</span>
+</div>
+</div>
+<!-- KPI 4: Total de Horas de Mentoria Executadas -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-primary-fixed transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+<div>
+<div class="flex items-center justify-between text-outline">
+<span class="text-label-sm font-label-sm uppercase font-semibold tracking-wider">Horas de Mentoria</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">timelapse</span>
+</div>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-data-metric font-data-metric text-on-surface tracking-tight">3.640h</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-emerald-100 text-emerald-800">
+                +320h este mês
+              </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">Média de 2.4h por participante</p>
+</div>
+<div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-outline">Mentores mobilizados: <strong>42</strong></span>
+<span class="text-label-sm font-label-sm text-primary font-bold">100% Capacitados</span>
+</div>
+</div>
+</section>
+<!-- Central Grid: 70% Left (Interactive Table) & 30% Right (Risks & Goals) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Column Principal (Left - 70% / 8 columns in 12-col grid) -->
+<section class="lg:col-span-8 space-y-4">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<!-- Table Header & Toolbar -->
+<div class="p-5 border-b border-outline-variant space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-lg bg-surface-container text-primary">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface font-bold leading-tight">
+                      Atendimentos de Hoje - Max
+                    </h3>
+<p class="text-body-sm font-body-sm text-outline">
+                      Grade diária de sessões individuais de mentoria e suporte à formalização
+                    </p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low text-on-surface text-label-sm font-label-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+                    Exportar Relatório Diário
+                  </button>
+<button class="p-1.5 rounded-lg border border-outline-variant hover:bg-surface-container text-on-surface-variant transition-colors" title="Filtrar colunas">
+<span class="material-symbols-outlined text-[18px]">view_column</span>
+</button>
+</div>
+</div>
+<!-- Search Bar and Status Filters -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+<!-- Search input -->
+<div class="relative w-full sm:w-80">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-sm font-body-sm text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Buscar por nome, CPF ou segmento..." type="text"/>
+</div>
+<!-- Status Filter Pills -->
+<div class="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-label-sm font-label-sm font-semibold whitespace-nowrap">
+                    Todos (18)
+                  </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant text-label-sm font-label-sm font-medium whitespace-nowrap transition-colors">
+                    Agendado (11)
+                  </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant text-label-sm font-label-sm font-medium whitespace-nowrap transition-colors">
+                    Realizado (5)
+                  </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant text-label-sm font-label-sm font-medium whitespace-nowrap transition-colors">
+                    Falta (2)
+                  </button>
+</div>
+</div>
+</div>
+<!-- Rich Interactive Table -->
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 border-b border-outline-variant">
+<th class="py-3 px-4 text-label-sm font-label-sm text-outline uppercase font-semibold">Horário</th>
+<th class="py-3 px-4 text-label-sm font-label-sm text-outline uppercase font-semibold">Empreendedor / Negócio</th>
+<th class="py-3 px-4 text-label-sm font-label-sm text-outline uppercase font-semibold">Segmento</th>
+<th class="py-3 px-4 text-label-sm font-label-sm text-outline uppercase font-semibold">Mentor SENAC</th>
+<th class="py-3 px-4 text-label-sm font-label-sm text-outline uppercase font-semibold">Status</th>
+<th class="py-3 px-4 text-label-sm font-label-sm text-outline uppercase font-semibold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-body-sm font-body-sm">
+<!-- Row 1: Mariana Silva -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-3.5 px-4 font-semibold text-on-surface tabular-nums">09:00</td>
+<td class="py-3.5 px-4">
+<div>
+<div class="font-bold text-on-surface">Mariana Silva</div>
+<div class="text-[12px] text-outline">Sabor da Terra</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700">
+                        Gastronomia
+                      </span>
+</td>
+<td class="py-3.5 px-4 font-medium text-on-surface-variant">Prof. Roberto Dias</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-emerald-100 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        Realizado
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-2.5 py-1 rounded border border-outline-variant hover:bg-surface-container text-primary font-semibold text-label-sm font-label-sm transition-colors">
+                        Ver Prontuário
+                      </button>
+</td>
+</tr>
+<!-- Row 2: Lucas Albuquerque -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-3.5 px-4 font-semibold text-on-surface tabular-nums">10:30</td>
+<td class="py-3.5 px-4">
+<div>
+<div class="font-bold text-on-surface">Lucas Albuquerque</div>
+<div class="text-[12px] text-outline">TechReparos</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700">
+                        Serviços
+                      </span>
+</td>
+<td class="py-3.5 px-4 font-medium text-on-surface-variant">Ana Paula Vieira</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-emerald-100 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        Realizado
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-2.5 py-1 rounded border border-outline-variant hover:bg-surface-container text-primary font-semibold text-label-sm font-label-sm transition-colors">
+                        Ver Prontuário
+                      </button>
+</td>
+</tr>
+<!-- Row 3: Camila Ferreira (Em 45 min) -->
+<tr class="hover:bg-slate-50 transition-colors bg-primary-fixed/10">
+<td class="py-3.5 px-4 font-semibold text-on-surface tabular-nums">
+<div class="flex items-center gap-1.5">
+<span>13:30</span>
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div>
+<div class="font-bold text-on-surface">Camila Ferreira</div>
+<div class="text-[12px] text-outline">Moda Sustentável</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700">
+                        Varejo
+                      </span>
+</td>
+<td class="py-3.5 px-4 font-medium text-on-surface-variant">Prof. Roberto Dias</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-primary-container text-on-primary w-fit">
+                          Agendado
+                        </span>
+<span class="text-[11px] text-primary font-bold">Em 45 min</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1 rounded bg-secondary-container text-on-primary font-bold text-label-sm font-label-sm hover:bg-secondary transition-colors shadow-sm">
+                        Iniciar Sessão
+                      </button>
+</td>
+</tr>
+<!-- Row 4: João Pedro Santos -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-3.5 px-4 font-semibold text-on-surface tabular-nums">15:00</td>
+<td class="py-3.5 px-4">
+<div>
+<div class="font-bold text-on-surface">João Pedro Santos</div>
+<div class="text-[12px] text-outline">Marcenaria Moderna</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700">
+                        Indústria Leve
+                      </span>
+</td>
+<td class="py-3.5 px-4 font-medium text-on-surface-variant">Cláudia Ramos</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-primary-fixed text-primary">
+                        Agendado
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-2.5 py-1 rounded border border-outline-variant hover:bg-surface-container text-on-surface-variant font-medium text-label-sm font-label-sm transition-colors">
+                        Detalhes
+                      </button>
+</td>
+</tr>
+<!-- Row 5: Vanessa Ribeiro (Falta - 2a ausência) -->
+<tr class="hover:bg-slate-50 transition-colors bg-red-50/40">
+<td class="py-3.5 px-4 font-semibold text-on-surface tabular-nums">16:30</td>
+<td class="py-3.5 px-4">
+<div>
+<div class="font-bold text-on-surface">Vanessa Ribeiro</div>
+<div class="text-[12px] text-outline">Beleza & Estética Viva</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700">
+                        Saúde & Beleza
+                      </span>
+</td>
+<td class="py-3.5 px-4 font-medium text-on-surface-variant">Marcelo Faria</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-red-100 text-red-800 w-fit">
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+                          Falta
+                        </span>
+<span class="text-[10px] text-red-700 font-bold">2ª ausência consecutiva</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-2.5 py-1 rounded bg-red-100 border border-red-200 hover:bg-red-200 text-red-800 font-bold text-label-sm font-label-sm transition-colors">
+                        Contatar / Notificar
+                      </button>
+</td>
+</tr>
+<!-- Row 6: Thiago Nogueira -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-3.5 px-4 font-semibold text-on-surface tabular-nums">17:30</td>
+<td class="py-3.5 px-4">
+<div>
+<div class="font-bold text-on-surface">Thiago Nogueira</div>
+<div class="text-[12px] text-outline">Delivery Express MEI</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700">
+                        Logística
+                      </span>
+</td>
+<td class="py-3.5 px-4 font-medium text-on-surface-variant">Ana Paula Vieira</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-primary-fixed text-primary">
+                        Agendado
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-2.5 py-1 rounded border border-outline-variant hover:bg-surface-container text-on-surface-variant font-medium text-label-sm font-label-sm transition-colors">
+                        Detalhes
+                      </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer & Pagination -->
+<div class="p-4 bg-slate-50 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-3 text-label-sm font-label-sm">
+<span class="text-outline">
+                Exibindo <strong class="text-on-surface">6</strong> de <strong class="text-on-surface">18</strong> agendamentos de hoje
+              </span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded border border-outline-variant bg-surface-container-lowest text-outline hover:text-on-surface disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary font-bold">1</button>
+<button class="px-2.5 py-1 rounded border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container">2</button>
+<button class="px-2.5 py-1 rounded border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container">3</button>
+<button class="p-1.5 rounded border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Micro Analytics Strip: Conversão Rápida da Semana -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-outline font-medium">Sessões Concluídas na Semana</p>
+<p class="text-headline-md font-headline-md font-bold text-on-surface">142 atendimentos</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-blue-50 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-outline font-medium">CNPJs Emitidos na Semana</p>
+<p class="text-headline-md font-headline-md font-bold text-on-surface">38 formalizações</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-orange-50 text-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">alarm</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-outline font-medium">Tempo Médio por Sessão</p>
+<p class="text-headline-md font-headline-md font-bold text-on-surface">54 minutos</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Coluna Lateral (Right - 30% / 4 columns in 12-col grid) -->
+<aside class="lg:col-span-4 space-y-6">
+<!-- Card: Alertas de Assiduidade & Bloqueios Automáticos -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<!-- Header -->
+<div class="p-4 bg-slate-50 border-b border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">security</span>
+<h3 class="text-headline-md font-headline-md text-on-surface font-bold text-[15px]">Alertas & Bloqueios</h3>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm font-bold bg-secondary-fixed text-on-secondary-fixed">
+                3 Requerem Intervenção
+              </span>
+</div>
+<!-- Content Alerts -->
+<div class="p-4 space-y-3.5 divide-y divide-slate-100">
+<!-- Alerta 1: Crítico / Bloqueio Iminente -->
+<div class="pt-1 first:pt-0 space-y-2">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-1.5 text-red-700">
+<span class="material-symbols-outlined text-[16px]">lock_clock</span>
+<span class="text-label-md font-label-md font-bold">Bloqueio Iminente: Vanessa Ribeiro</span>
+</div>
+<span class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-red-100 text-red-800">Crítico</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+<strong>2 faltas não justificadas.</strong> Regra: 3 faltas resultam em cancelamento imediato da vaga de mentoria e perda do benefício de consultoria contábil SENAC.
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 py-1.5 px-2 bg-secondary-container hover:bg-secondary text-on-primary rounded text-label-sm font-label-sm font-bold flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">send</span>
+                    Alerta WhatsApp
+                  </button>
+<button class="py-1.5 px-2.5 border border-outline-variant hover:bg-surface-container text-on-surface-variant rounded text-label-sm font-label-sm font-medium transition-colors">
+                    Justificar Falta
+                  </button>
+</div>
+</div>
+<!-- Alerta 2: Atenção / Risco de Desistência -->
+<div class="pt-3.5 space-y-2">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-1.5 text-amber-700">
+<span class="material-symbols-outlined text-[16px]">person_alert</span>
+<span class="text-label-md font-label-md font-bold">Risco de Desistência: Felipe Gonzaga</span>
+</div>
+<span class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Atenção</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                  Sem entrega do plano de formalização e sem contato com o mentor há 14 dias.
+                </p>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[11px] text-outline">Mentor: Carlos Drumond</span>
+<button class="py-1 px-3 bg-surface-container hover:bg-surface-container-high text-primary rounded text-label-sm font-label-sm font-bold transition-colors">
+                    Reagendar Consultor
+                  </button>
+</div>
+</div>
+<!-- Alerta 3: Conformidade / Pendência Cadastral CCMEI -->
+<div class="pt-3.5 space-y-2">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-1.5 text-primary">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span class="text-label-md font-label-md font-bold">Pendência Cadastral CCMEI</span>
+</div>
+<span class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-blue-100 text-primary">Conformidade</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+<strong>Andréia Luz:</strong> Documentação de endereço divergente com a Receita Federal para emissão de alvará.
+                </p>
+<div class="flex items-center justify-between pt-1">
+<span class="text-[11px] text-outline">Protocolo: #SENAC-8891</span>
+<button class="py-1 px-3 bg-surface-container hover:bg-surface-container-high text-primary rounded text-label-sm font-label-sm font-bold transition-colors">
+                    Validar Documento
+                  </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card: Resumo de Metas do Programa Co.Nexo SENAC -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-5 shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface font-bold text-[16px]">Metas do Semestre 2024.2</h3>
+<p class="text-body-sm font-body-sm text-outline">Metas globais pactuadas SENAC SP</p>
+</div>
+<span class="p-1.5 rounded-lg bg-surface-container text-primary">
+<span class="material-symbols-outlined text-[20px]">donut_large</span>
+</span>
+</div>
+<!-- Progresso 1: Formações de Empreendedorismo -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="font-medium text-on-surface">Formações de Empreendedorismo</span>
+<span class="font-bold text-primary">88%</span>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 88%"></div>
+</div>
+<p class="text-[11px] text-outline">1.320 de 1.500 vagas preenchidas</p>
+</div>
+<!-- Progresso 2: Consultorias Técnicas -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="font-medium text-on-surface">Consultorias Técnicas</span>
+<span class="font-bold text-emerald-700">94%</span>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+<div class="bg-emerald-600 h-2 rounded-full" style="width: 94%"></div>
+</div>
+<p class="text-[11px] text-outline">940 de 1.000 diagnósticos entregues</p>
+</div>
+<!-- Progresso 3: Acesso ao Microcrédito Orientado -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="font-medium text-on-surface">Acesso ao Microcrédito Orientado</span>
+<span class="font-bold text-secondary-container">62%</span>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+<div class="bg-secondary-container h-2 rounded-full" style="width: 62%"></div>
+</div>
+<p class="text-[11px] text-outline">310 de 500 propostas pré-aprovadas</p>
+</div>
+<!-- Banner Coordenador Support -->
+<div class="mt-4 p-3 bg-primary-fixed/30 rounded-lg border border-primary-fixed flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">support_agent</span>
+<span class="text-label-sm font-label-sm text-primary font-bold">Plantão Técnico do Coordenador</span>
+</div>
+<button class="text-label-sm font-label-sm text-primary font-bold underline hover:text-primary-container">
+                Acionar
+              </button>
+</div>
+</div>
+<!-- Mentores de Plantão Hoje -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<h4 class="text-label-md font-label-md font-bold text-on-surface">Mentores em Atividade Hoje</h4>
+<span class="text-label-sm font-label-sm font-semibold text-primary">4 Ativos</span>
+</div>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center text-[11px] font-bold">RD</div>
+<div>
+<p class="text-body-sm font-body-sm font-bold text-on-surface leading-tight">Prof. Roberto Dias</p>
+<p class="text-[11px] text-outline">Finanças & Tributação</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Em Sessão</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-[11px] font-bold">AP</div>
+<div>
+<p class="text-body-sm font-body-sm font-bold text-on-surface leading-tight">Ana Paula Vieira</p>
+<p class="text-[11px] text-outline">Gestão de Vendas & CX</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-primary">Disponível</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-slate-700 text-on-primary flex items-center justify-center text-[11px] font-bold">CR</div>
+<div>
+<p class="text-body-sm font-body-sm font-bold text-on-surface leading-tight">Cláudia Ramos</p>
+<p class="text-[11px] text-outline">Marketing Digital MEI</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-primary">Disponível</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Global Institutional Footer -->
+<footer class="mt-auto px-6 py-4 bg-surface-container-lowest border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between text-body-sm font-body-sm text-outline">
+<div class="flex items-center gap-3">
+<span class="font-bold text-primary">SENAC Co.Nexo</span>
+<span>•</span>
+<span>Sistema Integrado de Gestão do Empreendedorismo Individual</span>
+</div>
+<div class="flex items-center gap-4 mt-2 sm:mt-0 text-[12px]">
+<a class="hover:text-primary transition-colors" href="#">Termos do Programa</a>
+<a class="hover:text-primary transition-colors" href="#">Normas de Assiduidade</a>
+<a class="hover:text-primary transition-colors" href="#">Suporte ao Facilitador</a>
+<span class="text-outline">Versão 3.8.4-prod</span>
+</div>
+</footer>
+</div>
+</body></html>

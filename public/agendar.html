@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html class="h-full bg-slate-50" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Co.Nexo SENAC — Portal do Empreendedor</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#002f5f",
+            "primary-container": "#004587",
+            "primary-fixed": "#d5e3ff",
+            "primary-fixed-dim": "#a8c8ff",
+            "on-primary": "#ffffff",
+            "secondary": "#a04100",
+            "secondary-container": "#f37021",
+            "secondary-fixed": "#ffdbcb",
+            "on-secondary": "#ffffff",
+            "surface": "#f8f9ff",
+            "surface-dim": "#cbdbf5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#424750",
+            "outline": "#737782",
+            "outline-variant": "#c2c6d2",
+            "background": "#f8f9ff"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-[#f8f9ff] text-on-surface min-h-screen flex flex-col justify-between font-body antialiased py-6 px-4">
+
+  <div class="max-w-lg w-full mx-auto flex flex-col gap-5">
+
+    <!-- Header Institucional SENAC Co.Nexo -->
+    <div class="flex flex-col items-center text-center gap-1.5">
+      <div class="px-4 py-2 rounded-2xl bg-white border border-outline-variant/60 shadow-sm">
+        <img src="img/logo-conexo.png" alt="Co.Nexo Senac" class="h-14 w-auto object-contain"/>
+      </div>
+      <h1 class="font-headline font-extrabold text-2xl text-on-surface tracking-tight">Portal do Empreendedor</h1>
+      <p id="subtitulo-portal-topo" class="text-xs text-on-surface-variant max-w-sm">
+        Escolha abaixo o melhor dia e horário para sua entrevista inicial.
+      </p>
+    </div>
+
+    <!-- Card de Identificação do Empreendedor + Progresso -->
+    <div id="card-aluno-info" class="p-4 rounded-2xl bg-white border border-outline-variant shadow-sm flex flex-col gap-3">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 overflow-hidden">
+          <div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center font-headline font-bold text-lg shrink-0 shadow-sm" id="avatar-mentorado">
+            <span class="material-symbols-outlined text-2xl">person</span>
+          </div>
+          <div class="flex flex-col overflow-hidden">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Participante Oficial</span>
+            <h2 class="font-headline font-bold text-base text-on-surface truncate" id="nome-mentorado">Identificando perfil...</h2>
+            <span class="text-xs text-secondary-container font-semibold truncate" id="negocio-mentorado">Carregando dados da inscrição...</span>
+          </div>
+        </div>
+        <span id="badge-mei-portal" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-container-low text-primary-container border border-outline-variant shrink-0">
+          Em Aceleração
+        </span>
+      </div>
+
+      <!-- Barra de Progresso nos 5 Encontros (Visível apenas após a 1ª entrevista) -->
+      <div id="bloco-progresso-portal" class="hidden pt-2 border-t border-outline-variant/50 flex-col gap-1">
+        <div class="flex justify-between text-[11px] font-semibold">
+          <span class="text-on-surface-variant">Progresso na Mentoria:</span>
+          <span class="text-primary-container font-bold" id="progresso-portal-texto">0 de 5 Encontros</span>
+        </div>
+        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+          <div id="progresso-portal-barra" class="bg-emerald-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navegação em 3 Abas (Oculta na 1ª entrevista; exibida apenas quando em mentoria) -->
+    <div id="nav-portal-abas" class="hidden grid-cols-3 gap-1.5 bg-surface-container-low p-1.5 rounded-2xl border border-outline-variant shadow-sm">
+      <button onclick="mudarAbaPortal('agendar')" id="btn-aba-agendar" class="py-2.5 px-2 rounded-xl text-xs font-headline font-bold bg-primary-container text-white shadow-sm transition-all flex items-center justify-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">calendar_month</span>
+        <span>Agendar</span>
+      </button>
+      <button onclick="mudarAbaPortal('trilha')" id="btn-aba-trilha" class="py-2.5 px-2 rounded-xl text-xs font-headline font-semibold text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">timeline</span>
+        <span>Minha Trilha</span>
+      </button>
+      <button onclick="mudarAbaPortal('materiais')" id="btn-aba-materiais" class="py-2.5 px-2 rounded-xl text-xs font-headline font-semibold text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">folder_Special</span>
+        <span>Metas & PDFs</span>
+      </button>
+    </div>
+
+    <!-- Alerta de Bloqueio por Assiduidade -->
+    <div id="card-bloqueado" class="hidden p-5 rounded-2xl bg-red-50 border border-red-200 shadow-sm flex-col items-center text-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+        <span class="material-symbols-outlined text-2xl">lock</span>
+      </div>
+      <div>
+        <h3 class="font-headline font-bold text-base text-red-900 mb-1">Agendamento Retido por Assiduidade</h3>
+        <p class="text-xs text-red-700 leading-relaxed">
+          Sua inscrição atingiu o limite de 2 faltas ou remarcações previsto nas regras do programa Co.Nexo. Você ainda pode consultar seus materiais na aba ao lado.
+        </p>
+      </div>
+      <a href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20preciso%20justificar%20minha%20aus%C3%AAncia%20no%20Programa%20Co.Nexo%20SENAC." target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors shadow-sm">
+        <span class="material-symbols-outlined text-sm">chat</span>
+        <span>Justificar com Atendimento SENAC</span>
+      </a>
+    </div>
+
+    <!-- ABA 1: AGENDAMENTO AUTÔNOMO -->
+    <div id="aba-conteudo-agendar" class="flex flex-col gap-4">
+
+      <!-- Card: Meu Próximo Encontro Confirmado (Exibido quando já possui agendamento ativo) -->
+      <div id="card-meu-agendamento-ativo" class="hidden p-5 rounded-2xl bg-white border-2 border-emerald-500 shadow-md flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl">event_available</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 block">Seu Próximo Encontro</span>
+              <h3 class="font-headline font-bold text-sm text-on-surface" id="ativo-tipo-titulo">Horário Confirmado</h3>
+            </div>
+          </div>
+          <span id="badge-status-confirmacao-ativo" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Confirmado ✓</span>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-surface-container-low border border-outline-variant space-y-2 text-xs">
+          <div class="flex justify-between">
+            <span class="text-on-surface-variant">Data e Horário:</span>
+            <strong class="text-primary-container font-headline" id="ativo-data-hora">-</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-on-surface-variant">Consultor(a) SENAC:</span>
+            <strong class="text-on-surface" id="ativo-consultor">-</strong>
+          </div>
+        </div>
+
+        <!-- Botão Zero-Friction: Pré-Checkin em 1 Toque pelo Aluno -->
+        <div id="bloco-pre-checkin-aluno" class="flex flex-col gap-2">
+          <button id="btn-pre-checkin-aluno" onclick="confirmarMinhaPresencaPortal()" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
+            <span class="material-symbols-outlined text-base">thumb_up</span>
+            <span>Confirmar Minha Presença em 1 Toque</span>
+          </button>
+          <div id="aviso-pre-checkin-realizado" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs items-center justify-center gap-2 font-semibold">
+            <span class="material-symbols-outlined text-emerald-600 text-base">verified</span>
+            <span>Sua presença já está pré-confirmada com a equipe SENAC!</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 leading-relaxed">
+          <strong>Política de Reagendamento:</strong> Desmarcações feitas com mais de <strong>24h de antecedência</strong> liberam a vaga sem falta. Menos de 24h contabilizam falta automática.
+        </div>
+
+        <button onclick="cancelarMeuAgendamentoPortal()" class="w-full py-2.5 px-4 rounded-xl border border-red-300 bg-red-50 text-red-700 hover:bg-red-100 font-headline font-bold text-xs transition-all flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-base">event_repeat</span>
+          <span>Preciso Reagendar / Cancelar este Horário</span>
+        </button>
+      </div>
+
+      <div id="secao-horarios" class="flex flex-col gap-4">
+        <!-- Indicador Automático da Etapa Obrigatória -->
+        <div class="p-3.5 rounded-xl bg-primary-fixed/30 border border-primary-fixed flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-primary-container text-2xl" id="icone-etapa">assignment_turned_in</span>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-primary-container block" id="subtitulo-etapa">Primeiro Encontro Obrigatório</span>
+              <strong class="font-headline font-bold text-xs text-on-surface" id="titulo-etapa">Entrevista Inicial de Diagnóstico</strong>
+            </div>
+          </div>
+          <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-primary-container text-on-primary shrink-0" id="badge-duracao">1 hora</span>
+        </div>
+
+        <div class="flex flex-col gap-2.5" id="lista-slots">
+          <div class="p-8 text-center text-on-surface-variant text-xs flex flex-col items-center gap-2">
+            <span class="material-symbols-outlined animate-spin text-2xl text-primary-container">progress_activity</span>
+            <span>Buscando horários disponíveis na grade...</span>
+          </div>
+        </div>
+
+        <div class="sticky bottom-4 pt-2">
+          <button id="btn-confirmar" onclick="confirmarAgendamento()" disabled class="w-full py-3.5 px-4 rounded-xl bg-secondary-container disabled:bg-outline-variant disabled:cursor-not-allowed text-on-secondary font-headline font-bold text-sm shadow-md hover:brightness-105 active:scale-95 transition-all flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-lg">check_circle</span>
+            <span>Confirmar Meu Horário</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tela de Sucesso do Agendamento -->
+      <div id="card-sucesso" class="hidden p-6 rounded-2xl bg-white border border-outline-variant shadow-lg flex-col items-center text-center gap-4">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-inner">
+          <span class="material-symbols-outlined text-3xl">task_alt</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-bold text-xl text-on-surface">Horário Confirmado!</h2>
+          <p class="text-xs text-on-surface-variant mt-1">
+            Sua sessão foi reservada com sucesso na equipe Co.Nexo SENAC.
+          </p>
+        </div>
+
+        <div class="w-full p-4 rounded-xl bg-surface-container-low border border-outline-variant flex flex-col gap-2.5 text-left text-xs">
+          <div class="flex items-center justify-between pb-2 border-b border-outline-variant/60">
+            <span class="text-on-surface-variant">Data e Horário:</span>
+            <strong class="font-headline font-bold text-primary-container" id="resumo-data">-</strong>
+          </div>
+          <div class="flex items-center justify-between pb-2 border-b border-outline-variant/60">
+            <span class="text-on-surface-variant">Consultor(a) SENAC:</span>
+            <strong class="font-semibold text-on-surface" id="resumo-consultor">-</strong>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-on-surface-variant">Empreendedor:</span>
+            <strong class="font-semibold text-on-surface" id="resumo-aluno">-</strong>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 text-left">
+          <strong>Lembrete de Assiduidade:</strong> Caso precise remarcar, avise com pelo menos <strong>24 horas de antecedência</strong> para evitar registro de falta.
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 2: MINHA TRILHA DOS 5 ENCONTROS -->
+    <div id="aba-conteudo-trilha" class="hidden flex-col gap-3">
+      <div class="bg-white rounded-2xl p-5 border border-outline-variant shadow-sm space-y-4">
+        <div>
+          <h3 class="font-headline font-bold text-sm text-primary-container">Sua Jornada nos 5 Encontros SENAC</h3>
+          <p class="text-xs text-on-surface-variant">Acompanhe cada etapa de estruturação e formalização do seu negócio:</p>
+        </div>
+        <div id="timeline-encontros" class="space-y-3"></div>
+      </div>
+    </div>
+
+    <!-- ABA 3: MINHAS METAS & MATERIAIS (DOWNLOAD DE PDFs E PLANILHAS) -->
+    <div id="aba-conteudo-materiais" class="hidden flex-col gap-4">
+      <div class="bg-white rounded-2xl p-5 border border-outline-variant shadow-sm space-y-4">
+        <div>
+          <h3 class="font-headline font-bold text-sm text-primary-container">Plano de Ação & Compromissos</h3>
+          <p class="text-xs text-on-surface-variant">Orientações registradas pela sua consultora após cada sessão:</p>
+        </div>
+        <div id="lista-metas-portal" class="space-y-3"></div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-outline-variant shadow-sm space-y-4">
+        <div>
+          <h3 class="font-headline font-bold text-sm text-primary-container">Central de Materiais & Planilhas</h3>
+          <p class="text-xs text-on-surface-variant">Toque para abrir ou baixar os documentos liberados para sua empresa:</p>
+        </div>
+        <div id="lista-arquivos-portal" class="space-y-2.5"></div>
+      </div>
+    </div>
+
+    <!-- Footer Discreto -->
+    <div class="text-center text-[11px] text-on-surface-variant/70 pb-4">
+      Co.Nexo &bull; Serviço Nacional de Aprendizagem Comercial (SENAC)
+    </div>
+
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    let slotSelecionado = null;
+    let mentorado = null;
+    let diarioMentorado = null;
+    let agendamentoAtivo = null;
+    let tipoAtual = 'entrevista_1h';
+
+    function mudarAbaPortal(aba) {
+      const abas = ['agendar', 'trilha', 'materiais'];
+      abas.forEach(a => {
+        const conteudo = document.getElementById(`aba-conteudo-${a}`);
+        const btn = document.getElementById(`btn-aba-${a}`);
+        if (a === aba) {
+          conteudo.classList.remove('hidden');
+          conteudo.classList.add('flex');
+          btn.className = 'py-2.5 px-2 rounded-xl text-xs font-headline font-bold bg-primary-container text-white shadow-sm transition-all flex items-center justify-center gap-1';
+        } else {
+          conteudo.classList.add('hidden');
+          conteudo.classList.remove('flex');
+          btn.className = 'py-2.5 px-2 rounded-xl text-xs font-headline font-semibold text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1';
+        }
+      });
+    }
+
+    async function iniciar() {
+      if (!token) {
+        document.getElementById('card-aluno-info').innerHTML = `
+          <div class="p-4 text-center text-red-600 text-xs w-full">
+            <span class="material-symbols-outlined text-3xl mb-1 block">warning</span>
+            <strong>Link de acesso não informado ou inválido.</strong>
+            <p class="text-on-surface-variant text-[11px] mt-1">Utilize o link exclusivo enviado pelo WhatsApp do atendimento Co.Nexo SENAC.</p>
+          </div>
+        `;
+        document.getElementById('secao-horarios').classList.add('hidden');
+        document.getElementById('nav-portal-abas').classList.add('hidden');
+        return;
+      }
+
+      try {
+        const res = await apiFetch(`/empreendedores/portal/${token}`);
+        if (res.sucesso) {
+          mentorado = res.dados;
+          document.getElementById('nome-mentorado').textContent = mentorado.nomeCompleto;
+          document.getElementById('negocio-mentorado').textContent = mentorado.negocio?.nomeFantasia || 'Negócio em Estruturação';
+
+          const iniciais = mentorado.nomeCompleto.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+          document.getElementById('avatar-mentorado').innerHTML = `<span>${iniciais}</span>`;
+
+          const badgeMei = document.getElementById('badge-mei-portal');
+          if (mentorado.negocio?.situacaoAtual === 'mei_aberto') {
+            badgeMei.textContent = 'MEI Formalizado';
+            badgeMei.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shrink-0';
+          }
+
+          if (mentorado.statusPrograma === 'em_mentoria' || mentorado.statusPrograma === 'concluido') {
+            tipoAtual = 'mentoria_2h';
+            document.getElementById('subtitulo-etapa').textContent = 'Trilha de Aceleração';
+            document.getElementById('titulo-etapa').textContent = 'Mentoria Especializada Individual';
+            document.getElementById('badge-duracao').textContent = '2 horas';
+            document.getElementById('icone-etapa').textContent = 'psychology';
+            document.getElementById('subtitulo-portal-topo').textContent = 'Agende seu próximo encontro, acompanhe sua trilha e acesse suas metas e materiais.';
+
+            // Exibe barra de progresso e abas Minha Trilha / Metas & PDFs apenas para quem já passou da 1ª entrevista
+            const blocoProgresso = document.getElementById('bloco-progresso-portal');
+            blocoProgresso.classList.remove('hidden');
+            blocoProgresso.classList.add('flex');
+
+            const navAbas = document.getElementById('nav-portal-abas');
+            navAbas.classList.remove('hidden');
+            navAbas.classList.add('grid');
+
+            const resDiario = await apiFetch(`/diarios/portal/${token}`);
+            if (resDiario.sucesso) {
+              diarioMentorado = resDiario.dados;
+              renderizarTrilhaEMateriais(diarioMentorado.encontros || []);
+            }
+          } else {
+            tipoAtual = 'entrevista_1h';
+            document.getElementById('subtitulo-etapa').textContent = '1º Encontro Obrigatório';
+            document.getElementById('titulo-etapa').textContent = 'Entrevista Inicial de Diagnóstico';
+            document.getElementById('badge-duracao').textContent = '1 hora';
+            document.getElementById('icone-etapa').textContent = 'quiz';
+            document.getElementById('subtitulo-portal-topo').textContent = 'Escolha abaixo o melhor dia e horário para sua entrevista inicial obrigatória.';
+          }
+
+          if (mentorado.bloqueadoPorAssiduidade) {
+            document.getElementById('card-bloqueado').classList.remove('hidden');
+            document.getElementById('card-bloqueado').classList.add('flex');
+            document.getElementById('secao-horarios').classList.add('hidden');
+            return;
+          }
+
+          await verificarMeuAgendamentoAtivo();
+        }
+      } catch (err) {
+        document.getElementById('card-aluno-info').innerHTML = `
+          <div class="p-4 text-center text-red-600 text-xs w-full">
+            <strong>Link não localizado ou expirado.</strong> Solicite um novo link à equipe do SENAC.
+          </div>
+        `;
+        document.getElementById('secao-horarios').classList.add('hidden');
+      }
+    }
+
+    function renderizarTrilhaEMateriais(encontros) {
+      const realizados = encontros.filter(e => e.status === 'realizado').length;
+      const pct = Math.round((realizados / 5) * 100);
+      document.getElementById('progresso-portal-texto').textContent = `${realizados} de 5 Encontros (${pct}%)`;
+      document.getElementById('progresso-portal-barra').style.width = `${pct}%`;
+
+      // 1. Renderiza Timeline da Trilha
+      const timeline = document.getElementById('timeline-encontros');
+      timeline.innerHTML = encontros.map(e => {
+        let badge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Pendente</span>';
+        let corCirculo = 'bg-surface-container-high text-on-surface-variant';
+        if (e.status === 'realizado') {
+          badge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Concluído ✓</span>';
+          corCirculo = 'bg-emerald-600 text-white';
+        } else if (e.status === 'falta') {
+          badge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">Ausência</span>';
+          corCirculo = 'bg-red-600 text-white';
+        }
+
+        return `
+          <div class="p-3.5 rounded-xl bg-surface-container-low/60 border border-outline-variant flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-full ${corCirculo} font-headline font-bold text-xs flex items-center justify-center shrink-0">
+                ${e.numeroEncontro}
+              </div>
+              <div>
+                <h4 class="font-headline font-bold text-xs text-on-surface">Encontro ${e.numeroEncontro}: ${e.tituloPadrao}</h4>
+                <p class="text-[11px] text-outline">${e.planoAcaoMetas ? 'Plano de ação registrado' : 'Aguardando realização da sessão'}</p>
+              </div>
+            </div>
+            ${badge}
+          </div>
+        `;
+      }).join('');
+
+      // 2. Renderiza Metas & Tarefas (Com Checklist Interativo para o Aluno)
+      const comMetas = encontros.filter(e =>
+        (e.planoAcaoMetas && e.planoAcaoMetas.trim() !== '') ||
+        (e.checklistMetas && e.checklistMetas.length > 0)
+      );
+      const divMetas = document.getElementById('lista-metas-portal');
+      if (comMetas.length === 0) {
+        divMetas.innerHTML = `<div class="p-4 rounded-xl bg-surface-container-low/50 border border-dashed border-outline-variant text-center text-xs text-outline">Suas metas práticas aparecerão aqui logo após o seu atendimento com a consultora.</div>`;
+      } else {
+        divMetas.innerHTML = comMetas.map(e => {
+          const checklistHtml = (e.checklistMetas && e.checklistMetas.length > 0)
+            ? `
+              <div class="pt-2 space-y-1.5">
+                ${e.checklistMetas.map((item, idx) => `
+                  <label class="flex items-center gap-2.5 p-2 rounded-lg bg-white border border-outline-variant/60 cursor-pointer text-xs">
+                    <input type="checkbox" ${item.concluida ? 'checked' : ''} onchange="marcarMetaPortal(${e.numeroEncontro}, ${idx})" class="rounded text-emerald-600 focus:ring-emerald-500">
+                    <span class="${item.concluida ? 'line-through text-outline' : 'text-on-surface font-medium'}">${item.texto}</span>
+                  </label>
+                `).join('')}
+              </div>
+            `
+            : '';
+
+          return `
+            <div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant space-y-2">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-primary-container bg-primary-fixed px-2 py-0.5 rounded">Encontro ${e.numeroEncontro} — ${e.tituloPadrao}</span>
+              ${e.planoAcaoMetas ? `<p class="text-xs text-on-surface leading-relaxed whitespace-pre-line font-medium pt-1">${e.planoAcaoMetas}</p>` : ''}
+              ${checklistHtml}
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 3. Renderiza Materiais & Entregáveis
+      const todosArquivos = [];
+      encontros.forEach(e => {
+        (e.entregaveis || []).forEach(arq => {
+          todosArquivos.push({ ...arq, numeroEncontro: e.numeroEncontro });
+        });
+      });
+
+      const divArquivos = document.getElementById('lista-arquivos-portal');
+      if (todosArquivos.length === 0) {
+        divArquivos.innerHTML = `<div class="p-4 rounded-xl bg-surface-container-low/50 border border-dashed border-outline-variant text-center text-xs text-outline">Nenhum documento ou planilha anexado até o momento.</div>`;
+      } else {
+        divArquivos.innerHTML = todosArquivos.map(arq => `
+          <div class="p-3.5 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 overflow-hidden">
+              <span class="material-symbols-outlined text-secondary-container text-xl shrink-0">description</span>
+              <div class="overflow-hidden">
+                <strong class="text-xs font-bold text-on-surface block truncate">${arq.titulo}</strong>
+                <span class="text-[10px] text-outline">Encontro ${arq.numeroEncontro}</span>
+              </div>
+            </div>
+            <a href="${arq.urlArquivo}" download="${arq.titulo}" target="_blank" class="px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-bold hover:bg-primary transition-colors shrink-0 flex items-center gap-1">
+              <span>Baixar</span>
+              <span class="material-symbols-outlined text-sm">download</span>
+            </a>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function marcarMetaPortal(numeroEncontro, itemIdx) {
+      if (!diarioMentorado || !mentorado) return;
+      const enc = (diarioMentorado.encontros || []).find(e => e.numeroEncontro === numeroEncontro);
+      if (!enc || !enc.checklistMetas?.[itemIdx]) return;
+
+      enc.checklistMetas[itemIdx].concluida = !enc.checklistMetas[itemIdx].concluida;
+      renderizarTrilhaEMateriais(diarioMentorado.encontros);
+
+      try {
+        await apiFetch(`/diarios/portal/${token}/encontro/${numeroEncontro}/checklist`, {
+          method: 'PATCH',
+          body: JSON.stringify({ checklistMetas: enc.checklistMetas })
+        });
+        showToast('Tarefa atualizada no seu Plano de Ação!', 'success');
+      } catch (e) {}
+    }
+
+    async function verificarMeuAgendamentoAtivo() {
+      try {
+        const res = await apiFetch(`/agendamentos/portal/${token}`);
+        const cardAtivo = document.getElementById('card-meu-agendamento-ativo');
+        const secaoHorarios = document.getElementById('secao-horarios');
+
+        if (res.sucesso && res.dados && res.dados.length > 0) {
+          agendamentoAtivo = res.dados[0];
+          const tipoLabel = agendamentoAtivo.tipo === 'entrevista_1h'
+            ? 'Entrevista Inicial de Diagnóstico (1h)'
+            : 'Mentoria Especializada Individual (2h)';
+
+          document.getElementById('ativo-tipo-titulo').textContent = tipoLabel;
+          document.getElementById('ativo-data-hora').textContent = formatDate(agendamentoAtivo.dataHoraInicio);
+          document.getElementById('ativo-consultor').textContent = agendamentoAtivo.consultorId?.nome || 'Consultoria SENAC';
+
+          const btnCheckin = document.getElementById('btn-pre-checkin-aluno');
+          const avisoCheckin = document.getElementById('aviso-pre-checkin-realizado');
+          const badgeTopo = document.getElementById('badge-status-confirmacao-ativo');
+
+          if (agendamentoAtivo.confirmadoPeloAluno) {
+            btnCheckin.classList.add('hidden');
+            avisoCheckin.classList.remove('hidden');
+            avisoCheckin.classList.add('flex');
+            badgeTopo.textContent = 'Pré-Confirmado ✓';
+            badgeTopo.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-600 text-white';
+          } else {
+            btnCheckin.classList.remove('hidden');
+            avisoCheckin.classList.add('hidden');
+            avisoCheckin.classList.remove('flex');
+            badgeTopo.textContent = 'Agendado';
+            badgeTopo.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800';
+          }
+
+          cardAtivo.classList.remove('hidden');
+          cardAtivo.classList.add('flex');
+          secaoHorarios.classList.add('hidden');
+        } else {
+          agendamentoAtivo = null;
+          cardAtivo.classList.add('hidden');
+          cardAtivo.classList.remove('flex');
+          secaoHorarios.classList.remove('hidden');
+          carregarSlots();
+        }
+      } catch (e) {
+        carregarSlots();
+      }
+    }
+
+    async function confirmarMinhaPresencaPortal() {
+      if (!agendamentoAtivo || !token) return;
+      try {
+        const res = await apiFetch(`/agendamentos/${agendamentoAtivo._id}/confirmar-aluno`, {
+          method: 'PATCH',
+          body: JSON.stringify({ accessToken: token })
+        });
+        if (res.sucesso) {
+          showToast('Presença pré-confirmada com sucesso!', 'success');
+          await verificarMeuAgendamentoAtivo();
+        }
+      } catch (e) {}
+    }
+
+    async function cancelarMeuAgendamentoPortal() {
+      if (!agendamentoAtivo || !token) return;
+      try {
+        const res = await apiFetch(`/agendamentos/${agendamentoAtivo._id}/cancelar`, {
+          method: 'POST',
+          body: JSON.stringify({
+            motivo: 'Solicitado pelo empreendedor no Portal do Aluno',
+            accessToken: token
+          })
+        });
+
+        showToast(res.mensagem || 'Horário desmarcado com sucesso!', res.bloqueado ? 'danger' : 'success');
+        if (res.bloqueado) {
+          window.location.reload();
+          return;
+        }
+        await verificarMeuAgendamentoAtivo();
+      } catch (e) {}
+    }
+
+    async function carregarSlots() {
+      const container = document.getElementById('lista-slots');
+      container.innerHTML = `
+        <div class="p-6 text-center text-on-surface-variant text-xs flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined animate-spin text-2xl text-primary-container">progress_activity</span>
+          <span>Buscando horários disponíveis...</span>
+        </div>
+      `;
+      slotSelecionado = null;
+      document.getElementById('btn-confirmar').disabled = true;
+
+      try {
+        const res = await apiFetch(`/agendamentos/disponiveis?tipo=${tipoAtual}`);
+        if (res.sucesso) {
+          if (res.dados.length === 0) {
+            container.innerHTML = `
+              <div class="p-6 rounded-2xl bg-amber-50 border border-amber-200 text-center text-xs text-amber-800 flex flex-col items-center gap-1.5">
+                <span class="material-symbols-outlined text-2xl text-amber-600">event_busy</span>
+                <strong>Sem horários abertos para esta etapa no momento.</strong>
+                <span class="text-[11px] text-amber-700">Novos turnos são liberados diariamente pela coordenação SENAC.</span>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = res.dados.map(slot => {
+            const dataExtenso = new Date(slot.dataHoraInicio).toLocaleDateString('pt-BR', {
+              weekday: 'short',
+              day: '2-digit',
+              month: 'short'
+            });
+            const horaInicio = new Date(slot.dataHoraInicio).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const horaFim = new Date(slot.dataHoraFim).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const consultor = slot.consultorId?.nome || 'Consultoria SENAC';
+
+            return `
+              <div onclick="selecionarSlot('${slot._id}', this)" class="slot-card p-4 rounded-xl bg-white border-2 border-outline-variant/70 hover:border-primary-container cursor-pointer transition-all flex items-center justify-between shadow-sm">
+                <div class="flex flex-col gap-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-primary-container bg-primary-fixed px-2 py-0.5 rounded-full capitalize">${dataExtenso}</span>
+                    <span class="text-[11px] text-on-surface-variant flex items-center gap-0.5 font-semibold">
+                      <span class="material-symbols-outlined text-sm">schedule</span>
+                      ${horaInicio} às ${horaFim}
+                    </span>
+                  </div>
+                  <span class="font-headline font-bold text-sm text-on-surface mt-0.5">${consultor}</span>
+                </div>
+                <div class="radio-indicator w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center shrink-0 transition-colors">
+                  <span class="material-symbols-outlined text-base text-transparent">check</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      } catch (err) {
+        console.error('Erro ao buscar slots:', err);
+      }
+    }
+
+    function selecionarSlot(id, element) {
+      document.querySelectorAll('.slot-card').forEach(el => {
+        el.classList.remove('border-primary-container', 'bg-primary-fixed/20');
+        el.classList.add('border-outline-variant/70', 'bg-white');
+        const ind = el.querySelector('.radio-indicator');
+        if (ind) {
+          ind.className = 'radio-indicator w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center shrink-0 transition-colors';
+          ind.querySelector('span').className = 'material-symbols-outlined text-base text-transparent';
+        }
+      });
+
+      element.classList.remove('border-outline-variant/70', 'bg-white');
+      element.classList.add('border-primary-container', 'bg-primary-fixed/20');
+      const ind = element.querySelector('.radio-indicator');
+      if (ind) {
+        ind.className = 'radio-indicator w-6 h-6 rounded-full bg-primary-container border-2 border-primary-container flex items-center justify-center shrink-0 transition-colors text-white';
+        ind.querySelector('span').className = 'material-symbols-outlined text-base text-white';
+      }
+
+      slotSelecionado = id;
+      document.getElementById('btn-confirmar').disabled = false;
+    }
+
+    async function confirmarAgendamento() {
+      if (!slotSelecionado || !token) return;
+
+      const btn = document.getElementById('btn-confirmar');
+      btn.disabled = true;
+      btn.innerHTML = `
+        <span class="material-symbols-outlined animate-spin text-base">progress_activity</span>
+        <span>Confirmando Reserva...</span>
+      `;
+
+      try {
+        const res = await apiFetch('/agendamentos/reservar', {
+          method: 'POST',
+          body: JSON.stringify({
+            slotId: slotSelecionado,
+            accessToken: token
+          })
+        });
+
+        if (res.sucesso) {
+          showToast('Horário reservado com sucesso!', 'success');
+          await iniciar();
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = `
+          <span class="material-symbols-outlined text-lg">check_circle</span>
+          <span>Confirmar Meu Horário</span>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', iniciar);
+  </script>
+</body>
+</html>

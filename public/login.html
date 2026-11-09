@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="h-full" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Entrar — Co.Nexo SENAC</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary-container": "#004587",
+            "secondary-container": "#f37021",
+            "surface": "#f8f9fa",
+            "outline-variant": "#c2c6d1",
+            "on-surface": "#191c1d",
+            "on-surface-variant": "#424750"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface h-full flex items-center justify-center font-body antialiased p-4">
+
+  <div class="w-full max-w-sm">
+    <!-- Card Principal de Login -->
+    <div id="box-login" class="bg-white rounded-2xl p-7 border border-outline-variant/80 shadow-lg space-y-6">
+      <!-- Logo Oficial Co.Nexo SENAC -->
+      <div class="flex flex-col items-center text-center gap-2">
+        <img src="img/logo-conexo.png" alt="Co.Nexo Senac Fecomércio BA" class="h-24 w-auto object-contain"/>
+        <p class="text-xs text-on-surface-variant">Acesse sua conta com e-mail e senha</p>
+      </div>
+
+      <!-- Formulário de Login -->
+      <form id="form-login" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1">E-mail</label>
+          <input type="email" id="input-email" required placeholder="seu.email@senac.br" class="w-full text-xs rounded-xl border-outline-variant bg-surface p-3 focus:border-primary-container focus:ring-primary-container"/>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-on-surface">Senha</label>
+            <button type="button" onclick="alternarTelaRecuperacao(true)" class="text-[11px] font-semibold text-primary-container hover:underline">
+              Esqueci minha senha
+            </button>
+          </div>
+          <input type="password" id="input-senha" required placeholder="••••••••" class="w-full text-xs rounded-xl border-outline-variant bg-surface p-3 focus:border-primary-container focus:ring-primary-container"/>
+        </div>
+
+        <button type="submit" id="btn-submit-login" class="w-full py-3 rounded-xl bg-primary-container hover:bg-[#00366b] text-white font-headline font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2">
+          <span>Entrar</span>
+          <span class="material-symbols-outlined text-base">login</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Card de Esqueci Minha Senha (Oculto por padrão) -->
+    <div id="box-recuperar" class="hidden bg-white rounded-2xl p-7 border border-outline-variant/80 shadow-lg space-y-5">
+      <div class="flex flex-col items-center text-center gap-1.5">
+        <div class="w-11 h-11 rounded-2xl bg-secondary-container/10 text-secondary-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-2xl">lock_reset</span>
+        </div>
+        <h2 class="font-headline font-bold text-lg text-on-surface">Redefinir Senha</h2>
+        <p class="text-xs text-on-surface-variant">Informe seu e-mail cadastrado e escolha uma nova senha de acesso.</p>
+      </div>
+
+      <form id="form-recuperar" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1">Seu E-mail</label>
+          <input type="email" id="rec-email" required placeholder="seu.email@senac.br" class="w-full text-xs rounded-xl border-outline-variant bg-surface p-3 focus:border-primary-container focus:ring-primary-container"/>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1">Nova Senha (mín. 6 caracteres)</label>
+          <input type="password" id="rec-nova-senha" required minlength="6" placeholder="Digite a nova senha" class="w-full text-xs rounded-xl border-outline-variant bg-surface p-3 focus:border-primary-container focus:ring-primary-container"/>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-secondary-container hover:brightness-105 text-white font-headline font-bold text-xs shadow-sm transition-all">
+          Salvar Nova Senha
+        </button>
+
+        <button type="button" onclick="alternarTelaRecuperacao(false)" class="w-full py-2 text-xs font-semibold text-on-surface-variant hover:text-on-surface transition-colors">
+          Voltar para o login
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Garante que os 3 usuários padrão (Regis, Max e Aline) existam no banco
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await fetch('/api/auth/seed', { method: 'POST' });
+      } catch (e) {}
+    });
+
+    function alternarTelaRecuperacao(mostrarRecuperacao) {
+      const boxLogin = document.getElementById('box-login');
+      const boxRec = document.getElementById('box-recuperar');
+      if (mostrarRecuperacao) {
+        boxLogin.classList.add('hidden');
+        boxRec.classList.remove('hidden');
+        document.getElementById('rec-email').value = document.getElementById('input-email').value;
+      } else {
+        boxRec.classList.add('hidden');
+        boxLogin.classList.remove('hidden');
+      }
+    }
+
+    document.getElementById('form-login').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('input-email').value.trim();
+      const senha = document.getElementById('input-senha').value;
+
+      try {
+        const res = await apiFetch('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, senha })
+        });
+
+        if (res.sucesso) {
+          const role = res.usuario.role;
+          const perfilBase = PERFIS_SENAC[role] || PERFIS_SENAC.coordenador;
+          setSession(res.token, {
+            ...perfilBase,
+            id: res.usuario.id,
+            nome: res.usuario.nome,
+            email: res.usuario.email,
+            role: res.usuario.role
+          });
+          window.location.href = perfilBase.homeUrl;
+        }
+      } catch (err) {}
+    });
+
+    document.getElementById('form-recuperar').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('rec-email').value.trim();
+      const novaSenha = document.getElementById('rec-nova-senha').value;
+
+      try {
+        const res = await apiFetch('/auth/esqueci-senha', {
+          method: 'POST',
+          body: JSON.stringify({ email, novaSenha })
+        });
+
+        if (res.sucesso) {
+          showToast(res.mensagem, 'success');
+          document.getElementById('input-email').value = email;
+          document.getElementById('input-senha').value = '';
+          alternarTelaRecuperacao(false);
+        }
+      } catch (err) {}
+    });
+  </script>
+</body>
+</html>

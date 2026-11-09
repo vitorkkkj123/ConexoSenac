@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Co.Nexo SENAC — Painel Executivo de Inteligência & Cockpit</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#002f5f",
+            "primary-container": "#004587",
+            "primary-fixed": "#d5e3ff",
+            "primary-fixed-dim": "#a8c8ff",
+            "on-primary": "#ffffff",
+            "secondary": "#a04100",
+            "secondary-container": "#f37021",
+            "secondary-fixed": "#ffdbcb",
+            "on-secondary": "#ffffff",
+            "surface": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#424750",
+            "outline": "#737782",
+            "outline-variant": "#c2c6d2",
+            "background": "#f8f9ff"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, h4, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    @media print {
+      aside, header, .no-print { display: none !important; }
+      main { padding: 0 !important; max-width: 100% !important; }
+      body { background: #ffffff !important; }
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased selection:bg-primary-fixed selection:text-primary">
+
+<div class="flex min-h-screen w-full">
+  <!-- SideNavBar Corporativa -->
+  <aside class="h-screen w-64 flex flex-col shrink-0 fixed lg:sticky inset-y-0 top-0 left-0 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out bg-surface-container-low border-r border-outline-variant select-none z-50">
+    <div class="flex flex-col h-full p-4 justify-between">
+      <div class="space-y-6">
+        <!-- Logo Co.Nexo SENAC -->
+        <div class="flex items-center justify-center px-2 py-2 bg-white rounded-xl border border-outline-variant/60 shadow-sm">
+          <img src="img/logo-conexo.png" alt="Co.Nexo Senac" class="h-14 w-auto object-contain"/>
+        </div>
+
+        <!-- Botão de Ação Principal -->
+        <div class="px-1">
+          <a href="alunos.html" class="w-full py-2.5 px-4 bg-secondary-container hover:bg-secondary text-on-primary font-headline font-semibold text-xs rounded-lg shadow-sm transition-all flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">person_add</span>
+            <span>Novo Atendimento</span>
+          </a>
+        </div>
+
+        <!-- Menu de Navegação -->
+        <nav class="space-y-1">
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary font-semibold text-sm shadow-sm transition-all" href="index.html">
+            <span class="material-symbols-outlined text-[20px]">monitoring</span>
+            <span>Painel & Indicadores</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface text-sm font-medium transition-colors" href="alunos.html">
+            <span class="material-symbols-outlined text-[20px]">groups</span>
+            <span>Base de Empreendedores</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface text-sm font-medium transition-colors" href="agenda.html">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span>Grade & Agendamento</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface text-sm font-medium transition-colors" href="login.html">
+            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+            <span>Trocar Workspace</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Perfil Ativo & Alternador RBAC (Injetado por layout.js) -->
+      <div id="sidebar-user-profile" class="pt-4 border-t border-outline-variant"></div>
+    </div>
+  </aside>
+
+  <!-- Área Principal de Conteúdo -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Header Superior Limpo -->
+    <header class="sticky top-0 z-30 bg-surface-container-lowest border-b border-outline-variant shadow-sm">
+      <div class="w-full px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-3">
+        <div class="flex items-center gap-3">
+          <h2 class="text-base font-headline font-bold text-primary-container">Painel & Indicadores</h2>
+          <span class="hidden md:inline-flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1 rounded-lg border border-outline-variant text-xs text-on-surface-variant font-medium">
+            <span class="material-symbols-outlined text-outline text-[15px]">event</span>
+            <span id="data-hoje-header">Hoje</span>
+          </span>
+        </div>
+
+        <!-- Ações do Header -->
+        <div class="flex items-center gap-2">
+          <button onclick="carregarDashboard()" class="p-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-on-surface-variant transition-colors" title="Atualizar Indicadores">
+            <span class="material-symbols-outlined text-[18px]">sync</span>
+          </button>
+          <button onclick="exportarBaseCompletaExcel()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition-colors text-xs font-semibold" title="Baixar planilha para o Excel">
+            <span class="material-symbols-outlined text-[16px]">download</span>
+            <span>Exportar CSV</span>
+          </button>
+          <button onclick="window.print()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-white text-on-surface hover:bg-surface-container transition-colors text-xs font-semibold" title="Gerar PDF ou Imprimir">
+            <span class="material-symbols-outlined text-[16px]">print</span>
+            <span>PDF</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conteúdo do Dashboard -->
+    <main class="flex-1 p-6 space-y-6 max-w-[1600px] w-full mx-auto">
+
+      <!-- Cabeçalho de Impressão Oficial (Visível apenas em PDF/Impressão) -->
+      <div class="hidden print:flex items-center justify-between border-b-2 border-primary-container pb-4 mb-6">
+        <div>
+          <h1 class="text-xl font-bold text-primary-container">SENAC — Relatório do Programa Co.Nexo</h1>
+          <p class="text-xs text-gray-600">Indicadores de Formalização MEI, Assiduidade e Horas de Mentoria</p>
+        </div>
+        <span class="text-xs font-semibold text-gray-500" id="print-timestamp"></span>
+      </div>
+
+      <!-- 4 KPIs Estratégicos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI 1 -->
+        <div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-primary-container"></div>
+          <div>
+            <div class="flex items-center justify-between text-outline">
+              <span class="text-[11px] uppercase font-semibold tracking-wider">Empreendedores Atendidos</span>
+              <span class="material-symbols-outlined text-[18px] text-primary-container">groups</span>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span class="text-3xl font-headline font-bold text-on-surface tracking-tight" id="kpi-total-alunos">-</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                Ativos
+              </span>
+            </div>
+            <p class="text-xs text-outline mt-1.5" id="kpi-distribuicao-status">Carregando...</p>
+          </div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-secondary-container"></div>
+          <div>
+            <div class="flex items-center justify-between text-outline">
+              <span class="text-[11px] uppercase font-semibold tracking-wider">Formalização MEI</span>
+              <span class="material-symbols-outlined text-[18px] text-secondary">verified</span>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span class="text-3xl font-headline font-bold text-secondary-container tracking-tight" id="kpi-taxa-formalizacao">-%</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-secondary-fixed text-secondary" id="kpi-detalhe-mei">
+                0 MEIs
+              </span>
+            </div>
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-3">
+              <div class="bg-secondary-container h-full rounded-full transition-all duration-500" id="barra-formalizacao" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-emerald-600"></div>
+          <div>
+            <div class="flex items-center justify-between text-outline">
+              <span class="text-[11px] uppercase font-semibold tracking-wider">Taxa de Assiduidade</span>
+              <span class="material-symbols-outlined text-[18px] text-emerald-700">event_available</span>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span class="text-3xl font-headline font-bold text-on-surface tracking-tight" id="kpi-taxa-assiduidade">-%</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                Presença
+              </span>
+            </div>
+            <p class="text-xs text-outline mt-1.5" id="kpi-detalhe-assiduidade">0 realizados | 0 faltas</p>
+          </div>
+        </div>
+
+        <!-- KPI 4 -->
+        <div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+          <div>
+            <div class="flex items-center justify-between text-outline">
+              <span class="text-[11px] uppercase font-semibold tracking-wider">Horas Executadas</span>
+              <span class="material-symbols-outlined text-[18px] text-primary">schedule</span>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span class="text-3xl font-headline font-bold text-on-surface tracking-tight" id="kpi-horas-executadas">0h</span>
+              <span class="text-xs text-outline font-medium">acumuladas</span>
+            </div>
+            <p class="text-xs text-outline mt-1.5">Entrevistas (1h) e mentorias (2h)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Gráficos Executivos (BI SENAC com Chart.js — 3 Gráficos) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <!-- Gráfico 1: Funil / Evolução na Trilha (4 Colunas) -->
+        <div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between">
+          <div class="mb-3">
+            <h3 class="text-xs font-headline font-bold text-primary-container uppercase tracking-wider">Evolução dos Empreendedores</h3>
+            <p class="text-[11px] text-on-surface-variant">Distribuição por etapa do programa</p>
+          </div>
+          <div class="h-56 w-full relative">
+            <canvas id="chartFunilStatus"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfico 2: Situação Cadastral MEI vs Informal (4 Colunas) -->
+        <div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between">
+          <div class="mb-3">
+            <h3 class="text-xs font-headline font-bold text-primary-container uppercase tracking-wider">Formalização MEI</h3>
+            <p class="text-[11px] text-on-surface-variant">Proporção de negócios informais vs. formalizados</p>
+          </div>
+          <div class="h-56 w-full relative flex items-center justify-center">
+            <canvas id="chartFormalizacao"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfico 3: Maturidade Média dos Negócios nos 4 Eixos SENAC (4 Colunas) -->
+        <div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm flex flex-col justify-between">
+          <div class="mb-3">
+            <h3 class="text-xs font-headline font-bold text-primary-container uppercase tracking-wider">Maturidade Média (4 Eixos)</h3>
+            <p class="text-[11px] text-on-surface-variant">Média de evolução técnica avaliada nas consultorias (1 a 5)</p>
+          </div>
+          <div class="h-56 w-full relative flex items-center justify-center">
+            <canvas id="chartMaturidadeMedia"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade Central: Agenda de Hoje (Esquerda) + Gestão de Bloqueios (Direita) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Coluna Esquerda (8 cols): Agenda do Dia -->
+        <div class="lg:col-span-8">
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-base font-headline font-bold text-primary-container flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary-container">today</span>
+                  <span>Atendimentos de Hoje</span>
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-0.5">Confirme presenças, registre faltas ou envie lembretes via WhatsApp.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 text-xs font-bold border border-blue-200" id="cockpit-agendados">0 Agendados</span>
+                <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200" id="cockpit-realizados">0 Realizados</span>
+                <span class="px-2.5 py-1 rounded-md bg-red-50 text-red-800 text-xs font-bold border border-red-200" id="cockpit-faltas">0 Faltas</span>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-outline-variant text-[11px] text-outline uppercase font-semibold">
+                    <th class="py-3 px-4">Horário</th>
+                    <th class="py-3 px-4">Tipo</th>
+                    <th class="py-3 px-4">Empreendedor / Negócio</th>
+                    <th class="py-3 px-4">Consultor(a)</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4 text-right no-print">Ações Operacionais</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-xs" id="tabela-cockpit-hoje">
+                  <tr>
+                    <td colspan="6" class="text-center py-8 text-outline">Carregando atendimentos de hoje...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna Direita (4 cols): Alertas de Bloqueio + Trilha de Auditoria -->
+        <div class="lg:col-span-4 space-y-5">
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+            <div class="p-4 bg-slate-50 border-b border-outline-variant flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-red-600 text-[20px]">gpp_maybe</span>
+                <h4 class="font-headline font-bold text-xs text-on-surface uppercase tracking-wider">Retenções por Assiduidade</h4>
+              </div>
+              <span class="text-[10px] font-bold bg-red-100 text-red-800 px-2 py-0.5 rounded">Regra ≥ 2 Faltas</span>
+            </div>
+            <div class="p-4 space-y-3" id="lista-bloqueados">
+              <div class="text-center text-outline text-xs py-4">Verificando alertas...</div>
+            </div>
+          </div>
+
+          <!-- Card 2: Radar de Evasão Silenciosa (Em Mentoria / Inscritos Sem Próximo Agendamento) -->
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden no-print">
+            <div class="p-4 bg-amber-50/70 border-b border-amber-200 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-700 text-[20px]">notification_important</span>
+                <h4 class="font-headline font-bold text-xs text-amber-950 uppercase tracking-wider">Radar de Evasão Silenciosa</h4>
+              </div>
+              <span class="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded" id="badge-total-evasao">Sem Horário</span>
+            </div>
+            <div class="p-4 space-y-2.5 max-h-64 overflow-y-auto" id="lista-evasao-silenciosa">
+              <div class="text-center text-outline text-xs py-4">Analisando carteira ativa...</div>
+            </div>
+          </div>
+
+          <!-- Painel de Trilha de Auditoria em Tempo Real (Exclusivo Regis) -->
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden no-print">
+            <div class="p-4 bg-slate-50 border-b border-outline-variant flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary-container text-[20px]">history</span>
+                <h4 class="font-headline font-bold text-xs text-on-surface uppercase tracking-wider">Últimas Ações da Equipe</h4>
+              </div>
+              <span class="text-[10px] font-bold bg-surface-container-high text-primary-container px-2 py-0.5 rounded">Auditoria</span>
+            </div>
+            <div class="p-4 space-y-2.5 max-h-72 overflow-y-auto" id="lista-auditoria-regis">
+              <div class="text-center text-outline text-xs py-4">Carregando histórico...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer Corporativo -->
+    <footer class="mt-auto px-6 py-4 bg-surface-container-lowest border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between text-xs text-outline">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-primary-container">Co.Nexo SENAC</span>
+        <span>—</span>
+        <span>Plataforma Corporativa de Apoio e Formalização de MEIs</span>
+      </div>
+      <div>Serviço Nacional de Aprendizagem Comercial &copy; 2026</div>
+    </footer>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/layout.js"></script>
+<script>
+  document.getElementById('data-hoje-header').textContent = new Date().toLocaleDateString('pt-BR', {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
+  document.getElementById('print-timestamp').textContent = 'Emitido em: ' + formatDate(new Date());
+
+  let chartFunilInstance = null;
+  let chartFormalizacaoInstance = null;
+  let chartMaturidadeInstance = null;
+
+  async function carregarDashboard() {
+    try {
+      // 1. Carrega KPIs Estratégicos
+      const resKpis = await apiFetch('/dashboard/kpis');
+      if (resKpis.sucesso) {
+        const k = resKpis.dados;
+        document.getElementById('kpi-total-alunos').textContent = k.totalEmpreendedores;
+        document.getElementById('kpi-taxa-formalizacao').textContent = `${k.taxaFormalizacao}%`;
+        document.getElementById('kpi-detalhe-mei').textContent = `${k.convertidosMEI} MEIs | ${k.informais} Informais`;
+        document.getElementById('barra-formalizacao').style.width = `${Math.min(k.taxaFormalizacao, 100)}%`;
+
+        document.getElementById('kpi-taxa-assiduidade').textContent = `${k.taxaAssiduidade}%`;
+        document.getElementById('kpi-detalhe-assiduidade').textContent = `${k.totalRealizados} realizados | ${k.totalFaltasGerais} faltas`;
+        document.getElementById('kpi-horas-executadas').textContent = `${k.horasMentoriaExecutadas}h`;
+
+        const dist = k.distribuicaoStatus || {};
+        document.getElementById('kpi-distribuicao-status').textContent =
+          `Leads RD: ${dist.inscrito || 0} | Diagnóstico: ${dist.em_diagnostico || 0} | Mentoria: ${dist.em_mentoria || 0}`;
+
+        atualizarGraficosExecutivo(k);
+      }
+
+      // 2. Carrega Cockpit Diário
+      const resCockpit = await apiFetch('/dashboard/cockpit');
+      if (resCockpit.sucesso) {
+        const c = resCockpit.dados;
+        document.getElementById('cockpit-agendados').textContent = `${c.statsHoje.agendados} Agendados`;
+        document.getElementById('cockpit-realizados').textContent = `${c.statsHoje.realizados} Realizados`;
+        document.getElementById('cockpit-faltas').textContent = `${c.statsHoje.faltas} Faltas`;
+
+        const tbody = document.getElementById('tabela-cockpit-hoje');
+        if (c.atendimentos.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center py-10 text-outline">
+                <span class="material-symbols-outlined text-3xl mb-1 block text-outline-variant">event_available</span>
+                Nenhum atendimento agendado para a data de hoje.
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = c.atendimentos.map(item => {
+            const hora = new Date(item.dataHoraInicio).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const tipoLabel = item.tipo === 'entrevista_1h' ? '1º Encontro (1h)' : 'Mentoria (2h)';
+            const nomeAluno = item.empreendedorId?.nomeCompleto || 'Horário Livre na Grade';
+            const negocio = item.empreendedorId?.negocio?.nomeFantasia || '';
+            const consultor = item.consultorId?.nome || '-';
+
+            let badgeStatus = `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700">${item.status}</span>`;
+            if (item.status === 'agendado') {
+              badgeStatus = item.confirmadoPeloAluno
+                ? '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Pré-Confirmado ✓</span>'
+                : '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Agendado</span>';
+            }
+            if (item.status === 'realizado') badgeStatus = '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Realizado</span>';
+            if (item.status === 'disponivel') badgeStatus = '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Vaga Livre</span>';
+            if (item.status === 'falta' || item.status === 'cancelado_tardio_falta') badgeStatus = '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800">Falta</span>';
+
+            return `
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="py-3.5 px-4 font-bold text-on-surface">${hora}</td>
+                <td class="py-3.5 px-4"><span class="px-2 py-0.5 bg-surface-container rounded text-on-surface font-medium">${tipoLabel}</span></td>
+                <td class="py-3.5 px-4">
+                  <div class="font-semibold text-on-surface">${nomeAluno}</div>
+                  <div class="text-[11px] text-outline">${negocio}</div>
+                </td>
+                <td class="py-3.5 px-4 text-on-surface-variant">${consultor}</td>
+                <td class="py-3.5 px-4">${badgeStatus}</td>
+                <td class="py-3.5 px-4 text-right no-print text-outline text-[11px]">
+                  Monitoramento Coordenação
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // 3. Lista de Bloqueados com Opção de Reabilitação / Abono
+        const divBloqueados = document.getElementById('lista-bloqueados');
+        if (c.alertasBloqueio.length === 0) {
+          divBloqueados.innerHTML = `
+            <div class="p-4 rounded-lg bg-emerald-50/70 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-2">
+              <span class="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
+              <span>Nenhum empreendedor bloqueado por faltas no momento.</span>
+            </div>
+          `;
+        } else {
+          divBloqueados.innerHTML = c.alertasBloqueio.map(b => {
+            const msgDesbloqueio = `Olá, ${b.nomeCompleto}. Aqui é do atendimento Co.Nexo SENAC. Notamos que sua matrícula foi retida por limite de faltas/remarcações. Gostaria de reagendar mediante justificativa?`;
+            return `
+              <div class="p-3.5 rounded-xl bg-red-50/70 border border-red-200 space-y-2">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="text-xs font-bold text-red-950">${b.nomeCompleto}</p>
+                    <p class="text-[11px] text-red-700">${formatPhone(b.whatsapp)}</p>
+                  </div>
+                  <span class="text-[10px] font-bold bg-red-200 text-red-900 px-2 py-0.5 rounded-full">
+                    ${b.totalFaltas} falta(s) | ${b.totalReagendamentos} remarc.
+                  </span>
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-1 border-t border-red-200/60">
+                  <a href="${gerarLinkWhatsApp(b.whatsapp, msgDesbloqueio)}" target="_blank" class="px-2.5 py-1 rounded bg-white text-emerald-700 border border-emerald-300 text-[11px] font-bold hover:bg-emerald-50">
+                    Chamar WhatsApp
+                  </a>
+                  <button onclick="desbloquearAluno('${b._id}', '${b.nomeCompleto}')" class="px-2.5 py-1 rounded bg-primary-container text-white text-[11px] font-bold hover:bg-primary">
+                    Abonar & Desbloquear
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // 3.5. Radar de Evasão Silenciosa (Alunos ativos sem horário marcado)
+        const divEvasao = document.getElementById('lista-evasao-silenciosa');
+        const badgeEvasao = document.getElementById('badge-total-evasao');
+        const listaEvasao = c.emRiscoEvasao || [];
+        if (badgeEvasao) badgeEvasao.textContent = `${listaEvasao.length} Pendente(s)`;
+
+        if (divEvasao) {
+          if (listaEvasao.length === 0) {
+            divEvasao.innerHTML = `
+              <div class="p-3.5 rounded-lg bg-emerald-50/70 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-600 text-[18px]">task_alt</span>
+                <span>100% dos empreendedores ativos já possuem próximo encontro agendado!</span>
+              </div>
+            `;
+          } else {
+            divEvasao.innerHTML = listaEvasao.map(emp => {
+              const linkPortal = `${window.location.origin}/agendar.html?token=${emp.accessToken}`;
+              const etapaLabel = emp.statusPrograma === 'inscrito' ? '1ª Entrevista' : 'Próxima Mentoria';
+              const msgReativacao = `Olá, ${emp.nomeCompleto}! Aqui é da coordenação do Co.Nexo SENAC. Notamos que seu próximo encontro (${etapaLabel}) ainda não está agendado. Escolha seu horário em 1 toque pelo link: ${linkPortal}`;
+              return `
+                <div class="p-3 rounded-xl bg-amber-50/60 border border-amber-200 flex items-center justify-between gap-2">
+                  <div class="overflow-hidden">
+                    <p class="text-xs font-bold text-on-surface truncate">${emp.nomeCompleto}</p>
+                    <p class="text-[11px] text-amber-800 truncate">${emp.negocio?.nomeFantasia || 'Em estruturação'} • Aguardando ${etapaLabel}</p>
+                  </div>
+                  <a href="${gerarLinkWhatsApp(emp.whatsapp, msgReativacao)}" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-700 shrink-0 flex items-center gap-1 shadow-sm" title="Convidar para agendar via WhatsApp">
+                    <span class="material-symbols-outlined text-[13px]">send</span>
+                    <span>Reativar</span>
+                  </a>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      }
+
+      // 4. Carrega Trilha de Auditoria em Tempo Real
+      const resAudit = await apiFetch('/dashboard/auditoria?limit=15');
+      if (resAudit.sucesso) {
+        const divAudit = document.getElementById('lista-auditoria-regis');
+        const logs = resAudit.dados || [];
+        if (logs.length === 0) {
+          divAudit.innerHTML = `<div class="text-xs text-outline text-center py-3">Nenhum evento registrado ainda.</div>`;
+        } else {
+          divAudit.innerHTML = logs.map(log => {
+            const dataHora = formatDate(log.createdAt);
+            return `
+              <div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/60 space-y-0.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-primary-container uppercase">${log.acao.replace(/_/g, ' ')}</span>
+                  <span class="text-[10px] text-outline">${dataHora}</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant leading-snug">${log.detalhes}</p>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+    } catch (err) {
+      console.error('Erro ao carregar dashboard:', err);
+    }
+  }
+
+  function atualizarGraficosExecutivo(k) {
+    const dist = k.distribuicaoStatus || {};
+    const ctxFunil = document.getElementById('chartFunilStatus');
+    if (ctxFunil) {
+      if (chartFunilInstance) chartFunilInstance.destroy();
+      chartFunilInstance = new Chart(ctxFunil, {
+        type: 'bar',
+        data: {
+          labels: ['1. Leads RD', '2. Em Diagnóstico', '3. Em Mentoria', '4. Concluídos'],
+          datasets: [{
+            label: 'Empreendedores',
+            data: [dist.inscrito || 0, dist.em_diagnostico || 0, dist.em_mentoria || 0, dist.concluido || 0],
+            backgroundColor: ['#f59e0b', '#004587', '#059669', '#7c3aed'],
+            borderRadius: 8,
+            barThickness: 36
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } }
+          }
+        }
+      });
+    }
+
+    const ctxForm = document.getElementById('chartFormalizacao');
+    if (ctxForm) {
+      if (chartFormalizacaoInstance) chartFormalizacaoInstance.destroy();
+      chartFormalizacaoInstance = new Chart(ctxForm, {
+        type: 'doughnut',
+        data: {
+          labels: ['MEI Formalizado (CNPJ Ativo)', 'Negócio Informal (Em Transição)', 'MEI Inadimplente'],
+          datasets: [{
+            data: [k.convertidosMEI || 0, k.informais || 0, k.inadimplentes || 0],
+            backgroundColor: ['#059669', '#004587', '#dc2626'],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '64%',
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    const ctxMat = document.getElementById('chartMaturidadeMedia');
+    if (ctxMat) {
+      const m = k.maturidadeMedia || { financas: 3, vendas: 3, operacoes: 3, formalizacao: 3 };
+      const mi = k.maturidadeInicialMedia || { financas: 2, vendas: 2, operacoes: 2, formalizacao: 2 };
+      if (chartMaturidadeInstance) chartMaturidadeInstance.destroy();
+      chartMaturidadeInstance = new Chart(ctxMat, {
+        type: 'radar',
+        data: {
+          labels: ['Finanças', 'Vendas', 'Operações', 'MEI'],
+          datasets: [
+            {
+              label: 'Marco Zero (Inicial)',
+              data: [mi.financas || 2, mi.vendas || 2, mi.operacoes || 2, mi.formalizacao || 2],
+              backgroundColor: 'rgba(115, 119, 130, 0.12)',
+              borderColor: '#737782',
+              borderDash: [4, 4],
+              pointBackgroundColor: '#737782',
+              borderWidth: 1.5
+            },
+            {
+              label: 'Maturidade Atual',
+              data: [m.financas || 3, m.vendas || 3, m.operacoes || 3, m.formalizacao || 3],
+              backgroundColor: 'rgba(0, 69, 135, 0.22)',
+              borderColor: '#004587',
+              pointBackgroundColor: '#f37021',
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: { min: 0, max: 5, ticks: { stepSize: 1, display: false } }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+          }
+        }
+      });
+    }
+  }
+
+  async function registrarPresenca(agendamentoId, status) {
+    try {
+      await apiFetch(`/agendamentos/${agendamentoId}/presenca`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status })
+      });
+      showToast(`Atendimento marcado como ${status.toUpperCase()}!`, status === 'realizado' ? 'success' : 'danger');
+      carregarDashboard();
+    } catch (e) {}
+  }
+
+  async function desbloquearAluno(id, nome) {
+    try {
+      await apiFetch(`/empreendedores/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ statusPrograma: 'em_mentoria', bloqueadoPorAssiduidade: false, totalFaltas: 0 })
+      });
+      showToast(`Matrícula de ${nome} reabilitada com sucesso!`, 'success');
+      carregarDashboard();
+    } catch (e) {}
+  }
+
+  async function exportarBaseCompletaExcel() {
+    try {
+      const res = await apiFetch('/empreendedores?limit=500');
+      if (!res.sucesso) return;
+      const lista = res.dados || res.itens || [];
+      const cabecalhos = ['Nome Completo', 'CPF', 'WhatsApp', 'E-mail', 'Empresa / Nome Fantasia', 'Ramo de Atividade', 'Situação Cadastral', 'CNPJ', 'Status no Programa', 'Total de Faltas', 'Canal de Entrada', 'Data de Inscrição'];
+      const linhas = lista.map(a => [
+        a.nomeCompleto,
+        formatCPF(a.cpf),
+        formatPhone(a.whatsapp),
+        a.email || '',
+        a.negocio?.nomeFantasia || '',
+        a.negocio?.ramoAtividade || '',
+        a.negocio?.situacaoAtual || 'informal',
+        a.negocio?.cnpj || '',
+        a.statusPrograma,
+        a.totalFaltas || 0,
+        a.origemLead || 'SENAC',
+        formatOnlyDate(a.createdAt)
+      ]);
+      exportarParaCSV(`Relatorio_CoNexo_SENAC_${new Date().toISOString().slice(0,10)}.csv`, cabecalhos, linhas);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', carregarDashboard);
+</script>
+</body>
+</html>

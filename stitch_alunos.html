@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Base de Empreendedores | Co.Nexo SENAC São Paulo</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#ffdbcb",
+            "primary": "#002f5f",
+            "surface-container-high": "#dce9ff",
+            "tertiary-container": "#004c60",
+            "surface-dim": "#cbdbf5",
+            "error": "#ba1a1a",
+            "primary-fixed-dim": "#a8c8ff",
+            "on-primary-fixed-variant": "#034688",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "background": "#f8f9ff",
+            "surface-variant": "#d3e4fe",
+            "inverse-primary": "#a8c8ff",
+            "primary-container": "#004587",
+            "on-primary": "#ffffff",
+            "inverse-surface": "#213145",
+            "on-primary-fixed": "#001b3c",
+            "secondary-fixed-dim": "#ffb693",
+            "surface": "#f8f9ff",
+            "on-secondary-fixed-variant": "#7a3000",
+            "primary-fixed": "#d5e3ff",
+            "secondary-container": "#fc7728",
+            "on-secondary-container": "#5d2300",
+            "inverse-on-surface": "#eaf1ff",
+            "error-container": "#ffdad6",
+            "outline": "#737782",
+            "on-surface": "#0b1c30",
+            "secondary": "#a04100",
+            "surface-container-highest": "#d3e4fe",
+            "on-tertiary-container": "#6dbedc",
+            "tertiary": "#003443",
+            "on-secondary-fixed": "#341000",
+            "surface-bright": "#f8f9ff",
+            "tertiary-fixed": "#b9eaff",
+            "on-background": "#0b1c30",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c2c6d2",
+            "on-secondary": "#ffffff",
+            "surface-tint": "#2c5fa2",
+            "on-primary-container": "#87b5fe",
+            "on-error": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "on-surface-variant": "#424750",
+            "tertiary-fixed-dim": "#81d1f0",
+            "surface-container": "#e5eeff",
+            "on-tertiary-fixed-variant": "#004d62",
+            "on-tertiary-fixed": "#001f29"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-mobile": "0.75rem",
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "display-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "data-metric": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display-sm": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "data-metric": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-lg": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c2c6d2;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface h-full flex overflow-hidden font-body-md text-body-md antialiased selection:bg-primary-fixed selection:text-primary">
+<!-- ======================================================== -->
+<!-- 1. SIDEBAR (SideNavBar Component JSON Execution)        -->
+<!-- ======================================================== -->
+<aside class="h-screen w-64 flex flex-col shrink-0 sticky top-0 left-0 bg-surface-container-low border-r border-outline-variant select-none z-30">
+<div class="flex flex-col justify-between h-full p-4">
+<!-- Top Brand Anchor & Menu -->
+<div class="flex flex-col gap-6">
+<!-- Logo & Header Unit -->
+<div class="flex items-center gap-3 px-2 pt-1 pb-2">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-sm ring-2 ring-primary/20">
+<span class="material-symbols-outlined text-2xl" data-icon="corporate_fare">corporate_fare</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-xl text-headline-xl font-bold text-primary tracking-tight">Co.Nexo</span>
+<span class="text-[10px] font-bold bg-secondary-container text-on-secondary px-1.5 py-0.5 rounded tracking-wide uppercase">SENAC</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Regional São Paulo</span>
+</div>
+</div>
+<!-- Quick CTA Primary Action -->
+<button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-secondary-container text-on-secondary font-headline-md text-body-md font-semibold shadow-sm hover:brightness-105 active:scale-95 transition-all" onclick="toggleModal(true)">
+<span class="material-symbols-outlined text-lg" data-icon="person_add">person_add</span>
+<span>Novo Atendimento</span>
+</button>
+<!-- Main Navigation Links -->
+<nav aria-label="Navegação Principal" class="flex flex-col gap-1.5">
+<!-- Item 1: Dashboard Executivo -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard Executivo</span>
+</a>
+<!-- Item 2: Esteira de Formalização -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="account_tree">account_tree</span>
+<span class="font-label-md text-label-md">Esteira de Formalização</span>
+</a>
+<!-- Item 3: Ciclos de Mentoria -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="supervised_user_circle">supervised_user_circle</span>
+<span class="font-label-md text-label-md">Ciclos de Mentoria</span>
+</a>
+<!-- Item 4: Risco & Bloqueios -->
+<a class="flex items-center justify-between px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl" data-icon="warning">warning</span>
+<span class="font-label-md text-label-md">Risco &amp; Bloqueios</span>
+</div>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-error-container text-on-error-container">38</span>
+</a>
+<!-- Item 5: ACTIVE TAB -> Base Empreendedores -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-primary text-on-primary font-semibold shadow-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Base Empreendedores</span>
+</a>
+<!-- Item 6: Auditoria & Conformidade -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors duration-150 active:translate-x-0.5" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="verified_user">verified_user</span>
+<span class="font-label-md text-label-md">Auditoria &amp; Conformidade</span>
+</a>
+</nav>
+</div>
+<!-- Footer Navigation Items & Identity Pill -->
+<div class="flex flex-col gap-2 pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Configurações</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="headset_mic">headset_mic</span>
+<span class="font-label-sm text-label-sm">Central de Suporte</span>
+</a>
+<!-- System Version Status -->
+<div class="mt-2 p-2.5 rounded-lg bg-surface-container border border-outline-variant/60 flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-[11px] font-medium font-body-sm">Conexão Gov.br</span>
+</div>
+<span class="text-[10px] text-outline font-mono">v2.4.1</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ======================================================== -->
+<!-- 2. MAIN WORKSPACE AREA                                  -->
+<!-- ======================================================== -->
+<div class="flex-1 flex flex-col h-screen overflow-y-auto custom-scrollbar bg-background">
+<!-- Top Bar Component -->
+<header class="w-full px-6 py-3 flex justify-between items-center bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-20 shadow-sm backdrop-blur-md">
+<!-- Left: Regional Context & Cycle -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="location_on">location_on</span>
+<span class="font-headline-md text-headline-md text-primary font-bold">Regional SP - Centro</span>
+</div>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-low border border-outline-variant/50 text-on-surface-variant font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-sm text-secondary-container" data-icon="military_tech">military_tech</span>
+<span>Ciclo 2024.2 - Edição Empreenda</span>
+</div>
+<div class="hidden xl:flex items-center gap-1.5 text-outline font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+<span id="currentDate">24 de Outubro, 2024</span>
+</div>
+</div>
+<!-- Right: Search, Notification, Actions & User Avatar -->
+<div class="flex items-center gap-3">
+<!-- Quick Mini Search -->
+<div class="relative hidden lg:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg" data-icon="search">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 text-body-sm font-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="Busca global rápida..." type="text"/>
+</div>
+<!-- Help / Support Icon -->
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Ajuda">
+<span class="material-symbols-outlined text-xl" data-icon="help_outline">help_outline</span>
+</button>
+<!-- Notification Bell with Ping -->
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low relative transition-colors" title="Notificações">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary-container ring-2 ring-surface-container-lowest"></span>
+</button>
+<!-- Top CTA Highlight Button (+ Novo Empreendedor) -->
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-secondary-container hover:bg-[#d95d10] text-on-secondary font-headline-md text-label-md font-semibold shadow-sm transition-all active:scale-95" onclick="toggleModal(true)">
+<span class="material-symbols-outlined text-lg" data-icon="add_circle">add_circle</span>
+<span class="hidden sm:inline">+ Novo Empreendedor</span>
+</button>
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<!-- Manager Profile Badge -->
+<div class="flex items-center gap-3 pl-1">
+<div class="w-9 h-9 rounded-full ring-2 ring-primary/20 bg-primary-container text-on-primary flex items-center justify-center font-bold text-sm">
+            CF
+          </div>
+<div class="hidden md:flex flex-col text-left">
+<span class="text-label-md font-label-md font-semibold text-primary leading-tight">Clara Faria</span>
+<span class="text-label-sm font-label-sm text-outline">Coord. de Mentoria</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content Container -->
+<main class="p-6 md:p-8 flex flex-col gap-6 max-w-[1720px] w-full mx-auto">
+<!-- ======================================================== -->
+<!-- 3. PAGE HEADER & EXECUTIVE KPI SUMMARY REEL             -->
+<!-- ======================================================== -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="font-display-sm text-display-sm text-primary tracking-tight">Base Geral de Empreendedores MEI</h1>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-primary/10 text-primary font-semibold border border-primary/20">
+              Co.Nexo 360°
+            </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-3xl">
+            Gerenciamento cadastral, monitoramento de assiduidade e histórico 360° dos participantes do programa Co.Nexo SENAC.
+          </p>
+</div>
+<!-- Quick Utility Actions -->
+<div class="flex items-center gap-2 shrink-0">
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="file_download">file_download</span>
+<span>Exportar Relatório Geral</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md font-semibold transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="sync">sync</span>
+<span>Atualizar</span>
+</button>
+</div>
+</div>
+<!-- KPI Summary Cards (Bento Style with Brand Stripes) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+<!-- Metric 1: Total Cadastrados -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm font-semibold uppercase text-outline tracking-wider">Total Cadastrados</span>
+<div class="p-2 rounded-lg bg-primary-fixed text-primary">
+<span class="material-symbols-outlined text-xl" data-icon="group">group</span>
+</div>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<span class="font-data-metric text-data-metric text-primary">1.482</span>
+<span class="flex items-center text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+<span class="material-symbols-outlined text-sm mr-0.5" data-icon="trending_up">trending_up</span>
+              +18.4%
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">No ciclo ativo 2024.2</p>
+</div>
+<!-- Metric 2: Em Mentoria Ativa -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary-container"></div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm font-semibold uppercase text-outline tracking-wider">Em Mentoria Ativa</span>
+<div class="p-2 rounded-lg bg-surface-container-high text-primary-container">
+<span class="material-symbols-outlined text-xl" data-icon="handshake">handshake</span>
+</div>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<span class="font-data-metric text-data-metric text-primary-container">840</span>
+<span class="text-xs font-semibold text-primary-container bg-primary-fixed px-2 py-0.5 rounded-full">
+              56.7% da base
+            </span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-2.5">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 56.7%"></div>
+</div>
+</div>
+<!-- Metric 3: Formalizados / Concluídos -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 right-0 h-1 bg-emerald-600"></div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm font-semibold uppercase text-outline tracking-wider">Formalizados / Concluídos</span>
+<div class="p-2 rounded-lg bg-emerald-100 text-emerald-800">
+<span class="material-symbols-outlined text-xl" data-icon="verified">verified</span>
+</div>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<span class="font-data-metric text-data-metric text-on-surface">412</span>
+<span class="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+              27.8% da meta
+            </span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-2.5">
+<div class="bg-emerald-600 h-1.5 rounded-full" style="width: 27.8%"></div>
+</div>
+</div>
+<!-- Metric 4: Em Risco / Bloqueados -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary-container"></div>
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm font-semibold uppercase text-outline tracking-wider">Em Risco / Bloqueados</span>
+<div class="p-2 rounded-lg bg-secondary-fixed text-secondary-container">
+<span class="material-symbols-outlined text-xl" data-icon="report_problem">report_problem</span>
+</div>
+</div>
+<div class="mt-4 flex items-baseline justify-between">
+<span class="font-data-metric text-data-metric text-secondary-container">38</span>
+<span class="flex items-center text-xs font-semibold text-error bg-error-container px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-sm mr-0.5" data-icon="priority_high">priority_high</span>
+              2.5% em risco
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+            Requer ação preventiva de contato
+          </p>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- 4. ADVANCED SEARCH, FILTER TABS & CONTROL TOOLBAR       -->
+<!-- ======================================================== -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-4 flex flex-col gap-4">
+<!-- Status Filter Tabs -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-3 overflow-x-auto custom-scrollbar">
+<div class="flex items-center gap-2 shrink-0">
+<!-- Tab: Todos -->
+<button class="px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-headline-md text-label-md font-semibold shadow-sm transition-all">
+              Todos <span class="ml-1 opacity-80 text-xs">(1.482)</span>
+</button>
+<!-- Tab: Inscrito -->
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md font-medium transition-colors">
+              Inscrito <span class="ml-1 text-outline text-xs">(192)</span>
+</button>
+<!-- Tab: Em Mentoria -->
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md font-medium transition-colors">
+              Em Mentoria <span class="ml-1 text-primary-container font-semibold text-xs">(840)</span>
+</button>
+<!-- Tab: Concluído -->
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md font-medium transition-colors">
+              Concluído <span class="ml-1 text-emerald-700 font-semibold text-xs">(412)</span>
+</button>
+<!-- Tab: Bloqueado -->
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md font-medium transition-colors">
+              Bloqueado <span class="ml-1 text-error font-semibold text-xs">(38)</span>
+</button>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low text-label-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="file_download">file_download</span>
+<span>Exportar CSV/XLS</span>
+</button>
+<button class="p-1.5 rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Visualização em Grade">
+<span class="material-symbols-outlined text-lg" data-icon="grid_view">grid_view</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container-low border border-primary/30 text-primary transition-colors" title="Visualização em Lista">
+<span class="material-symbols-outlined text-lg" data-icon="view_list">view_list</span>
+</button>
+</div>
+</div>
+<!-- Filter Form & Select Inputs -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+<!-- Text Search Box -->
+<div class="md:col-span-4 relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg" data-icon="search">search</span>
+<input class="w-full pl-9 pr-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all" id="searchInput" placeholder="Buscar por Nome, CPF, Negócio ou Segmento..." type="text"/>
+</div>
+<!-- Dropdown: Segmento -->
+<div class="md:col-span-2">
+<select class="w-full py-2 px-3 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-on-surface">
+<option value="">Segmento: Todos</option>
+<option value="gastronomia">Gastronomia &amp; Alimentos</option>
+<option value="moda">Moda &amp; Vestuário</option>
+<option value="ti">Tecnologia &amp; Reparos</option>
+<option value="beleza">Beleza &amp; Estética</option>
+<option value="servicos">Serviços &amp; Logística</option>
+<option value="artesanato">Artesanato &amp; Design</option>
+</select>
+</div>
+<!-- Dropdown: Consultor Mentor -->
+<div class="md:col-span-2">
+<select class="w-full py-2 px-3 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-on-surface">
+<option value="">Mentor: Todos</option>
+<option value="1">Prof. Eduardo Mendes</option>
+<option value="2">Dra. Beatriz Prado</option>
+<option value="3">Rodrigo Vasconcelos</option>
+<option value="4">Aline Guimarães</option>
+<option value="unassigned">Aguardando Alocação</option>
+</select>
+</div>
+<!-- Dropdown: Enquadramento -->
+<div class="md:col-span-2">
+<select class="w-full py-2 px-3 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-on-surface">
+<option value="">Enquadramento</option>
+<option value="formalizado">MEI Formalizado</option>
+<option value="pendente">Em Formalização</option>
+<option value="informal">Informal / Pré-MEI</option>
+</select>
+</div>
+<!-- Dropdown: Grau de Risco/Faltas -->
+<div class="md:col-span-2">
+<select class="w-full py-2 px-3 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-on-surface">
+<option value="">Assiduidade / Risco</option>
+<option value="0">0 Faltas (Regular)</option>
+<option value="1">1 Falta (Atenção)</option>
+<option value="2">2+ Faltas (Alerta)</option>
+</select>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- 5. HIGH-DENSITY ENTERPRISE DATA TABLE                   -->
+<!-- ======================================================== -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<!-- Table Overflow Box -->
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<!-- Table Header -->
+<thead>
+<tr class="bg-surface-container-low/70 border-b border-outline-variant text-[11px] font-label-sm uppercase tracking-wider text-outline select-none">
+<th class="py-3 px-4 w-10 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</th>
+<th class="py-3 px-4 font-semibold">Empreendedor</th>
+<th class="py-3 px-4 font-semibold">Negócio &amp; Nicho</th>
+<th class="py-3 px-4 font-semibold">Enquadramento</th>
+<th class="py-3 px-4 font-semibold">Mentor Responsável</th>
+<th class="py-3 px-4 font-semibold">Assiduidade</th>
+<th class="py-3 px-4 font-semibold">Status Programa</th>
+<th class="py-3 px-4 font-semibold text-right">Contato &amp; Ações</th>
+</tr>
+</thead>
+<!-- Table Body -->
+<tbody class="divide-y divide-surface-container text-body-sm font-body-sm">
+<!-- ROW 1: Mariana Silva -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs shrink-0 ring-1 ring-primary/20">
+                      MS
+                    </div>
+<div>
+<div class="font-headline-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">
+                        Mariana Silva Santos
+                      </div>
+<div class="text-xs text-outline font-mono">CPF: ***.482.908-**</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="font-medium text-on-surface">Sabor da Terra Gastronomia</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    Gastronomia Artesanal
+                  </div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    MEI Formalizado
+                  </span>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface font-medium">Prof. Eduardo Mendes</div>
+<div class="text-[11px] text-outline">Encontro semanal terças</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                    0 Faltas (100%)
+                  </span>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary-fixed text-primary border border-primary/20">
+                    Em Mentoria
+                  </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors" href="https://wa.me/5511987654321" target="_blank" title="Abrir WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</a>
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" onclick="copiarLink('https://wa.me/5511987654321')" title="Copiar Link WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs border border-primary/20 transition-all">
+                      Ficha 360°
+                    </button>
+</div>
+</td>
+</tr>
+<!-- ROW 2: Lucas Albuquerque -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-blue-100 text-blue-800 font-bold flex items-center justify-center text-xs shrink-0 ring-1 ring-blue-300">
+                      LA
+                    </div>
+<div>
+<div class="font-headline-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">
+                        Lucas Albuquerque Costa
+                      </div>
+<div class="text-xs text-outline font-mono">CPF: ***.119.538-**</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="font-medium text-on-surface">TechReparos Express</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    TI &amp; Manutenção
+                  </div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    Em Formalização
+                  </span>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface font-medium">Dra. Beatriz Prado</div>
+<div class="text-[11px] text-outline">Plano de Negócios v2</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-800">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+                    1 Falta Justificada
+                  </span>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary-fixed text-primary border border-primary/20">
+                    Em Mentoria
+                  </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors" href="https://wa.me/5511976543210" target="_blank" title="Abrir WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</a>
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" onclick="copiarLink('https://wa.me/5511976543210')" title="Copiar Link WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs border border-primary/20 transition-all">
+                      Ficha 360°
+                    </button>
+</div>
+</td>
+</tr>
+<!-- ROW 3: Camila Ferreira -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0 ring-1 ring-emerald-300">
+                      CF
+                    </div>
+<div>
+<div class="font-headline-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">
+                        Camila Ferreira Prado
+                      </div>
+<div class="text-xs text-outline font-mono">CPF: ***.902.778-**</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="font-medium text-on-surface">EcoCostura Sustentável</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    Moda &amp; Confecção
+                  </div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    MEI Formalizado
+                  </span>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface font-medium">Aline Guimarães</div>
+<div class="text-[11px] text-outline">Ciclo de Pitch Concluído</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                    0 Faltas (100%)
+                  </span>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    Concluído
+                  </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors" href="https://wa.me/5511965432109" target="_blank" title="Abrir WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</a>
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" onclick="copiarLink('https://wa.me/5511965432109')" title="Copiar Link WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs border border-primary/20 transition-all">
+                      Ficha 360°
+                    </button>
+</div>
+</td>
+</tr>
+<!-- ROW 4: Vanessa Ribeiro -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-purple-100 text-purple-800 font-bold flex items-center justify-center text-xs shrink-0 ring-1 ring-purple-300">
+                      VR
+                    </div>
+<div>
+<div class="font-headline-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">
+                        Vanessa Ribeiro da Mata
+                      </div>
+<div class="text-xs text-outline font-mono">CPF: ***.330.128-**</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="font-medium text-on-surface">Estética Viva &amp; Cabelos</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    Beleza &amp; Bem-Estar
+                  </div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-300">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                    Informal / Pré-MEI
+                  </span>
+</td>
+<td class="py-3 px-4">
+<div class="text-outline italic">Aguardando Alocação</div>
+<div class="text-[11px] text-secondary font-medium">Prioridade Fase 1</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                    0 Faltas
+                  </span>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-200">
+                    Inscrito
+                  </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors" href="https://wa.me/5511954321098" target="_blank" title="Abrir WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</a>
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" onclick="copiarLink('https://wa.me/5511954321098')" title="Copiar Link WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs border border-primary/20 transition-all">
+                      Ficha 360°
+                    </button>
+</div>
+</td>
+</tr>
+<!-- ROW 5: Thiago Nogueira (CRITICAL / RISK ROW) -->
+<tr class="bg-red-50/40 hover:bg-red-50/80 transition-colors group">
+<td class="py-3 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-error-container text-on-error-container font-bold flex items-center justify-center text-xs shrink-0 ring-1 ring-error/30">
+                      TN
+                    </div>
+<div>
+<div class="font-headline-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors flex items-center gap-1.5">
+                        Thiago Nogueira Lima
+                        <span class="material-symbols-outlined text-error text-base" data-icon="warning" title="Risco de Bloqueio">warning</span>
+</div>
+<div class="text-xs text-outline font-mono">CPF: ***.741.852-**</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="font-medium text-on-surface">Delivery Express SP</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                    Logística &amp; Entregas
+                  </div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    Em Formalização
+                  </span>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface font-medium">Rodrigo Vasconcelos</div>
+<div class="text-[11px] text-error font-medium">Sem contato há 14 dias</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-error-container text-on-error-container">
+<span class="material-symbols-outlined text-sm" data-icon="error">error</span>
+                    3 Faltas (Alerta Máximo)
+                  </span>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-error-container text-on-error-container border border-error/30">
+                    Bloqueado
+                  </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors" href="https://wa.me/5511943210987" target="_blank" title="Abrir WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</a>
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" onclick="copiarLink('https://wa.me/5511943210987')" title="Copiar Link WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs border border-primary/20 transition-all">
+                      Ficha 360°
+                    </button>
+</div>
+</td>
+</tr>
+<!-- ROW 6: Beatriz Nakaoka -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-rose-100 text-rose-800 font-bold flex items-center justify-center text-xs shrink-0 ring-1 ring-rose-300">
+                      BN
+                    </div>
+<div>
+<div class="font-headline-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">
+                        Beatriz Nakaoka Mota
+                      </div>
+<div class="text-xs text-outline font-mono">CPF: ***.612.441-**</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="font-medium text-on-surface">Mota Panificação Artesanal</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    Alimentos &amp; Bebidas
+                  </div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    MEI Formalizado
+                  </span>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface font-medium">Prof. Eduardo Mendes</div>
+<div class="text-[11px] text-outline">Precificação e Custos</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                    0 Faltas (100%)
+                  </span>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary-fixed text-primary border border-primary/20">
+                    Em Mentoria
+                  </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors" href="https://wa.me/5511932109876" target="_blank" title="Abrir WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</a>
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" onclick="copiarLink('https://wa.me/5511932109876')" title="Copiar Link WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs border border-primary/20 transition-all">
+                      Ficha 360°
+                    </button>
+</div>
+</td>
+</tr>
+<!-- ROW 7: Gabriel Antunes -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-cyan-100 text-cyan-800 font-bold flex items-center justify-center text-xs shrink-0 ring-1 ring-cyan-300">
+                      GA
+                    </div>
+<div>
+<div class="font-headline-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">
+                        Gabriel Antunes Soares
+                      </div>
+<div class="text-xs text-outline font-mono">CPF: ***.891.023-**</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="font-medium text-on-surface">Antunes Design Gráfico</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                    Economia Criativa
+                  </div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    MEI Formalizado
+                  </span>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface font-medium">Aline Guimarães</div>
+<div class="text-[11px] text-outline">Captação B2B</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-800">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+                    1 Falta Justificada
+                  </span>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary-fixed text-primary border border-primary/20">
+                    Em Mentoria
+                  </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors" href="https://wa.me/5511921098765" target="_blank" title="Abrir WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+</a>
+<button class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" onclick="copiarLink('https://wa.me/5511921098765')" title="Copiar Link WhatsApp">
+<span class="material-symbols-outlined text-lg" data-icon="content_copy">content_copy</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-xs border border-primary/20 transition-all">
+                      Ficha 360°
+                    </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination Footer -->
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-4 select-none">
+<div class="flex items-center gap-3 text-body-sm text-on-surface-variant">
+<span>Exibindo <strong>1-7</strong> de <strong>1.482</strong> empreendedores</span>
+<div class="h-4 w-px bg-outline-variant hidden sm:block"></div>
+<div class="flex items-center gap-1.5">
+<span>Linhas por página:</span>
+<select class="py-1 px-2 text-xs bg-surface-container-low border border-outline-variant rounded-md focus:ring-primary">
+<option value="10">10</option>
+<option value="25">25</option>
+<option value="50">50</option>
+<option value="100">100</option>
+</select>
+</div>
+</div>
+<!-- Pagination Controls -->
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-outline hover:bg-surface-container-low transition-colors disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-lg" data-icon="first_page">first_page</span>
+</button>
+<button class="p-1.5 rounded-lg text-outline hover:bg-surface-container-low transition-colors disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-lg" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary font-semibold text-xs">1</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container-low text-on-surface text-xs font-medium transition-colors">2</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container-low text-on-surface text-xs font-medium transition-colors">3</button>
+<span class="px-1 text-outline text-xs">...</span>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container-low text-on-surface text-xs font-medium transition-colors">149</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="last_page">last_page</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Institutional Footer Note -->
+<footer class="pt-2 pb-6 border-t border-outline-variant/60 flex flex-col sm:flex-row items-center justify-between text-xs text-outline gap-2">
+<div class="flex items-center gap-2">
+<span class="font-bold text-primary">SENAC São Paulo</span>
+<span>•</span>
+<span>Programa Co.Nexo de Inclusão Produtiva e Empreendedorismo</span>
+</div>
+<div>
+          Conforme diretrizes MEC e LGPD • Lei Federal 13.709/2018
+        </div>
+</footer>
+</main>
+</div>
+<!-- ======================================================== -->
+<!-- 6. MODAL: NOVO CADASTRO DE EMPREENDEDOR (LGPD)          -->
+<!-- ======================================================== -->
+<div class="fixed inset-0 z-50 bg-on-surface/60 backdrop-blur-sm hidden items-center justify-center p-4" id="modalNovoEmpreendedor">
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-2xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+<!-- Modal Header -->
+<div class="px-6 py-4 bg-primary text-on-primary flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-xl" data-icon="person_add">person_add</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-primary">Novo Cadastro de Empreendedor</h3>
+<p class="text-xs text-primary-fixed opacity-90">Entrada na esteira Co.Nexo &amp; Validação LGPD</p>
+</div>
+</div>
+<button class="p-1 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors" onclick="toggleModal(false)">
+<span class="material-symbols-outlined text-xl" data-icon="close">close</span>
+</button>
+</div>
+<!-- Modal Body Form -->
+<form class="p-6 flex flex-col gap-5 max-h-[819px] overflow-y-auto custom-scrollbar" id="formNovoEmpreendedor" onsubmit="salvarEmpreendedor(event)">
+<!-- Bloco 1: Dados Pessoais -->
+<div>
+<h4 class="font-label-sm text-label-sm font-semibold uppercase text-primary tracking-wider mb-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="badge">badge</span>
+            1. Dados Pessoais do Titular
+          </h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+<div class="sm:col-span-2">
+<label class="block text-xs font-semibold text-on-surface mb-1">Nome Completo *</label>
+<input class="w-full px-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Ex: Juliana de Fátima Alves" required="" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface mb-1">CPF *</label>
+<input class="w-full px-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" placeholder="000.000.000-00" required="" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface mb-1">Data de Nascimento</label>
+<input class="w-full px-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" type="date"/>
+</div>
+<div class="sm:col-span-2">
+<label class="block text-xs font-semibold text-on-surface mb-1">WhatsApp Institucional / Contato *</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-emerald-600 text-lg" data-icon="chat">chat</span>
+<input class="w-full pl-10 pr-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" placeholder="(11) 90000-0000" required="" type="tel"/>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant/60"></div>
+<!-- Bloco 2: Dados do Negócio -->
+<div>
+<h4 class="font-label-sm text-label-sm font-semibold uppercase text-primary tracking-wider mb-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="storefront">storefront</span>
+            2. Dados do Empreendimento
+          </h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+<div>
+<label class="block text-xs font-semibold text-on-surface mb-1">Nome Fantasia / Negócio *</label>
+<input class="w-full px-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Ex: Doce Sabor Caseiro" required="" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface mb-1">Segmento / CNAE *</label>
+<select class="w-full px-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" required="">
+<option value="">Selecione o segmento...</option>
+<option value="gastronomia">Gastronomia &amp; Alimentação</option>
+<option value="moda">Moda &amp; Confecção</option>
+<option value="ti">Tecnologia &amp; Manutenção</option>
+<option value="beleza">Estética &amp; Cuidados</option>
+<option value="servicos">Serviços Gerais</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface mb-1">Faturamento Mensal Estimado</label>
+<select class="w-full px-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none">
+<option value="ate-2k">Até R$ 2.000 / mês</option>
+<option value="2k-5k">R$ 2.000 a R$ 5.000 / mês</option>
+<option value="5k-6k8">R$ 5.000 a R$ 6.750 / mês (Limite MEI)</option>
+<option value="acima">Acima do teto MEI</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface mb-1">Situação Atual do MEI</label>
+<select class="w-full px-3 py-2 text-body-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none">
+<option value="informal">Informal / Não possui CNPJ</option>
+<option value="em-formalizacao">Em Formalização (Pendência)</option>
+<option value="ativo">MEI Ativo Regular</option>
+</select>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant/60"></div>
+<!-- Bloco 3: Termo de Consentimento LGPD -->
+<div class="p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/80 flex items-start gap-3">
+<input class="mt-1 rounded border-outline-variant text-primary focus:ring-primary shrink-0" id="checkLGPD" required="" type="checkbox"/>
+<label class="text-xs text-on-surface leading-relaxed select-none" for="checkLGPD">
+<strong class="text-primary font-semibold">Termo de Consentimento LGPD:</strong> O participante autoriza o tratamento dos dados e contato direto via WhatsApp institucional para fins pedagógicos e de mentoria nos termos da Lei 13.709/2018 (Lei Geral de Proteção de Dados).
+          </label>
+</div>
+<!-- Modal Actions Footer -->
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-semibold text-body-sm transition-colors" onclick="toggleModal(false)" type="button">
+            Cancelar
+          </button>
+<button class="px-5 py-2 rounded-lg bg-secondary-container hover:bg-[#d95d10] text-on-secondary font-headline-md font-semibold text-body-sm shadow-sm transition-all active:scale-95 flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-lg" data-icon="save">save</span>
+<span>Salvar e Iniciar Diagnóstico</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Toast de Notificação -->
+<div class="fixed bottom-6 right-6 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-3 rounded-xl shadow-lg border border-outline/30 flex items-center gap-3 translate-y-24 opacity-0 transition-all duration-300" id="toastNotification">
+<span class="material-symbols-outlined text-emerald-400 text-xl" data-icon="check_circle">check_circle</span>
+<span class="text-body-sm font-medium" id="toastMsg">Link copiado com sucesso!</span>
+</div>
+<!-- ======================================================== -->
+<!-- 7. MICRO-INTERACTIONS & JAVASCRIPT LOGIC                 -->
+<!-- ======================================================== -->
+<script>
+    // Modal Controller
+    function toggleModal(show) {
+      const modal = document.getElementById('modalNovoEmpreendedor');
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    // Toast Controller
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    // Copiar Link WhatsApp
+    function copiarLink(link) {
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('Link do WhatsApp copiado para a área de transferência!');
+      }).catch(() => {
+        showToast('Link copiado: ' + link);
+      });
+    }
+
+    // Form submit
+    function salvarEmpreendedor(e) {
+      e.preventDefault();
+      toggleModal(false);
+      showToast('Empreendedor cadastrado com sucesso na Esteira MEI!');
+      e.target.reset();
+    }
+
+    // Live search filter in table
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const term = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(term) ? '' : 'none';
+      });
+    });
+
+    // Auto set current date
+    const today = new Date();
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const dateStr = today.toLocaleDateString('pt-BR', options);
+    const dateElem = document.getElementById('currentDate');
+    if (dateElem) {
+      dateElem.textContent = dateStr;
+    }
+  </script>
+</body></html>

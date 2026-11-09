@@ -1,0 +1,143 @@
+:root {
+  --senac-blue: #004587;
+  --senac-blue-dark: #002d59;
+  --senac-orange: #f37021;
+  --senac-orange-hover: #d95e14;
+  --senac-light-bg: #f8fafc;
+  --senac-card-bg: #ffffff;
+  --senac-border: #e2e8f0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--senac-light-bg);
+  color: #1e293b;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar-senac {
+  background: linear-gradient(135deg, var(--senac-blue), var(--senac-blue-dark));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.navbar-brand-badge {
+  background-color: var(--senac-orange);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Cards & Containers */
+.card-senac {
+  border: 1px solid var(--senac-border);
+  border-radius: 12px;
+  background-color: var(--senac-card-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-senac:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* KPI Cards */
+.kpi-card {
+  padding: 1.25rem;
+  border-left: 4px solid var(--senac-blue);
+  border-radius: 10px;
+}
+
+.kpi-card.kpi-orange {
+  border-left-color: var(--senac-orange);
+}
+
+.kpi-card.kpi-green {
+  border-left-color: #10b981;
+}
+
+.kpi-card.kpi-purple {
+  border-left-color: #8b5cf6;
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--senac-blue-dark);
+}
+
+.kpi-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+/* Buttons */
+.btn-senac-primary {
+  background-color: var(--senac-blue);
+  border-color: var(--senac-blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-senac-primary:hover {
+  background-color: var(--senac-blue-dark);
+  border-color: var(--senac-blue-dark);
+  color: #fff;
+}
+
+.btn-senac-orange {
+  background-color: var(--senac-orange);
+  border-color: var(--senac-orange);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-senac-orange:hover {
+  background-color: var(--senac-orange-hover);
+  border-color: var(--senac-orange-hover);
+  color: #fff;
+}
+
+/* Status Badges */
+.badge-status {
+  padding: 0.35em 0.65em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.badge-status-inscrito {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge-status-em_mentoria {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.badge-status-concluido {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badge-status-bloqueado {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Toast Container */
+#toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}

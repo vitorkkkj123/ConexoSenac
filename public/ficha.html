@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Co.Nexo SENAC — Diário de Mentoria, Presença & Evolução</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#002f5f",
+            "primary-container": "#004587",
+            "primary-fixed": "#d5e3ff",
+            "primary-fixed-dim": "#a8c8ff",
+            "on-primary": "#ffffff",
+            "secondary": "#a04100",
+            "secondary-container": "#f37021",
+            "secondary-fixed": "#ffdbcb",
+            "on-secondary": "#ffffff",
+            "surface": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#424750",
+            "outline": "#737782",
+            "outline-variant": "#c2c6d2"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body { font-family: 'Inter', sans-serif; background-color: #f4f6f9; color: #0b1c30; }
+    h1, h2, h3, h4, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+    @media print {
+      aside, header, .no-print, #toast-container { display: none !important; }
+      body, main { height: auto !important; overflow: visible !important; background: #fff !important; margin: 0 !important; }
+      .print-only { display: block !important; }
+      body.print-certificado main { display: none !important; }
+      body.print-certificado #modal-certificado {
+        position: static !important;
+        inset: auto !important;
+        background: #fff !important;
+        padding: 0 !important;
+        display: flex !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#f4f6f9] text-on-surface antialiased">
+  <div class="flex min-h-screen">
+    <!-- Sidebar Institucional Fixa -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full z-40 shadow-sm no-print">
+      <div class="p-5 flex flex-col justify-between h-full">
+        <div class="space-y-6">
+          <div class="flex items-center justify-center px-2 py-2 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+            <img src="img/logo-conexo.png" alt="Co.Nexo Senac" class="h-12 w-auto object-contain"/>
+          </div>
+
+          <a href="alunos.html" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-2 transition-all">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            <span>Voltar para Meus Mentorados</span>
+          </a>
+
+          <nav class="space-y-1.5"></nav>
+        </div>
+
+        <div id="sidebar-user-profile" class="pt-4 border-t border-slate-200"></div>
+      </div>
+    </aside>
+
+    <!-- Conteúdo Principal Com Scroll Livre e Natural -->
+    <div class="flex-1 ml-64 flex flex-col min-h-screen">
+      <!-- Topbar Sticky -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 px-8 py-3.5 flex flex-wrap items-center justify-between gap-3 shadow-sm no-print">
+        <div class="flex items-center gap-2 text-xs">
+          <a href="alunos.html" class="text-slate-500 hover:text-[#004587] font-bold flex items-center gap-1">
+            <span class="material-symbols-outlined text-base">school</span>
+            Meus Mentorados
+          </a>
+          <span class="text-slate-300">/</span>
+          <span class="font-headline font-extrabold text-[#004587] text-sm" id="breadcrumb-nome">Carregando...</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="enviarPortalWhatsApp()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all">
+            <span class="material-symbols-outlined text-sm">chat</span>
+            <span>Enviar Tarefas no WhatsApp</span>
+          </button>
+          <button onclick="copiarLinkAluno()" class="px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-all">
+            <span class="material-symbols-outlined text-sm text-[#f37021]">link</span>
+            <span>Link do Portal do Aluno</span>
+          </button>
+          <button id="btn-emitir-certificado" onclick="abrirModalCertificado()" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold shadow-sm transition-all">
+            <span class="material-symbols-outlined text-sm">workspace_premium</span>
+            <span>Emitir Certificado SENAC</span>
+          </button>
+          <button onclick="abrirModalEditarPerfil()" class="px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-all">
+            <span class="material-symbols-outlined text-sm text-[#004587]">edit</span>
+            <span>Editar Cadastro</span>
+          </button>
+          <button onclick="abrirModalFormalizacao()" class="px-4 py-2 rounded-xl bg-[#f37021] hover:bg-[#d95f16] text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition-all">
+            <span class="material-symbols-outlined text-sm">verified</span>
+            <span>Formalizar MEI (CNPJ)</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="p-8 space-y-6 max-w-[1440px] w-full mx-auto">
+        <!-- ========================================================================= -->
+        <!-- BLOCO 1: CABEÇALHO DO MENTORADO E RESUMO RÁPIDO                           -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm space-y-5">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-200/70">
+            <div class="flex items-center gap-4">
+              <div id="avatar-iniciais" class="w-14 h-14 rounded-2xl bg-[#004587] text-white flex items-center justify-center font-headline font-extrabold text-xl shadow-md shrink-0">
+                --
+              </div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <h1 id="aluno-nome" class="text-xl font-extrabold text-slate-900">Carregando...</h1>
+                  <span id="aluno-badge-status" class="px-3 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Em Mentoria</span>
+                  <span id="aluno-badge-faltas" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700">0 Faltas</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1 flex flex-wrap items-center gap-2">
+                  <span>Negócio: <strong id="aluno-negocio" class="text-slate-800">-</strong> (<span id="aluno-ramo">-</span>)</span>
+                  <span>•</span>
+                  <span>WhatsApp: <strong id="aluno-whatsapp" class="text-slate-800">-</strong></span>
+                  <span>•</span>
+                  <span>CPF: <strong id="aluno-cpf" class="text-slate-800">-</strong></span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Barra de Progresso dos 5 Encontros -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl px-5 py-3 flex items-center gap-4 shrink-0">
+              <div>
+                <span class="text-[10px] uppercase font-extrabold tracking-wider text-slate-500 block">Avanço na Trilha SENAC</span>
+                <span id="progresso-trilha-texto" class="text-base font-extrabold text-[#004587]">0 de 5 Encontros Realizados</span>
+              </div>
+              <div class="w-32 bg-slate-200 h-3 rounded-full overflow-hidden">
+                <div id="progresso-trilha-barra" class="bg-emerald-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cards de Status Cadastral -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-bold uppercase text-slate-400 block">Situação Cadastral / CNPJ</span>
+                <div id="aluno-situacao-bloco" class="font-bold text-slate-800 mt-0.5">Informal</div>
+              </div>
+              <button onclick="abrirModalFormalizacao()" class="text-[#f37021] font-extrabold hover:underline">Atualizar MEI</button>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-bold uppercase text-slate-400 block">Origem do Lead</span>
+                <span id="aluno-origem" class="font-bold text-slate-800 mt-0.5 block">RD Station</span>
+              </div>
+              <span class="material-symbols-outlined text-slate-400">bolt</span>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-bold uppercase text-slate-400 block">E-mail do Participante</span>
+                <span id="aluno-email" class="font-bold text-slate-800 mt-0.5 block">-</span>
+              </div>
+              <span class="material-symbols-outlined text-slate-400">mail</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- BLOCO 2: TRILHA DOS 5 ENCONTROS + CHAMADA DE PRESENÇA/FALTA EM CADA UM    -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <div class="p-6 bg-gradient-to-r from-[#003163] to-[#004587] text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 text-[10px] font-extrabold uppercase tracking-wider mb-1">
+                <span class="material-symbols-outlined text-xs">route</span>
+                Como funciona o avanço da mentoria
+              </div>
+              <h2 class="text-lg font-extrabold">Trilha de 5 Encontros & Controle de Presença / Falta</h2>
+              <p class="text-xs text-blue-100 mt-0.5">
+                Clique em qualquer um dos <strong>5 encontros abaixo</strong> para abrir seu diário, ou marque diretamente <strong>"✓ Presente"</strong> ou <strong>"✕ Falta"</strong> em cada sessão. Ao marcar presença, o aluno avança automaticamente para o próximo encontro!
+              </p>
+            </div>
+          </div>
+
+          <!-- 5 Cards Visuais de Encontros (Com Botões Diretos de Presente / Falta em TODOS os 5) -->
+          <div class="p-6 bg-slate-50 border-b border-slate-200">
+            <div id="grid-trilha-5-encontros" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <!-- Renderizado dinamicamente via JS -->
+            </div>
+          </div>
+
+          <!-- Área de Edição do Encontro Selecionado -->
+          <div id="conteudo-encontros" class="p-6 sm:p-8">
+            <div class="py-12 text-center text-slate-400 text-xs">Carregando encontro...</div>
+          </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- BLOCO 3: TERMÔMETRO DE MATURIDADE EMPRESARIAL (4 EIXOS SENAC)             -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h2 class="text-base font-extrabold text-[#004587] uppercase tracking-wider flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#f37021]">radar</span>
+                  Evolução de Maturidade do Negócio (4 Eixos)
+                </h2>
+                <p class="text-xs text-slate-500">Arraste as barras abaixo conforme o negócio evolui ao longo dos 5 encontros:</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="score-maturidade-inicial-badge" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs">Marco Zero: 40%</span>
+                <span id="score-maturidade-badge" class="px-3 py-1 rounded-lg bg-blue-100 text-[#004587] font-extrabold text-xs">Atual: 60%</span>
+                <span id="score-maturidade-delta" class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 font-extrabold text-xs">+20%</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex justify-between text-xs font-bold text-slate-800 mb-1.5">
+                  <span>1. Finanças & Precificação</span>
+                  <span id="val-mat-financas" class="text-[#004587]">3/5</span>
+                </div>
+                <input type="range" min="1" max="5" value="3" id="range-mat-financas" oninput="atualizarMaturidadeUI()" class="w-full accent-[#004587] cursor-pointer"/>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex justify-between text-xs font-bold text-slate-800 mb-1.5">
+                  <span>2. Marketing & Vendas</span>
+                  <span id="val-mat-vendas" class="text-[#004587]">3/5</span>
+                </div>
+                <input type="range" min="1" max="5" value="3" id="range-mat-vendas" oninput="atualizarMaturidadeUI()" class="w-full accent-[#004587] cursor-pointer"/>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex justify-between text-xs font-bold text-slate-800 mb-1.5">
+                  <span>3. Operações & Processos</span>
+                  <span id="val-mat-operacoes" class="text-[#004587]">3/5</span>
+                </div>
+                <input type="range" min="1" max="5" value="3" id="range-mat-operacoes" oninput="atualizarMaturidadeUI()" class="w-full accent-[#004587] cursor-pointer"/>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex justify-between text-xs font-bold text-slate-800 mb-1.5">
+                  <span>4. Gestão & Regularização MEI</span>
+                  <span id="val-mat-formalizacao" class="text-[#004587]">3/5</span>
+                </div>
+                <input type="range" min="1" max="5" value="3" id="range-mat-formalizacao" oninput="atualizarMaturidadeUI()" class="w-full accent-[#004587] cursor-pointer"/>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <button onclick="salvarMarcoInicialMaturidade()" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">flag</span>
+                Fixar como Marco Zero (1º Diagnóstico)
+              </button>
+              <button onclick="salvarMaturidadeLocal()" class="px-5 py-2 rounded-xl bg-[#004587] hover:bg-[#003163] text-white text-xs font-extrabold shadow-sm flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">save</span>
+                Salvar Notas de Maturidade
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 h-60 flex items-center justify-center">
+            <canvas id="chartRadarMaturidade"></canvas>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: ATUALIZAR FORMALIZAÇÃO MEI                                       -->
+  <!-- ========================================================================= -->
+  <div id="modal-formalizacao" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="p-5 bg-[#f37021] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">verified</span>
+          <h3 class="font-headline font-extrabold text-base">Formalização MEI (CNPJ)</h3>
+        </div>
+        <button onclick="fecharModalFormalizacao()" class="text-white/80 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="form-formalizacao" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Situação Cadastral do Negócio</label>
+          <select id="modal-situacao" class="w-full text-xs font-bold rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2.5" required>
+            <option value="informal">Informal (Sem CNPJ)</option>
+            <option value="mei_aberto">MEI Formalizado (CNPJ Ativo)</option>
+            <option value="mei_inadimplente">MEI Inadimplente</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Número do CNPJ (14 dígitos)</label>
+          <input type="text" id="modal-cnpj" placeholder="00.000.000/0001-00" class="w-full text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2.5"/>
+          <p class="text-[11px] text-slate-500 mt-1">Obrigatório ao marcar como MEI Formalizado ou Inadimplente.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
+          <button type="button" onclick="fecharModalFormalizacao()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#f37021] hover:bg-[#d95f16] text-white text-xs font-extrabold shadow-sm">Salvar Formalização</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: EDITAR CADASTRO DO EMPREENDEDOR                                  -->
+  <!-- ========================================================================= -->
+  <div id="modal-editar-perfil" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="p-5 bg-[#004587] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">edit_note</span>
+          <h3 class="font-headline font-extrabold text-base">Editar Dados do Empreendedor</h3>
+        </div>
+        <button onclick="fecharModalEditarPerfil()" class="text-white/80 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="form-editar-perfil" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo *</label>
+          <input type="text" id="edit-nome" class="w-full text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2" required/>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nome da Empresa / Negócio *</label>
+            <input type="text" id="edit-negocio" class="w-full text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2" required/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Ramo de Atividade</label>
+            <input type="text" id="edit-ramo" class="w-full text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2"/>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp *</label>
+            <input type="text" id="edit-whatsapp" class="w-full text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2" required/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">E-mail</label>
+            <input type="email" id="edit-email" class="w-full text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2"/>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Etapa no Programa Co.Nexo</label>
+          <select id="edit-status" class="w-full text-xs font-bold rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2">
+            <option value="inscrito">Passo 1: Inscrito (Lead RD Station)</option>
+            <option value="em_diagnostico">Passo 2: Em 1º Encontro / Diagnóstico</option>
+            <option value="em_mentoria">Passo 3: Em Mentoria com Professor</option>
+            <option value="concluido">Concluído (5 Encontros Finalizados)</option>
+            <option value="bloqueado">Bloqueado por Faltas</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
+          <button type="button" onclick="fecharModalEditarPerfil()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#004587] text-white text-xs font-extrabold shadow-sm">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: CERTIFICADO OFICIAL SENAC                                        -->
+  <!-- ========================================================================= -->
+  <div id="modal-certificado" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full border-4 border-[#004587] shadow-2xl overflow-hidden">
+      <div class="p-8 text-center space-y-5">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#004587] text-white text-xs font-bold uppercase tracking-widest">
+          <span class="material-symbols-outlined text-base text-[#f37021]">workspace_premium</span>
+          <span>Certificado de Conclusão — Co.Nexo SENAC</span>
+        </div>
+        <p class="text-xs text-slate-500 uppercase tracking-wider font-bold">O Serviço Nacional de Aprendizagem Comercial certifica que</p>
+        <h2 id="cert-nome-aluno" class="font-headline font-extrabold text-3xl text-[#004587]">-</h2>
+        <p class="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
+          titular do empreendimento <strong id="cert-empresa-aluno" class="text-slate-900">-</strong>, concluiu com êxito a Trilha de Aceleração e Mentoria Empresarial em <strong>5 Encontros</strong> nas áreas de Diagnóstico, Modelo de Negócios, Finanças, Marketing e Formalização MEI.
+        </p>
+        <div class="grid grid-cols-2 gap-8 pt-6 max-w-md mx-auto text-xs border-t border-slate-200">
+          <div>
+            <p class="font-bold text-slate-900">Aline (Consultoria SENAC)</p>
+            <p class="text-[11px] text-slate-500">Professora / Mentora Especialista</p>
+          </div>
+          <div>
+            <p class="font-bold text-slate-900">Regis (Coordenação SENAC)</p>
+            <p class="text-[11px] text-slate-500">Coordenação Co.Nexo</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2 no-print">
+        <button onclick="fecharModalCertificado()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Fechar</button>
+        <button onclick="imprimirCertificadoOficial()" class="px-5 py-2 rounded-xl bg-[#004587] text-white text-xs font-extrabold flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">print</span>
+          Imprimir / Salvar PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const alunoId = params.get('id');
+    let alunoAtual = null;
+    let encontrosAtuais = [];
+    let abaAtiva = 1;
+    let abaInicialDefinida = false;
+    let radarChartInstance = null;
+
+    const NOMES_TRILHA = {
+      1: { curto: '1. Diagnóstico', completo: 'Encontro 1: Diagnóstico Inicial & Triagem' },
+      2: { curto: '2. Modelo Negócio', completo: 'Encontro 2: Estruturação do Modelo de Negócio' },
+      3: { curto: '3. Finanças & Preço', completo: 'Encontro 3: Gestão Financeira, Custos e Precificação' },
+      4: { curto: '4. Mercado & Vendas', completo: 'Encontro 4: Estratégia Comercial, Canais e Marketing' },
+      5: { curto: '5. Formalização MEI', completo: 'Encontro 5: Consolidação, Plano 90 Dias e Formalização MEI' }
+    };
+
+    if (!alunoId) {
+      window.location.href = 'alunos.html';
+    }
+
+    async function carregarFichaEDiario() {
+      try {
+        const [resAluno, resDiario] = await Promise.all([
+          apiFetch(`/empreendedores/${alunoId}`),
+          apiFetch(`/diarios/${alunoId}`)
+        ]);
+
+        if (!resAluno.sucesso) return;
+        alunoAtual = resAluno.dados;
+
+        const nomes = (alunoAtual.nomeCompleto || 'E').trim().split(' ');
+        const iniciais = (nomes[0][0] + (nomes.length > 1 ? nomes[nomes.length - 1][0] : '')).toUpperCase();
+        document.getElementById('avatar-iniciais').textContent = iniciais;
+        document.getElementById('breadcrumb-nome').textContent = alunoAtual.nomeCompleto;
+        document.getElementById('aluno-nome').textContent = alunoAtual.nomeCompleto;
+        document.getElementById('aluno-cpf').textContent = formatCPF(alunoAtual.cpf);
+        document.getElementById('aluno-whatsapp').textContent = formatPhone(alunoAtual.whatsapp);
+        document.getElementById('aluno-email').textContent = alunoAtual.email || 'Não informado';
+        document.getElementById('aluno-negocio').textContent = alunoAtual.negocio?.nomeFantasia || 'Em Estruturação';
+        document.getElementById('aluno-ramo').textContent = alunoAtual.negocio?.ramoAtividade || 'Geral';
+        document.getElementById('aluno-origem').textContent = alunoAtual.origemLead || 'RD Station';
+
+        // Badge de Status e Faltas
+        const badgeStatus = document.getElementById('aluno-badge-status');
+        const st = alunoAtual.statusPrograma || 'em_mentoria';
+        const labelsStatus = {
+          inscrito: 'Passo 1: Lead RD Station',
+          em_diagnostico: 'Passo 2: Em Diagnóstico',
+          em_mentoria: 'Passo 3: Em Mentoria',
+          concluido: 'Trilha Concluída (5/5)',
+          bloqueado: 'Bloqueado por Faltas'
+        };
+        badgeStatus.textContent = labelsStatus[st] || st;
+        badgeStatus.className = st === 'concluido'
+          ? 'px-3 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800'
+          : (st === 'bloqueado' ? 'px-3 py-0.5 rounded-full text-xs font-extrabold bg-red-100 text-red-800' : 'px-3 py-0.5 rounded-full text-xs font-extrabold bg-blue-100 text-blue-800');
+
+        const totalFaltas = alunoAtual.totalFaltas || 0;
+        const badgeFaltas = document.getElementById('aluno-badge-faltas');
+        badgeFaltas.textContent = `${totalFaltas} Falta(s) Registrada(s)`;
+        badgeFaltas.className = totalFaltas > 0
+          ? 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800'
+          : 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600';
+
+        // Situação MEI
+        const blocoSituacao = document.getElementById('aluno-situacao-bloco');
+        if (alunoAtual.negocio?.situacaoAtual === 'mei_aberto') {
+          blocoSituacao.innerHTML = `<span class="text-emerald-700 font-extrabold">✓ MEI Formalizado (${formatCNPJ(alunoAtual.negocio.cnpj)})</span>`;
+        } else if (alunoAtual.negocio?.situacaoAtual === 'mei_inadimplente') {
+          blocoSituacao.innerHTML = `<span class="text-red-700 font-extrabold">⚠ MEI Inadimplente (${formatCNPJ(alunoAtual.negocio.cnpj)})</span>`;
+        } else {
+          blocoSituacao.innerHTML = `<span class="text-amber-700 font-bold">Negócio Informal (Sem CNPJ)</span>`;
+        }
+
+        carregarMaturidadeLocal();
+
+        if (resDiario.sucesso) {
+          encontrosAtuais = resDiario.dados.encontros || [];
+          // Na primeira vez que abre a tela, posiciona automaticamente no PRÓXIMO encontro pendente!
+          // Assim, se o Encontro 1 já foi realizado, a Aline já cai direto no Encontro 2!
+          if (!abaInicialDefinida) {
+            const proximoPendente = encontrosAtuais.find(e => e.status !== 'realizado');
+            abaAtiva = proximoPendente ? proximoPendente.numeroEncontro : 5;
+            abaInicialDefinida = true;
+          }
+          atualizarProgressoTrilha();
+          renderizarCardsTrilha5Encontros();
+          renderizarDiario();
+        }
+      } catch (err) {
+        console.error('Erro ao carregar ficha:', err);
+      }
+    }
+
+    function atualizarProgressoTrilha() {
+      const realizados = encontrosAtuais.filter(e => e.status === 'realizado').length;
+      const pct = Math.round((realizados / 5) * 100);
+      document.getElementById('progresso-trilha-texto').textContent = `${realizados} de 5 Encontros (${pct}%)`;
+      document.getElementById('progresso-trilha-barra').style.width = `${pct}%`;
+
+      const btnCert = document.getElementById('btn-emitir-certificado');
+      if (btnCert) {
+        if (realizados === 5) {
+          btnCert.classList.remove('hidden');
+          btnCert.classList.add('flex');
+        } else {
+          btnCert.classList.add('hidden');
+          btnCert.classList.remove('flex');
+        }
+      }
+    }
+
+    // Renderiza os 5 cards visuais no topo do Diário com botões diretos de PRESENTE e FALTA em cada um
+    function renderizarCardsTrilha5Encontros() {
+      const grid = document.getElementById('grid-trilha-5-encontros');
+      if (!grid) return;
+
+      let html = '';
+      for (let i = 1; i <= 5; i++) {
+        const enc = encontrosAtuais.find(e => e.numeroEncontro === i) || { numeroEncontro: i, status: 'pendente' };
+        const isAtiva = abaAtiva === i;
+        const info = NOMES_TRILHA[i];
+
+        let badgeStatus = `<span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">⏳ Pendente</span>`;
+        let corBorda = isAtiva ? 'border-2 border-[#004587] bg-blue-50/60 shadow-md ring-2 ring-[#004587]/15' : 'border border-slate-200 bg-white hover:border-slate-300';
+
+        if (enc.status === 'realizado') {
+          badgeStatus = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">✅ Presente</span>`;
+          if (!isAtiva) corBorda = 'border border-emerald-300 bg-emerald-50/30';
+        } else if (enc.status === 'falta') {
+          badgeStatus = `<span class="px-2 py-0.5 rounded bg-red-100 text-red-800 text-[10px] font-extrabold">❌ Falta</span>`;
+          if (!isAtiva) corBorda = 'border border-red-300 bg-red-50/30';
+        }
+
+        html += `
+          <div class="rounded-xl p-3.5 transition-all flex flex-col justify-between gap-3 ${corBorda}">
+            <div onclick="mudarAba(${i})" class="cursor-pointer space-y-1.5">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider ${isAtiva ? 'text-[#004587]' : 'text-slate-500'}">Encontro ${i}</span>
+                ${badgeStatus}
+              </div>
+              <h4 class="text-xs font-extrabold text-slate-900 leading-snug">${info.curto.split('. ')[1]}</h4>
+              <p class="text-[10px] text-slate-500">${isAtiva ? '● Visualizando agora' : 'Clique para abrir'}</p>
+            </div>
+
+            <!-- Botões diretos de Presença e Falta neste Encontro -->
+            <div class="pt-2 border-t border-slate-200/80 grid grid-cols-2 gap-1.5">
+              <button type="button" onclick="marcarPresencaOuFaltaDireto(${i}, 'realizado')" class="py-1.5 px-2 rounded-lg text-[11px] font-extrabold flex items-center justify-center gap-1 transition-all ${enc.status === 'realizado' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-200'}" title="Confirmar Presença no Encontro ${i}">
+                ✓ Presente
+              </button>
+              <button type="button" onclick="marcarPresencaOuFaltaDireto(${i}, 'falta')" class="py-1.5 px-2 rounded-lg text-[11px] font-extrabold flex items-center justify-center gap-1 transition-all ${enc.status === 'falta' ? 'bg-red-600 text-white shadow-sm' : 'bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200'}" title="Registrar Falta no Encontro ${i}">
+                ✕ Falta
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      grid.innerHTML = html;
+    }
+
+    function mudarAba(num) {
+      sincronizarCamposAbaAtual(abaAtiva);
+      abaAtiva = num;
+      renderizarCardsTrilha5Encontros();
+      renderizarDiario();
+    }
+
+    // Permite atribuir Presença ou Falta em QUALQUER encontro (1 a 5) com 1 clique e já avançar na trilha
+    async function marcarPresencaOuFaltaDireto(numeroEncontro, novoStatus) {
+      sincronizarCamposAbaAtual(abaAtiva);
+      const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+      const enc = idx >= 0 ? encontrosAtuais[idx] : { numeroEncontro, diagnostico: '', planoAcaoMetas: '', observacoesGerais: '', checklistMetas: [] };
+
+      const payload = {
+        diagnostico: enc.diagnostico || '',
+        planoAcaoMetas: enc.planoAcaoMetas || '',
+        observacoesGerais: enc.observacoesGerais || '',
+        status: novoStatus,
+        checklistMetas: enc.checklistMetas || []
+      };
+
+      try {
+        await apiFetch(`/diarios/${alunoId}/encontro/${numeroEncontro}`, {
+          method: 'PUT',
+          body: JSON.stringify(payload)
+        });
+
+        if (novoStatus === 'realizado') {
+          showToast(`Presença confirmada no Encontro ${numeroEncontro}!`, 'success');
+          // Se marcou presença e ainda não é o encontro 5, avança automaticamente para o próximo encontro!
+          if (numeroEncontro < 5) {
+            abaAtiva = numeroEncontro + 1;
+          } else {
+            abaAtiva = 5;
+          }
+        } else if (novoStatus === 'falta') {
+          showToast(`Falta registrada no Encontro ${numeroEncontro}.`, 'danger');
+          abaAtiva = numeroEncontro;
+        } else {
+          showToast(`Encontro ${numeroEncontro} marcado como pendente.`, 'primary');
+        }
+
+        await carregarFichaEDiario();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function renderizarDiario() {
+      const container = document.getElementById('conteudo-encontros');
+      const enc = encontrosAtuais.find(e => e.numeroEncontro === abaAtiva) || {
+        numeroEncontro: abaAtiva,
+        tituloPadrao: NOMES_TRILHA[abaAtiva]?.completo || `Encontro ${abaAtiva}`,
+        status: 'pendente',
+        diagnostico: '',
+        planoAcaoMetas: '',
+        observacoesGerais: '',
+        checklistMetas: [],
+        entregaveis: []
+      };
+
+      const tituloCompleto = NOMES_TRILHA[enc.numeroEncontro]?.completo || `Encontro ${enc.numeroEncontro}: ${enc.tituloPadrao}`;
+      const proximoNum = enc.numeroEncontro < 5 ? enc.numeroEncontro + 1 : null;
+
+      container.innerHTML = `
+        <div class="space-y-6">
+          <!-- Cabeçalho do Encontro Ativo -->
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+            <div>
+              <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-[#004587] text-white font-headline font-extrabold text-sm flex items-center justify-center">${enc.numeroEncontro}</span>
+                <h3 class="text-lg font-extrabold text-slate-900">${tituloCompleto}</h3>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Preencha o registro abaixo ou clique em <strong>"Preencher Roteiro Padrão SENAC"</strong> para agilizar.</p>
+            </div>
+
+            <!-- Botões Rápidos: Roteiro Padrão + Seletor de Presença/Falta -->
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="aplicarTemplatePedagogico(${enc.numeroEncontro})" class="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-[#004587] text-[#004587] hover:text-white border border-blue-200 text-xs font-extrabold flex items-center gap-1.5 transition-all">
+                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                Preencher Roteiro Padrão SENAC
+              </button>
+
+              <select id="status-enc-${enc.numeroEncontro}" onchange="marcarPresencaOuFaltaDireto(${enc.numeroEncontro}, this.value)" class="text-xs font-extrabold rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2">
+                <option value="pendente" ${enc.status === 'pendente' ? 'selected' : ''}>⏳ Status: Pendente</option>
+                <option value="realizado" ${enc.status === 'realizado' ? 'selected' : ''}>✅ Status: Presente (Realizado)</option>
+                <option value="falta" ${enc.status === 'falta' ? 'selected' : ''}>❌ Status: Falta / Ausente</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Formulário Principal do Encontro -->
+          <form onsubmit="salvarEncontro(event, ${enc.numeroEncontro}, false)" class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Coluna Esquerda: Diagnóstico / Evolução -->
+              <div class="space-y-2">
+                <label class="text-xs font-extrabold text-[#004587] flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">clinical_notes</span>
+                  1. Diagnóstico Situacional & Evolução do Encontro
+                </label>
+                <textarea id="diag-enc-${enc.numeroEncontro}" rows="6" placeholder="Descreva o que foi trabalhado neste encontro, pontos fortes e dificuldades do empreendedor..." class="w-full text-xs rounded-xl border-slate-300 bg-slate-50/70 focus:bg-white p-3.5 focus:border-[#004587] focus:ring-[#004587]">${enc.diagnostico || ''}</textarea>
+
+                <div class="pt-2">
+                  <label class="text-xs font-bold text-slate-600 flex items-center gap-1 mb-1">
+                    <span class="material-symbols-outlined text-sm">lock</span>
+                    Observações Internas da Professora (Oculto para o aluno)
+                  </label>
+                  <input type="text" id="obs-enc-${enc.numeroEncontro}" value="${enc.observacoesGerais || ''}" placeholder="Anotação interna exclusiva da equipe SENAC..." class="w-full text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2"/>
+                </div>
+              </div>
+
+              <!-- Coluna Direita: Plano de Ação & Checklist do Aluno -->
+              <div class="space-y-2">
+                <label class="text-xs font-extrabold text-[#004587] flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">checklist</span>
+                  2. Tarefas Práticas para o Aluno (Sincronizado com o Celular dele)
+                </label>
+                <textarea id="metas-enc-${enc.numeroEncontro}" rows="2" placeholder="Resumo da meta para o próximo encontro..." class="w-full text-xs rounded-xl border-slate-300 bg-slate-50/70 focus:bg-white p-3">${enc.planoAcaoMetas || ''}</textarea>
+
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                  <span class="text-[11px] font-extrabold text-slate-700 block">Checklist de Tarefas (O aluno pode marcar no Portal Mobile):</span>
+                  <div id="lista-checklist-${enc.numeroEncontro}" class="space-y-1.5">
+                    ${(enc.checklistMetas || []).length > 0 ? (enc.checklistMetas || []).map((item, idx) => `
+                      <div class="flex items-center justify-between gap-2 bg-white px-3 py-2 rounded-lg border border-slate-200 text-xs">
+                        <label class="flex items-center gap-2 cursor-pointer flex-1">
+                          <input type="checkbox" ${item.concluida ? 'checked' : ''} onchange="alternarItemChecklist(${enc.numeroEncontro}, ${idx})" class="rounded text-emerald-600 focus:ring-emerald-500"/>
+                          <span class="${item.concluida ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${item.texto}</span>
+                        </label>
+                        <button type="button" onclick="removerItemChecklist(${enc.numeroEncontro}, ${idx})" class="text-slate-400 hover:text-red-600 font-bold px-1">✕</button>
+                      </div>
+                    `).join('') : '<p class="text-xs text-slate-400 italic">Nenhuma tarefa adicionada ainda.</p>'}
+                  </div>
+
+                  <div class="flex items-center gap-2 pt-1">
+                    <input type="text" id="input-nova-meta-${enc.numeroEncontro}" placeholder="Digite uma nova tarefa (ex: Separar conta PF e PJ)..." class="flex-1 text-xs rounded-lg border-slate-300 bg-white px-3 py-2"/>
+                    <button type="button" onclick="adicionarItemChecklist(${enc.numeroEncontro})" class="px-3.5 py-2 rounded-lg bg-[#004587] text-white text-xs font-bold hover:bg-[#003163]">+ Adicionar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra de Botões de Salvar e Avançar Trilha -->
+            <div class="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                ${enc.numeroEncontro > 1 ? `
+                  <button type="button" onclick="mudarAba(${enc.numeroEncontro - 1})" class="px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Encontro ${enc.numeroEncontro - 1}
+                  </button>
+                ` : ''}
+                ${proximoNum ? `
+                  <button type="button" onclick="mudarAba(${proximoNum})" class="px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1">
+                    Ir para Encontro ${proximoNum}
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  </button>
+                ` : ''}
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2.5">
+                <button type="button" onclick="marcarPresencaOuFaltaDireto(${enc.numeroEncontro}, 'falta')" class="px-4 py-2.5 rounded-xl border border-red-300 bg-red-50 hover:bg-red-600 text-red-700 hover:text-white text-xs font-extrabold transition-all flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm">person_off</span>
+                  Registrar Falta no Encontro ${enc.numeroEncontro}
+                </button>
+
+                <button type="submit" class="px-4 py-2.5 rounded-xl border border-[#004587] bg-white hover:bg-blue-50 text-[#004587] text-xs font-extrabold transition-all flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm">save</span>
+                  Apenas Salvar Rascunho
+                </button>
+
+                <button type="button" onclick="salvarEncontro(null, ${enc.numeroEncontro}, true)" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-md transition-all flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">check_circle</span>
+                  ${proximoNum ? `Confirmar Presença (Encontro ${enc.numeroEncontro}) e Avançar p/ Encontro ${proximoNum} ➔` : `Confirmar Presença e Concluir Trilha (5/5) 🎉`}
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Seção de Anexos / Kit Pedagógico SENAC -->
+          <div class="pt-4 border-t border-slate-200 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base text-[#004587]">folder_open</span>
+                Materiais e Entregáveis deste Encontro
+              </h4>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[11px] text-slate-500 font-semibold">Kit Rápido SENAC:</span>
+                <button type="button" onclick="anexarKitRapido(${enc.numeroEncontro}, 'Planilha de Fluxo de Caixa e Precificação SENAC', 'https://www.gov.br/empresas-e-negocios/pt-br/empreendedor')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-100 text-[#004587] text-[11px] font-bold">+ Planilha Financeira</button>
+                <button type="button" onclick="anexarKitRapido(${enc.numeroEncontro}, 'Canvas de Modelo de Negócios SENAC', 'https://www.gov.br/empresas-e-negocios/pt-br/empreendedor')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-100 text-[#004587] text-[11px] font-bold">+ Canvas Negócio</button>
+                <button type="button" onclick="anexarKitRapido(${enc.numeroEncontro}, 'Guia Prático de Formalização MEI', 'https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/quero-ser-mei')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-100 text-[#004587] text-[11px] font-bold">+ Guia MEI</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              ${(enc.entregaveis || []).map(e => `
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span class="text-xs font-bold text-slate-800 truncate">${e.titulo}</span>
+                  <a href="${e.urlArquivo}" target="_blank" class="text-xs font-extrabold text-[#004587] hover:underline shrink-0 ml-2">Abrir ➔</a>
+                </div>
+              `).join('')}
+            </div>
+
+            <form onsubmit="anexarEntregavel(event, ${enc.numeroEncontro})" class="flex flex-col sm:flex-row gap-2">
+              <input type="text" id="titulo-arquivo-${enc.numeroEncontro}" placeholder="Título do material ou planilha..." class="flex-1 text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2" required/>
+              <input type="text" id="url-arquivo-${enc.numeroEncontro}" placeholder="Link (URL) do material..." class="flex-1 text-xs rounded-xl border-slate-300 bg-slate-50 px-3.5 py-2"/>
+              <button type="submit" class="px-4 py-2 rounded-xl bg-[#004587] text-white text-xs font-bold shrink-0">Anexar Material</button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function sincronizarCamposAbaAtual(numeroEncontro) {
+      const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+      if (idx < 0) return;
+      const diagEl = document.getElementById(`diag-enc-${numeroEncontro}`);
+      const metasEl = document.getElementById(`metas-enc-${numeroEncontro}`);
+      const obsEl = document.getElementById(`obs-enc-${numeroEncontro}`);
+      const statusEl = document.getElementById(`status-enc-${numeroEncontro}`);
+      if (diagEl) encontrosAtuais[idx].diagnostico = diagEl.value;
+      if (metasEl) encontrosAtuais[idx].planoAcaoMetas = metasEl.value;
+      if (obsEl) encontrosAtuais[idx].observacoesGerais = obsEl.value;
+      if (statusEl) encontrosAtuais[idx].status = statusEl.value;
+    }
+
+    const TEMPLATES_PEDAGOGICOS_SENAC = {
+      1: {
+        diagnostico: 'Mapeamento inicial do modelo de negócios realizado. Empreendedor apresenta domínio prático do produto/serviço, porém precisa separar finanças pessoais das empresariais.',
+        planoAcaoMetas: 'Organizar rotina administrativa semanal e definir os produtos de maior giro.',
+        checklist: [
+          'Listar os 3 principais produtos/serviços de maior venda',
+          'Separar anotações de despesas pessoais e da empresa'
+        ]
+      },
+      2: {
+        diagnostico: 'Estruturação da Proposta de Valor e análise da jornada do cliente. Identificadas oportunidades de melhoria no atendimento e apresentação do catálogo.',
+        planoAcaoMetas: 'Aplicar o modelo Canvas SENAC focando no diferencial competitivo.',
+        checklist: [
+          'Padronizar apresentação dos produtos/serviços para os clientes',
+          'Mapear os principais concorrentes e diferenciais do negócio'
+        ]
+      },
+      3: {
+        diagnostico: 'Revisão completa de custos variáveis, custos fixos e formação do preço de venda. Ajustada margem de contribuição dos produtos principais.',
+        planoAcaoMetas: 'Implantar controle diário de fluxo de caixa na planilha SENAC.',
+        checklist: [
+          'Separar conta bancária/PIX pessoal das vendas do negócio',
+          'Registrar 100% das entradas e saídas na Planilha Financeira SENAC'
+        ]
+      },
+      4: {
+        diagnostico: 'Estratégia comercial e posicionamento digital. Estruturado roteiro de abordagem ativa no WhatsApp Business e fidelização de clientes.',
+        planoAcaoMetas: 'Profissionalizar catálogo no WhatsApp Business e ativar pós-venda.',
+        checklist: [
+          'Configurar Catálogo de Produtos no WhatsApp Business',
+          'Entrar em contato com 15 clientes antigos oferecendo novidade da semana'
+        ]
+      },
+      5: {
+        diagnostico: 'Consolidação dos 5 encontros da mentoria. Revisão das obrigações mensais do MEI (DAS-MEI, Nota Fiscal) e plano de crescimento para os próximos 90 dias.',
+        planoAcaoMetas: 'Manter fechamento mensal de caixa e regularidade do CNPJ MEI.',
+        checklist: [
+          'Realizar fechamento de caixa todo dia 5 do mês',
+          'Manter pagamento em dia da guia DAS-MEI no Portal do Empreendedor'
+        ]
+      }
+    };
+
+    function aplicarTemplatePedagogico(numeroEncontro) {
+      sincronizarCamposAbaAtual(numeroEncontro);
+      const tpl = TEMPLATES_PEDAGOGICOS_SENAC[numeroEncontro];
+      if (!tpl) return;
+
+      const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+      if (idx < 0) return;
+
+      encontrosAtuais[idx].diagnostico = tpl.diagnostico;
+      encontrosAtuais[idx].planoAcaoMetas = tpl.planoAcaoMetas;
+      if (!Array.isArray(encontrosAtuais[idx].checklistMetas)) {
+        encontrosAtuais[idx].checklistMetas = [];
+      }
+      const existentes = new Set(encontrosAtuais[idx].checklistMetas.map(m => m.texto));
+      tpl.checklist.forEach(texto => {
+        if (!existentes.has(texto)) {
+          encontrosAtuais[idx].checklistMetas.push({ texto, concluida: false });
+        }
+      });
+
+      renderizarDiario();
+      showToast(`Roteiro padrão SENAC preenchido para o Encontro ${numeroEncontro}!`, 'success');
+    }
+
+    function adicionarItemChecklist(numeroEncontro) {
+      sincronizarCamposAbaAtual(numeroEncontro);
+      const input = document.getElementById(`input-nova-meta-${numeroEncontro}`);
+      const texto = (input?.value || '').trim();
+      if (!texto) return;
+      const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+      if (idx < 0) return;
+      if (!Array.isArray(encontrosAtuais[idx].checklistMetas)) {
+        encontrosAtuais[idx].checklistMetas = [];
+      }
+      encontrosAtuais[idx].checklistMetas.push({ texto, concluida: false });
+      renderizarDiario();
+    }
+
+    function alternarItemChecklist(numeroEncontro, itemIdx) {
+      sincronizarCamposAbaAtual(numeroEncontro);
+      const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+      if (idx < 0 || !encontrosAtuais[idx].checklistMetas?.[itemIdx]) return;
+      encontrosAtuais[idx].checklistMetas[itemIdx].concluida = !encontrosAtuais[idx].checklistMetas[itemIdx].concluida;
+      renderizarDiario();
+    }
+
+    function removerItemChecklist(numeroEncontro, itemIdx) {
+      sincronizarCamposAbaAtual(numeroEncontro);
+      const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+      if (idx < 0 || !encontrosAtuais[idx].checklistMetas) return;
+      encontrosAtuais[idx].checklistMetas.splice(itemIdx, 1);
+      renderizarDiario();
+    }
+
+    async function salvarEncontro(e, numeroEncontro, confirmarPresencaEAvancar = false) {
+      if (e) e.preventDefault();
+      try {
+        const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+        const checklistMetas = idx >= 0 ? (encontrosAtuais[idx].checklistMetas || []) : [];
+        const statusEscolhido = confirmarPresencaEAvancar
+          ? 'realizado'
+          : (document.getElementById(`status-enc-${numeroEncontro}`)?.value || 'pendente');
+
+        const payload = {
+          diagnostico: document.getElementById(`diag-enc-${numeroEncontro}`)?.value || '',
+          planoAcaoMetas: document.getElementById(`metas-enc-${numeroEncontro}`)?.value || '',
+          observacoesGerais: document.getElementById(`obs-enc-${numeroEncontro}`)?.value || '',
+          status: statusEscolhido,
+          checklistMetas
+        };
+
+        await apiFetch(`/diarios/${alunoId}/encontro/${numeroEncontro}`, {
+          method: 'PUT',
+          body: JSON.stringify(payload)
+        });
+
+        if (confirmarPresencaEAvancar) {
+          if (numeroEncontro < 5) {
+            abaAtiva = numeroEncontro + 1;
+            showToast(`Encontro ${numeroEncontro} concluído com presença! Avançando para o Encontro ${abaAtiva}...`, 'success');
+          } else {
+            showToast('Parabéns! Todos os 5 encontros foram concluídos! Certificado liberado.', 'success');
+          }
+        } else {
+          showToast(`Encontro ${numeroEncontro} salvo com sucesso!`, 'success');
+        }
+
+        await carregarFichaEDiario();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function anexarKitRapido(numeroEncontro, titulo, urlArquivo) {
+      try {
+        await apiFetch(`/diarios/${alunoId}/encontro/${numeroEncontro}/entregaveis`, {
+          method: 'POST',
+          body: JSON.stringify({ titulo, urlArquivo })
+        });
+        showToast(`"${titulo}" anexado ao Encontro ${numeroEncontro}!`, 'success');
+        await carregarFichaEDiario();
+      } catch (err) {}
+    }
+
+    async function anexarEntregavel(e, numeroEncontro) {
+      e.preventDefault();
+      const titulo = document.getElementById(`titulo-arquivo-${numeroEncontro}`).value;
+      const urlArquivo = document.getElementById(`url-arquivo-${numeroEncontro}`).value || 'https://www.gov.br/empresas-e-negocios/pt-br/empreendedor';
+      try {
+        await apiFetch(`/diarios/${alunoId}/encontro/${numeroEncontro}/entregaveis`, {
+          method: 'POST',
+          body: JSON.stringify({ titulo, urlArquivo })
+        });
+        showToast('Material anexado com sucesso!', 'success');
+        await carregarFichaEDiario();
+      } catch (err) {}
+    }
+
+    // Maturidade (4 Eixos)
+    function carregarMaturidadeLocal() {
+      if (alunoAtual && alunoAtual.maturidade) {
+        const m = alunoAtual.maturidade;
+        document.getElementById('range-mat-financas').value = m.financas || 3;
+        document.getElementById('range-mat-vendas').value = m.vendas || 3;
+        document.getElementById('range-mat-operacoes').value = m.operacoes || 3;
+        document.getElementById('range-mat-formalizacao').value = m.formalizacao || 3;
+      }
+      atualizarMaturidadeUI();
+    }
+
+    function atualizarMaturidadeUI() {
+      const f = Number(document.getElementById('range-mat-financas').value);
+      const v = Number(document.getElementById('range-mat-vendas').value);
+      const o = Number(document.getElementById('range-mat-operacoes').value);
+      const r = Number(document.getElementById('range-mat-formalizacao').value);
+
+      const mIni = (alunoAtual && alunoAtual.maturidadeInicial)
+        ? alunoAtual.maturidadeInicial
+        : { financas: 2, vendas: 2, operacoes: 2, formalizacao: 2 };
+      const fi = mIni.financas || 2;
+      const vi = mIni.vendas || 2;
+      const oi = mIni.operacoes || 2;
+      const ri = mIni.formalizacao || 2;
+
+      document.getElementById('val-mat-financas').textContent = `${f}/5`;
+      document.getElementById('val-mat-vendas').textContent = `${v}/5`;
+      document.getElementById('val-mat-operacoes').textContent = `${o}/5`;
+      document.getElementById('val-mat-formalizacao').textContent = `${r}/5`;
+
+      const pctInicial = Math.round(((fi + vi + oi + ri) / 20) * 100);
+      const pct = Math.round(((f + v + o + r) / 20) * 100);
+      const delta = pct - pctInicial;
+
+      document.getElementById('score-maturidade-inicial-badge').textContent = `Marco Zero: ${pctInicial}%`;
+      document.getElementById('score-maturidade-badge').textContent = `Atual: ${pct}%`;
+      document.getElementById('score-maturidade-delta').textContent = `${delta >= 0 ? '+' : ''}${delta}% Evolução`;
+
+      const ctx = document.getElementById('chartRadarMaturidade');
+      if (ctx) {
+        if (radarChartInstance) {
+          radarChartInstance.data.datasets[0].data = [fi, vi, oi, ri];
+          radarChartInstance.data.datasets[1].data = [f, v, o, r];
+          radarChartInstance.update();
+        } else {
+          radarChartInstance = new Chart(ctx, {
+            type: 'radar',
+            data: {
+              labels: ['Finanças', 'Vendas', 'Operações', 'MEI'],
+              datasets: [
+                {
+                  label: 'Marco Zero (1º Diagnóstico)',
+                  data: [fi, vi, oi, ri],
+                  backgroundColor: 'rgba(0, 69, 135, 0.08)',
+                  borderColor: '#004587',
+                  borderDash: [5, 5],
+                  pointBackgroundColor: '#004587',
+                  borderWidth: 1.5
+                },
+                {
+                  label: 'Maturidade Atual',
+                  data: [f, v, o, r],
+                  backgroundColor: 'rgba(243, 112, 33, 0.24)',
+                  borderColor: '#f37021',
+                  pointBackgroundColor: '#f37021',
+                  borderWidth: 2.5
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, display: false } } },
+              plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+            }
+          });
+        }
+      }
+    }
+
+    async function salvarMarcoInicialMaturidade() {
+      const maturidadeInicial = {
+        financas: Number(document.getElementById('range-mat-financas').value),
+        vendas: Number(document.getElementById('range-mat-vendas').value),
+        operacoes: Number(document.getElementById('range-mat-operacoes').value),
+        formalizacao: Number(document.getElementById('range-mat-formalizacao').value)
+      };
+      try {
+        await apiFetch(`/empreendedores/${alunoId}`, {
+          method: 'PUT',
+          body: JSON.stringify({ maturidadeInicial })
+        });
+        if (alunoAtual) alunoAtual.maturidadeInicial = maturidadeInicial;
+        atualizarMaturidadeUI();
+        showToast('Marco Zero fixado com sucesso!', 'success');
+      } catch (e) {}
+    }
+
+    async function salvarMaturidadeLocal() {
+      const maturidade = {
+        financas: Number(document.getElementById('range-mat-financas').value),
+        vendas: Number(document.getElementById('range-mat-vendas').value),
+        operacoes: Number(document.getElementById('range-mat-operacoes').value),
+        formalizacao: Number(document.getElementById('range-mat-formalizacao').value)
+      };
+      try {
+        await apiFetch(`/empreendedores/${alunoId}`, {
+          method: 'PUT',
+          body: JSON.stringify({ maturidade })
+        });
+        if (alunoAtual) alunoAtual.maturidade = maturidade;
+        showToast('Notas de maturidade salvas com sucesso!', 'success');
+      } catch (e) {}
+    }
+
+    // Modais
+    function abrirModalFormalizacao() {
+      if (alunoAtual && alunoAtual.negocio) {
+        document.getElementById('modal-situacao').value = alunoAtual.negocio.situacaoAtual || 'informal';
+        document.getElementById('modal-cnpj').value = alunoAtual.negocio.cnpj || '';
+      }
+      const m = document.getElementById('modal-formalizacao');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function fecharModalFormalizacao() {
+      const m = document.getElementById('modal-formalizacao');
+      m.classList.remove('flex');
+      m.classList.add('hidden');
+    }
+
+    document.getElementById('form-formalizacao').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const situacao = document.getElementById('modal-situacao').value;
+      const cnpj = document.getElementById('modal-cnpj').value;
+      try {
+        await apiFetch(`/empreendedores/${alunoId}/formalizacao`, {
+          method: 'PATCH',
+          body: JSON.stringify({ situacaoAtual: situacao, cnpj })
+        });
+        showToast('Situação MEI atualizada com sucesso!', 'success');
+        fecharModalFormalizacao();
+        await carregarFichaEDiario();
+      } catch (err) {}
+    });
+
+    function abrirModalEditarPerfil() {
+      if (!alunoAtual) return;
+      document.getElementById('edit-nome').value = alunoAtual.nomeCompleto || '';
+      document.getElementById('edit-negocio').value = alunoAtual.negocio?.nomeFantasia || '';
+      document.getElementById('edit-ramo').value = alunoAtual.negocio?.ramoAtividade || '';
+      document.getElementById('edit-whatsapp').value = alunoAtual.whatsapp || '';
+      document.getElementById('edit-email').value = alunoAtual.email || '';
+      document.getElementById('edit-status').value = alunoAtual.statusPrograma || 'em_mentoria';
+      const m = document.getElementById('modal-editar-perfil');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function fecharModalEditarPerfil() {
+      const m = document.getElementById('modal-editar-perfil');
+      m.classList.remove('flex');
+      m.classList.add('hidden');
+    }
+
+    document.getElementById('form-editar-perfil').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await apiFetch(`/empreendedores/${alunoId}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            nomeCompleto: document.getElementById('edit-nome').value,
+            whatsapp: document.getElementById('edit-whatsapp').value,
+            email: document.getElementById('edit-email').value,
+            statusPrograma: document.getElementById('edit-status').value,
+            negocio: {
+              ...(alunoAtual?.negocio || {}),
+              nomeFantasia: document.getElementById('edit-negocio').value,
+              ramoAtividade: document.getElementById('edit-ramo').value
+            }
+          })
+        });
+        showToast('Cadastro atualizado com sucesso!', 'success');
+        fecharModalEditarPerfil();
+        await carregarFichaEDiario();
+      } catch (err) {}
+    });
+
+    function abrirModalCertificado() {
+      if (!alunoAtual) return;
+      document.getElementById('cert-nome-aluno').textContent = alunoAtual.nomeCompleto;
+      document.getElementById('cert-empresa-aluno').textContent = alunoAtual.negocio?.nomeFantasia || 'Negócio Acelerado SENAC';
+      const m = document.getElementById('modal-certificado');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function fecharModalCertificado() {
+      const m = document.getElementById('modal-certificado');
+      m.classList.remove('flex');
+      m.classList.add('hidden');
+    }
+
+    function imprimirCertificadoOficial() {
+      document.body.classList.add('print-certificado');
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => document.body.classList.remove('print-certificado'), 500);
+      }, 100);
+    }
+
+    function copiarLinkAluno() {
+      if (!alunoAtual) return;
+      const link = `${window.location.origin}/agendar.html?token=${alunoAtual.accessToken}`;
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('Link do Portal do Aluno copiado!', 'success');
+      });
+    }
+
+    function enviarPortalWhatsApp() {
+      if (!alunoAtual) return;
+      const link = `${window.location.origin}/agendar.html?token=${alunoAtual.accessToken}`;
+      const msg = `Olá, *${alunoAtual.nomeCompleto}*! Aqui é da mentoria *Co.Nexo SENAC*.\n\nAtualizamos seu Diário de Mentoria com as tarefas do nosso encontro. Acesse seu Portal do Aluno pelo link:\n${link}`;
+      window.open(gerarLinkWhatsApp(alunoAtual.whatsapp, msg), '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', carregarFichaEDiario);
+  </script>
+</body>
+</html>

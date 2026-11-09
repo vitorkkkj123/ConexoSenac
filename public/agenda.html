@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html class="h-full" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Co.Nexo SENAC — Grade Inteligente & Operação de Turnos</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#002f5f",
+            "primary-container": "#004587",
+            "primary-fixed": "#d5e3ff",
+            "primary-fixed-dim": "#a8c8ff",
+            "on-primary": "#ffffff",
+            "secondary": "#a04100",
+            "secondary-container": "#f37021",
+            "secondary-fixed": "#ffdbcb",
+            "on-secondary": "#ffffff",
+            "surface": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#424750",
+            "outline": "#737782",
+            "outline-variant": "#c2c6d2",
+            "background": "#f8f9ff"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #c2c6d2; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-background text-on-surface h-full flex overflow-hidden font-body antialiased">
+
+  <!-- Sidebar Corporativa -->
+  <aside class="h-screen w-64 flex flex-col shrink-0 fixed lg:sticky inset-y-0 top-0 left-0 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out bg-surface-container-low border-r border-outline-variant select-none z-50">
+    <div class="flex flex-col justify-between h-full p-4">
+      <div class="flex flex-col gap-6">
+        <div class="flex items-center justify-center px-2 py-2 bg-white rounded-xl border border-outline-variant/60 shadow-sm">
+          <img src="img/logo-conexo.png" alt="Co.Nexo Senac" class="h-14 w-auto object-contain"/>
+        </div>
+
+        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-secondary-container text-on-secondary font-headline font-semibold text-xs shadow-sm hover:brightness-105 active:scale-95 transition-all" onclick="abrirModalBloco()">
+          <span class="material-symbols-outlined text-lg">bolt</span>
+          <span>Gerar Bloco de 4 Horas</span>
+        </button>
+
+        <nav class="flex flex-col gap-1">
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors text-sm" href="index.html">
+            <span class="material-symbols-outlined text-xl">monitoring</span>
+            <span>Painel & Indicadores</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors text-sm" href="alunos.html">
+            <span class="material-symbols-outlined text-xl">groups</span>
+            <span>Base de Empreendedores</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary font-semibold shadow-sm text-sm" href="agenda.html">
+            <span class="material-symbols-outlined text-xl">calendar_month</span>
+            <span>Grade & Agendamento</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface font-medium transition-colors text-sm" href="login.html">
+            <span class="material-symbols-outlined text-xl">manage_accounts</span>
+            <span>Trocar Workspace</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Perfil Ativo & Alternador RBAC -->
+      <div id="sidebar-user-profile" class="pt-4 border-t border-outline-variant"></div>
+    </div>
+  </aside>
+
+  <!-- Área Principal de Conteúdo -->
+  <div class="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
+
+    <!-- Topbar Limpa -->
+    <header class="w-full px-4 sm:px-6 py-3.5 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0 z-20 shadow-sm">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="min-w-0">
+          <span class="font-headline font-extrabold text-[#004587] text-sm sm:text-base block truncate">2. Grade de Horários dos Professores & Mentorias</span>
+          <span class="text-[11px] text-slate-500 hidden sm:block">Abra horários na agenda da Professora Aline e aloque os empreendedores aprovados no diagnóstico</span>
+        </div>
+        <div class="hidden xl:flex items-center gap-2 text-xs ml-4 shrink-0">
+          <span class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 font-semibold text-slate-700">
+            Vagas Abertas: <strong class="text-[#004587]" id="stat-slots-livres">0</strong>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 font-semibold text-emerald-800">
+            Agendados Hoje: <strong id="stat-agendados-hoje">0</strong>
+          </span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="abrirModalSlot()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+          <span class="material-symbols-outlined text-base text-[#004587]">add_circle</span>
+          <span>+ Abrir Horário</span>
+        </button>
+        <button onclick="abrirModalBloco()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#f37021] text-white text-xs font-bold hover:brightness-105 active:scale-95 transition-all shadow-sm">
+          <span class="material-symbols-outlined text-base">bolt</span>
+          <span>+ Turno de 4h</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Conteúdo Rolável -->
+    <main class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 flex flex-col gap-5 max-w-[1600px] w-full mx-auto">
+
+      <!-- Barra de Abas Operacionais (Vagas Livres vs Agendamentos Confirmados) + Filtros -->
+      <div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex flex-col lg:flex-row items-center justify-between gap-4">
+        <!-- Seletor de Abas do Max -->
+        <div class="flex items-center gap-1.5 bg-surface-container-low p-1 rounded-xl border border-outline-variant w-full lg:w-auto">
+          <button onclick="mudarAbaAgenda('livres')" id="tab-btn-livres" class="flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-headline font-bold bg-primary-container text-white shadow-sm transition-all">
+            <span class="material-symbols-outlined text-[16px]">event_available</span>
+            <span>Vagas Livres (Grade)</span>
+          </button>
+          <button onclick="mudarAbaAgenda('agendados')" id="tab-btn-agendados" class="flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-headline font-semibold text-on-surface-variant hover:text-on-surface transition-all">
+            <span class="material-symbols-outlined text-[16px]">fact_check</span>
+            <span>Agendamentos & Presença</span>
+          </button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-end">
+          <select id="filtro-status-agendamento" onchange="carregarGrade()" class="hidden text-xs font-semibold rounded-lg border-outline-variant bg-surface-container-low text-on-surface py-1.5 px-3 focus:border-primary-container focus:ring-primary-container">
+            <option value="">Todos os Status (Agendados/Realizados/Faltas)</option>
+            <option value="agendado" selected>Apenas Agendados (Pendentes)</option>
+            <option value="realizado">Presenças Confirmadas</option>
+            <option value="falta">Faltas Registradas</option>
+          </select>
+
+          <select id="filtro-tipo" onchange="carregarGrade()" class="text-xs font-semibold rounded-lg border-outline-variant bg-surface-container-low text-on-surface py-1.5 px-3 focus:border-primary-container focus:ring-primary-container">
+            <option value="">Todos os Formatos (1h e 2h)</option>
+            <option value="entrevista_1h">Entrevista Inicial (1 hora)</option>
+            <option value="mentoria_2h">Mentoria Especializada (2 horas)</option>
+          </select>
+
+          <input type="date" id="filtro-data" onchange="carregarGrade()" class="text-xs font-medium rounded-lg border-outline-variant bg-surface-container-low text-on-surface py-1.5 px-3 focus:border-primary-container focus:ring-primary-container">
+
+          <button onclick="limparDataECarregar()" class="px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant text-xs font-semibold text-on-surface-variant hover:text-on-surface" title="Ver todas as datas">
+            Todas Datas
+          </button>
+
+          <button onclick="carregarGrade()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant text-xs font-bold text-on-surface hover:bg-surface-container-high transition-colors">
+            <span class="material-symbols-outlined text-sm">refresh</span>
+            <span>Atualizar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ABA 1: Tabela de Vagas Abertas para Reserva / Encaixe -->
+      <div id="secao-vagas-livres" class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+        <div class="p-4 bg-slate-50 border-b border-outline-variant flex items-center justify-between">
+          <h3 class="font-headline font-bold text-sm text-primary-container flex items-center gap-2">
+            <span class="material-symbols-outlined text-emerald-600 text-lg">event_available</span>
+            <span>Horários Disponíveis</span>
+          </h3>
+          <span class="text-xs text-outline">Aloque um empreendedor manualmente ou exclua horários livres</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-surface-container-low/70 border-b border-outline-variant text-[11px] font-headline font-bold text-on-surface-variant uppercase tracking-wider">
+                <th class="py-3.5 px-6">Data & Horário</th>
+                <th class="py-3.5 px-4">Formato / Duração</th>
+                <th class="py-3.5 px-4">Consultor(a) Responsável</th>
+                <th class="py-3.5 px-4">Origem do Turno</th>
+                <th class="py-3.5 px-6 text-right">Ação de Recepção / Encaixe</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-grade" class="divide-y divide-outline-variant/50 text-xs">
+              <tr>
+                <td colspan="5" class="text-center py-10 text-on-surface-variant">Carregando grade de atendimentos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ABA 2: Tabela de Agendamentos Confirmados, Chamada de Presença/Falta e Cancelamento -->
+      <div id="secao-agendados" class="hidden bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex-col">
+        <div class="p-4 bg-slate-50 border-b border-outline-variant flex items-center justify-between">
+          <h3 class="font-headline font-bold text-sm text-primary-container flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary-container text-lg">fact_check</span>
+            <span>Atendimentos Agendados & Controle de Presença</span>
+          </h3>
+          <span class="text-xs text-outline">Confirme presença, aplique falta, envie lembrete no WhatsApp ou cancele/libere a vaga</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-surface-container-low/70 border-b border-outline-variant text-[11px] font-headline font-bold text-on-surface-variant uppercase tracking-wider">
+                <th class="py-3.5 px-6">Data & Horário</th>
+                <th class="py-3.5 px-4">Empreendedor / Empresa</th>
+                <th class="py-3.5 px-4">Formato</th>
+                <th class="py-3.5 px-4">Consultor(a)</th>
+                <th class="py-3.5 px-4">Status</th>
+                <th class="py-3.5 px-6 text-right">Ações do Atendimento (Max)</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-agendados" class="divide-y divide-outline-variant/50 text-xs">
+              <tr>
+                <td colspan="6" class="text-center py-10 text-on-surface-variant">Carregando agendamentos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Alocar Empreendedor Manualmente na Vaga (Recepção Max) -->
+  <div id="modal-alocar" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-md w-full max-h-[90vh] border border-outline-variant shadow-2xl overflow-hidden flex flex-col my-auto">
+      <div class="p-5 bg-primary-container text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-xl">person_check</span>
+          <h3 class="font-headline font-bold text-base">Alocar Empreendedor na Vaga</h3>
+        </div>
+        <button onclick="fecharModalAlocar()" class="text-white/80 hover:text-white">✕</button>
+      </div>
+      <form id="form-alocar-aluno" class="p-6 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+        <input type="hidden" id="alocar-slot-id">
+        <div class="p-3 rounded-xl bg-surface-container-low border border-outline-variant text-xs">
+          <span class="text-outline block">Horário Selecionado:</span>
+          <strong class="text-primary-container font-headline text-sm" id="alocar-slot-resumo">-</strong>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1.5">Selecione o Empreendedor *</label>
+          <select id="select-empreendedor-alocar" required class="w-full text-xs rounded-lg border-outline-variant bg-surface-container-lowest p-2.5 focus:border-primary-container focus:ring-primary-container">
+            <option value="">Carregando empreendedores...</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-outline-variant">
+          <button type="button" onclick="fecharModalAlocar()" class="px-4 py-2 rounded-lg text-xs font-semibold text-on-surface-variant hover:bg-surface-container-high">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-secondary-container text-white text-xs font-bold hover:brightness-105 shadow-sm">Confirmar Agendamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Gerar Bloco de 4 Horas -->
+  <div id="modal-bloco" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-md w-full max-h-[90vh] border border-outline-variant shadow-2xl overflow-hidden flex flex-col my-auto">
+      <div class="p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-low shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary-container text-2xl">bolt</span>
+          <h3 class="font-headline font-bold text-lg text-on-surface">Gerar Bloco de 4 Horas</h3>
+        </div>
+        <button onclick="fecharModalBloco()" class="text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="form-bloco-4h" class="p-6 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+        <p class="text-xs text-on-surface-variant bg-surface-container-low p-3 rounded-xl border border-outline-variant">
+          Cria automaticamente 4 entrevistas consecutivas de 1h ou 2 mentorias de 2h, eliminando janelas ociosas no turno.
+        </p>
+
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1.5">Professor(a) / Consultor(a) da Mentoria *</label>
+          <select name="consultorId" id="select-consultor-bloco" class="w-full text-xs rounded-lg border-outline-variant bg-surface-container-lowest focus:border-primary-container focus:ring-primary-container" required></select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1.5">Estrutura do Bloco *</label>
+          <select name="tipo" class="w-full text-xs rounded-lg border-outline-variant bg-surface-container-lowest focus:border-primary-container focus:ring-primary-container" required>
+            <option value="mentoria_2h" selected>2 mentorias com Professor de 2 horas cada</option>
+            <option value="entrevista_1h">4 encontros iniciais de 1 hora cada</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1.5">Início do Turno de 4 Horas *</label>
+          <input type="datetime-local" id="input-inicio-bloco" name="dataHoraInicio" class="w-full text-xs rounded-lg border-outline-variant bg-surface-container-lowest focus:border-primary-container focus:ring-primary-container" required>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-outline-variant">
+          <button type="button" onclick="fecharModalBloco()" class="px-4 py-2 rounded-lg text-xs font-semibold text-on-surface-variant hover:bg-surface-container-high">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-secondary-container text-on-secondary text-xs font-bold hover:brightness-105 shadow-sm">Gerar Bloco na Grade</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Horário Avulso -->
+  <div id="modal-slot" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-md w-full max-h-[90vh] border border-outline-variant shadow-2xl overflow-hidden flex flex-col my-auto">
+      <div class="p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-low shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary-container text-2xl">calendar_add_on</span>
+          <h3 class="font-headline font-bold text-lg text-on-surface">Abrir Horário do Professor</h3>
+        </div>
+        <button onclick="fecharModalSlot()" class="text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="form-slot-avulso" class="p-6 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1.5">Professor(a) / Consultor(a) *</label>
+          <select name="consultorId" id="select-consultor-avulso" class="w-full text-xs rounded-lg border-outline-variant bg-surface-container-lowest focus:border-primary-container focus:ring-primary-container" required></select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1.5">Tipo da Sessão *</label>
+          <select name="tipo" class="w-full text-xs rounded-lg border-outline-variant bg-surface-container-lowest focus:border-primary-container focus:ring-primary-container" required>
+            <option value="mentoria_2h" selected>Mentoria com Professor (2 horas)</option>
+            <option value="entrevista_1h">1º Encontro / Diagnóstico (1 hora)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-1.5">Data e Horário de Início *</label>
+          <input type="datetime-local" id="input-inicio-avulso" name="dataHoraInicio" class="w-full text-xs rounded-lg border-outline-variant bg-surface-container-lowest focus:border-primary-container focus:ring-primary-container" required>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-outline-variant">
+          <button type="button" onclick="fecharModalSlot()" class="px-4 py-2 rounded-lg text-xs font-semibold text-on-surface-variant hover:bg-surface-container-high">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-primary-container text-on-primary text-xs font-bold hover:brightness-110 shadow-sm">Abrir Vaga</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script>
+    let abaAgendaAtual = 'livres';
+
+    function mudarAbaAgenda(aba) {
+      abaAgendaAtual = aba;
+      const btnLivres = document.getElementById('tab-btn-livres');
+      const btnAgendados = document.getElementById('tab-btn-agendados');
+      const secLivres = document.getElementById('secao-vagas-livres');
+      const secAgendados = document.getElementById('secao-agendados');
+      const filtroStatus = document.getElementById('filtro-status-agendamento');
+
+      if (aba === 'livres') {
+        btnLivres.className = 'flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-headline font-bold bg-primary-container text-white shadow-sm transition-all';
+        btnAgendados.className = 'flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-headline font-semibold text-on-surface-variant hover:text-on-surface transition-all';
+        secLivres.classList.remove('hidden');
+        secAgendados.classList.add('hidden');
+        filtroStatus.classList.add('hidden');
+      } else {
+        btnAgendados.className = 'flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-headline font-bold bg-primary-container text-white shadow-sm transition-all';
+        btnLivres.className = 'flex-1 lg:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-headline font-semibold text-on-surface-variant hover:text-on-surface transition-all';
+        secAgendados.classList.remove('hidden');
+        secAgendados.classList.add('flex');
+        secLivres.classList.add('hidden');
+        filtroStatus.classList.remove('hidden');
+      }
+      carregarGrade();
+    }
+
+    function limparDataECarregar() {
+      document.getElementById('filtro-data').value = '';
+      carregarGrade();
+    }
+
+    function preencherDataHoraPadrao() {
+      const amanha = new Date();
+      amanha.setDate(amanha.getDate() + 1);
+      amanha.setHours(9, 0, 0, 0);
+      const isoLocal = new Date(amanha.getTime() - amanha.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById('input-inicio-bloco').value = isoLocal;
+      document.getElementById('input-inicio-avulso').value = isoLocal;
+    }
+
+    async function carregarConsultoresEAlunos() {
+      try {
+        const [resCons, resAlunos, resCockpit] = await Promise.all([
+          apiFetch('/auth/consultores'),
+          apiFetch('/empreendedores?limit=200'),
+          apiFetch('/dashboard/cockpit')
+        ]);
+
+        if (resCons.sucesso) {
+          const options = resCons.dados.map(c => `<option value="${c._id}">${c.nome}</option>`).join('');
+          document.getElementById('select-consultor-bloco').innerHTML = options;
+          document.getElementById('select-consultor-avulso').innerHTML = options;
+        }
+
+        if (resAlunos.sucesso) {
+          const ativos = (resAlunos.dados || resAlunos.itens || []).filter(a => !a.bloqueadoPorAssiduidade);
+          document.getElementById('select-empreendedor-alocar').innerHTML = ativos.map(a =>
+            `<option value="${a.accessToken}">${a.nomeCompleto} — ${a.negocio?.nomeFantasia || 'Sem nome fantasia'} (${formatCPF(a.cpf)})</option>`
+          ).join('');
+        }
+
+        if (resCockpit.sucesso) {
+          document.getElementById('stat-agendados-hoje').textContent = resCockpit.dados.statsHoje.agendados || 0;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function carregarGrade() {
+      const tipo = document.getElementById('filtro-tipo').value;
+      const data = document.getElementById('filtro-data').value;
+      const statusFiltro = document.getElementById('filtro-status-agendamento').value;
+
+      try {
+        const query = new URLSearchParams();
+        if (tipo) query.append('tipo', tipo);
+        if (data) query.append('data', data);
+
+        // 1. Carrega Vagas Livres
+        const res = await apiFetch(`/agendamentos/disponiveis?${query.toString()}`);
+        if (res.sucesso) {
+          const tbody = document.getElementById('tabela-grade');
+          document.getElementById('stat-slots-livres').textContent = res.dados.length;
+
+          if (res.dados.length === 0) {
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="5" class="text-center py-12 text-on-surface-variant">
+                  <span class="material-symbols-outlined text-3xl text-outline mb-1 block">event_busy</span>
+                  <p class="font-bold">Nenhum horário aberto para os filtros selecionados.</p>
+                  <p class="text-[11px] text-outline mt-0.5">Clique em "+ Bloco de 4h" no canto superior direito para abrir novos turnos.</p>
+                </td>
+              </tr>
+            `;
+          } else {
+            tbody.innerHTML = res.dados.map(slot => {
+              const dataFormatada = formatDate(slot.dataHoraInicio);
+              const fimFormatado = new Date(slot.dataHoraFim).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+              const consultor = slot.consultorId?.nome || 'Consultoria SENAC';
+              const iniciais = consultor.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+              const isEntrevista = slot.tipo === 'entrevista_1h';
+              const tipoLabel = isEntrevista ? '1h Entrevista Inicial' : '2h Mentoria Especializada';
+              const tipoBadgeClass = isEntrevista ? 'bg-primary-fixed text-primary border-primary-fixed-dim' : 'bg-secondary-fixed text-secondary border-orange-200';
+              const resumoSlot = `${dataFormatada} até ${fimFormatado} (${tipoLabel} com ${consultor})`;
+
+              return `
+                <tr class="hover:bg-surface-container-low/40 transition-colors">
+                  <td class="py-4 px-6 font-bold text-on-surface">
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-primary-container text-base">calendar_today</span>
+                      <span>${dataFormatada} até ${fimFormatado}</span>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${tipoBadgeClass}">
+                      ${tipoLabel}
+                    </span>
+                  </td>
+                  <td class="py-4 px-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-[10px]">
+                        ${iniciais}
+                      </div>
+                      <span class="font-semibold text-on-surface">${consultor}</span>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 text-outline">
+                    ${slot.observacoesAtendimento || 'Horário Avulso'}
+                  </td>
+                  <td class="py-4 px-6 text-right">
+                    <div class="flex items-center justify-end gap-2">
+                      <button onclick="abrirModalAlocar('${slot._id}', '${resumoSlot.replace(/'/g, '')}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-bold hover:bg-primary transition-all shadow-sm">
+                        <span class="material-symbols-outlined text-sm">person_add</span>
+                        <span>Alocar Aluno</span>
+                      </button>
+                      <button onclick="removerSlot('${slot._id}')" class="p-1.5 rounded-lg border border-outline-variant text-on-surface-variant hover:text-red-600 hover:bg-red-50 transition-all" title="Remover horário livre">
+                        <span class="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+
+        // 2. Carrega Agendamentos Confirmados / Histórico de Presença (Para a Aba 2 do Max)
+        const queryTodos = new URLSearchParams();
+        if (tipo) queryTodos.append('tipo', tipo);
+        if (data) queryTodos.append('data', data);
+        if (statusFiltro) queryTodos.append('status', statusFiltro);
+
+        const resTodos = await apiFetch(`/agendamentos/todos?${queryTodos.toString()}`);
+        if (resTodos.sucesso) {
+          const agendadosList = (resTodos.dados || []).filter(s => s.status !== 'disponivel');
+          const tbodyAg = document.getElementById('tabela-agendados');
+
+          if (agendadosList.length === 0) {
+            tbodyAg.innerHTML = `
+              <tr>
+                <td colspan="6" class="text-center py-12 text-on-surface-variant">
+                  <span class="material-symbols-outlined text-3xl text-outline mb-1 block">fact_check</span>
+                  <p class="font-bold">Nenhum agendamento encontrado para este filtro.</p>
+                </td>
+              </tr>
+            `;
+          } else {
+            tbodyAg.innerHTML = agendadosList.map(item => {
+              const dataFormatada = formatDate(item.dataHoraInicio);
+              const hora = new Date(item.dataHoraInicio).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+              const nomeAluno = item.empreendedorId?.nomeCompleto || 'Empreendedor';
+              const empresa = item.empreendedorId?.negocio?.nomeFantasia || 'Sem nome fantasia';
+              const tel = item.empreendedorId?.whatsapp || '';
+              const consultor = item.consultorId?.nome || 'Consultoria SENAC';
+              const tipoLabel = item.tipo === 'entrevista_1h' ? '1h Entrevista' : '2h Mentoria';
+
+              let badgeStatus = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700">${item.status}</span>`;
+              if (item.status === 'agendado') {
+                badgeStatus = item.confirmadoPeloAluno
+                  ? '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Pré-Confirmado Aluno ✓</span>'
+                  : '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Aguardando Pré-Checkin</span>';
+              }
+              if (item.status === 'realizado') badgeStatus = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">Presente ✓</span>';
+              if (item.status === 'falta' || item.status === 'cancelado_tardio_falta') badgeStatus = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-100 text-red-800">Falta Registrada</span>';
+              if (item.status === 'cancelado_com_antecedencia') badgeStatus = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">Reagendado (>24h)</span>';
+
+              const msgWhats = `Olá, ${nomeAluno}! Aqui é do atendimento Co.Nexo SENAC. Confirmamos seu horário de ${tipoLabel} em ${dataFormatada} com ${consultor}. Podemos confirmar sua presença?`;
+              const urlWhats = tel ? gerarLinkWhatsApp(tel, msgWhats) : '#';
+
+              return `
+                <tr class="hover:bg-surface-container-low/40 transition-colors">
+                  <td class="py-4 px-6 font-bold text-on-surface">${dataFormatada}</td>
+                  <td class="py-4 px-4">
+                    <div class="font-bold text-primary-container">${nomeAluno}</div>
+                    <div class="text-[11px] text-outline">${empresa} ${tel ? '• ' + formatPhone(tel) : ''}</div>
+                  </td>
+                  <td class="py-4 px-4 font-semibold">${tipoLabel}</td>
+                  <td class="py-4 px-4 text-on-surface-variant">${consultor}</td>
+                  <td class="py-4 px-4">${badgeStatus}</td>
+                  <td class="py-4 px-6 text-right">
+                    <div class="inline-flex items-center justify-end gap-1.5">
+                      ${tel ? `
+                        <a href="${urlWhats}" target="_blank" class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold hover:bg-emerald-100 flex items-center gap-1" title="Enviar lembrete no WhatsApp">
+                          <span class="material-symbols-outlined text-[14px]">send</span>
+                          <span>Lembrete</span>
+                        </a>
+                      ` : ''}
+                      ${item.status === 'agendado' ? `
+                        <button onclick="registrarPresencaMax('${item._id}', 'realizado')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700" title="Confirmar Presença">
+                          ✓ Presente
+                        </button>
+                        <button onclick="registrarPresencaMax('${item._id}', 'falta')" class="px-2.5 py-1 rounded-lg bg-red-600 text-white text-xs font-bold hover:bg-red-700" title="Registrar Falta">
+                          ✕ Falta
+                        </button>
+                        <button onclick="cancelarEReabrirVaga('${item._id}', '${nomeAluno.replace(/'/g, '')}')" class="px-2.5 py-1 rounded-lg border border-outline-variant bg-white text-on-surface-variant hover:text-red-700 hover:bg-red-50 text-xs font-semibold" title="Cancelar agendamento e reabrir a vaga na grade">
+                          Liberar Vaga
+                        </button>
+                      ` : ''}
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao carregar grade:', err);
+      }
+    }
+
+    async function registrarPresencaMax(agendamentoId, status) {
+      try {
+        await apiFetch(`/agendamentos/${agendamentoId}/presenca`, {
+          method: 'PATCH',
+          body: JSON.stringify({ status })
+        });
+        showToast(`Atendimento registrado como ${status.toUpperCase()}!`, status === 'realizado' ? 'success' : 'danger');
+        carregarGrade();
+        carregarConsultoresEAlunos();
+      } catch (e) {}
+    }
+
+    async function cancelarEReabrirVaga(agendamentoId, nomeAluno) {
+      try {
+        const res = await apiFetch(`/agendamentos/${agendamentoId}/cancelar`, {
+          method: 'POST',
+          body: JSON.stringify({ motivo: 'Cancelado pela recepção (Max) - Vaga reaberta' })
+        });
+        showToast(res.mensagem || `Agendamento de ${nomeAluno} cancelado e vaga reaberta!`, 'info');
+        carregarGrade();
+        carregarConsultoresEAlunos();
+      } catch (e) {}
+    }
+
+    async function removerSlot(slotId) {
+      try {
+        await apiFetch(`/agendamentos/slots/${slotId}`, { method: 'DELETE' });
+        showToast('Horário removido da grade!', 'info');
+        carregarGrade();
+      } catch (err) {}
+    }
+
+    function abrirModalAlocar(slotId, resumo) {
+      document.getElementById('alocar-slot-id').value = slotId;
+      document.getElementById('alocar-slot-resumo').textContent = resumo;
+      const modal = document.getElementById('modal-alocar');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function fecharModalAlocar() {
+      const modal = document.getElementById('modal-alocar');
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    document.getElementById('form-alocar-aluno').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const slotId = document.getElementById('alocar-slot-id').value;
+      const accessToken = document.getElementById('select-empreendedor-alocar').value;
+      if (!slotId || !accessToken) return;
+
+      try {
+        await apiFetch('/agendamentos/reservar', {
+          method: 'POST',
+          body: JSON.stringify({ slotId, accessToken })
+        });
+        showToast('Empreendedor alocado no horário com sucesso!', 'success');
+        fecharModalAlocar();
+        carregarGrade();
+        carregarConsultoresEAlunos();
+      } catch (err) {}
+    });
+
+    function abrirModalBloco() {
+      const modal = document.getElementById('modal-bloco');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function fecharModalBloco() {
+      const modal = document.getElementById('modal-bloco');
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    function abrirModalSlot() {
+      const modal = document.getElementById('modal-slot');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function fecharModalSlot() {
+      const modal = document.getElementById('modal-slot');
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    document.getElementById('form-bloco-4h').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      try {
+        await apiFetch('/agendamentos/slots/bloco-4h', {
+          method: 'POST',
+          body: JSON.stringify({
+            consultorId: formData.get('consultorId'),
+            tipo: formData.get('tipo'),
+            dataHoraInicio: new Date(formData.get('dataHoraInicio')).toISOString()
+          })
+        });
+
+        showToast('Bloco inteligente de 4 horas gerado com sucesso!', 'success');
+        fecharModalBloco();
+        carregarGrade();
+      } catch (err) {}
+    });
+
+    document.getElementById('form-slot-avulso').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      try {
+        await apiFetch('/agendamentos/slots', {
+          method: 'POST',
+          body: JSON.stringify({
+            consultorId: formData.get('consultorId'),
+            tipo: formData.get('tipo'),
+            dataHoraInicio: new Date(formData.get('dataHoraInicio')).toISOString()
+          })
+        });
+
+        showToast('Horário avulso aberto com sucesso!', 'success');
+        fecharModalSlot();
+        carregarGrade();
+      } catch (err) {}
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      preencherDataHoraPadrao();
+      carregarConsultoresEAlunos();
+      carregarGrade();
+    });
+  </script>
+</body>
+</html>

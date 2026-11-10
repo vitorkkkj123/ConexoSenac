@@ -89,6 +89,11 @@ function wrapDoc(collectionName, rawDoc) {
   if (!rawDoc) return null;
   const doc = JSON.parse(JSON.stringify(rawDoc));
 
+  Object.defineProperty(doc, '__col', {
+    enumerable: false,
+    value: collectionName
+  });
+
   Object.defineProperty(doc, 'toObject', {
     enumerable: false,
     value: function() { return JSON.parse(JSON.stringify(this)); }
@@ -184,6 +189,10 @@ class QueryChain {
 
   limit(n) {
     this.limitCount = Number(n) || null;
+    return this;
+  }
+
+  lean() {
     return this;
   }
 
@@ -286,6 +295,8 @@ function attachModelFallback(Model, collectionName) {
     const chain = {
       populates: [],
       populate(f) { this.populates.push(f); return this; },
+      select() { return this; },
+      lean() { return this; },
       async exec() {
         const db = carregarEstado();
         const list = db[collectionName] || [];

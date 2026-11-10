@@ -6,10 +6,12 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 
 const apiRoutes = require('./routes/api');
+const connectDB = require('./config/database');
 const errorHandler = require('./middlewares/errorHandler');
 const { NotFoundError } = require('./utils/errors');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Segurança de Headers HTTP
 app.use(helmet({
@@ -30,6 +32,7 @@ if (process.env.NODE_ENV !== 'test') {
 const publicLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
   max: 300,
+  validate: { xForwardedForHeader: false },
   message: { sucesso: false, erro: 'Muitas requisições. Tente novamente mais tarde.' }
 });
 app.use('/api/', publicLimiter);
@@ -40,6 +43,16 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Servir arquivos estáticos do Frontend (HTML5 + CSS3 + Bootstrap)
 app.use(express.static(path.join(__dirname, '../public')));
+
+// Garantir conexão com o banco (ou Serverless Fallback na Vercel) antes das rotas da API
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Rotas da API REST
 app.use('/api', apiRoutes);

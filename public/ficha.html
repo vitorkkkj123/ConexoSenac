@@ -862,7 +862,7 @@
       }
     };
 
-    function aplicarTemplatePedagogico(numeroEncontro) {
+    async function aplicarTemplatePedagogico(numeroEncontro) {
       sincronizarCamposAbaAtual(numeroEncontro);
       const tpl = TEMPLATES_PEDAGOGICOS_SENAC[numeroEncontro];
       if (!tpl) return;
@@ -883,10 +883,31 @@
       });
 
       renderizarDiario();
-      showToast(`Roteiro padrão SENAC preenchido para o Encontro ${numeroEncontro}!`, 'success');
+      await salvarEncontroSilencioso(numeroEncontro);
+      showToast(`Roteiro e atividades salvos e liberados para o aluno no Encontro ${numeroEncontro}!`, 'success');
     }
 
-    function adicionarItemChecklist(numeroEncontro) {
+    async function salvarEncontroSilencioso(numeroEncontro) {
+      try {
+        const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
+        if (idx < 0) return;
+        const enc = encontrosAtuais[idx];
+        await apiFetch(`/diarios/${alunoId}/encontro/${numeroEncontro}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            diagnostico: enc.diagnostico || '',
+            planoAcaoMetas: enc.planoAcaoMetas || '',
+            observacoesGerais: enc.observacoesGerais || '',
+            status: enc.status || 'pendente',
+            checklistMetas: enc.checklistMetas || []
+          })
+        });
+      } catch (err) {
+        console.error('Erro ao salvar checklist automaticamente:', err);
+      }
+    }
+
+    async function adicionarItemChecklist(numeroEncontro) {
       sincronizarCamposAbaAtual(numeroEncontro);
       const input = document.getElementById(`input-nova-meta-${numeroEncontro}`);
       const texto = (input?.value || '').trim();
@@ -898,22 +919,26 @@
       }
       encontrosAtuais[idx].checklistMetas.push({ texto, concluida: false });
       renderizarDiario();
+      await salvarEncontroSilencioso(numeroEncontro);
+      showToast('Atividade adicionada e enviada para o Portal do Aluno!', 'success');
     }
 
-    function alternarItemChecklist(numeroEncontro, itemIdx) {
+    async function alternarItemChecklist(numeroEncontro, itemIdx) {
       sincronizarCamposAbaAtual(numeroEncontro);
       const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
       if (idx < 0 || !encontrosAtuais[idx].checklistMetas?.[itemIdx]) return;
       encontrosAtuais[idx].checklistMetas[itemIdx].concluida = !encontrosAtuais[idx].checklistMetas[itemIdx].concluida;
       renderizarDiario();
+      await salvarEncontroSilencioso(numeroEncontro);
     }
 
-    function removerItemChecklist(numeroEncontro, itemIdx) {
+    async function removerItemChecklist(numeroEncontro, itemIdx) {
       sincronizarCamposAbaAtual(numeroEncontro);
       const idx = encontrosAtuais.findIndex(x => x.numeroEncontro === numeroEncontro);
       if (idx < 0 || !encontrosAtuais[idx].checklistMetas) return;
       encontrosAtuais[idx].checklistMetas.splice(itemIdx, 1);
       renderizarDiario();
+      await salvarEncontroSilencioso(numeroEncontro);
     }
 
     async function salvarEncontro(e, numeroEncontro, confirmarPresencaEAvancar = false) {
@@ -1201,10 +1226,12 @@
       });
     }
 
-    function enviarPortalWhatsApp() {
+    async function enviarPortalWhatsApp() {
       if (!alunoAtual) return;
-      const link = `${window.location.origin}/agendar.html?token=${alunoAtual.accessToken}`;
-      const msg = `Olá, *${alunoAtual.nomeCompleto}*! Aqui é da mentoria *Co.Nexo SENAC*.\n\nAtualizamos seu Diário de Mentoria com as tarefas do nosso encontro. Acesse seu Portal do Aluno pelo link:\n${link}`;
+      sincronizarCamposAbaAtual(abaAtiva);
+      await salvarEncontroSilencioso(abaAtiva);
+      const link = `${window.location.origin}/agendar.html?token=${alunoAtual.accessToken}&aba=materiais`;
+      const msg = `Olá, *${alunoAtual.nomeCompleto}*! Aqui é da mentoria *Co.Nexo SENAC*.\n\nAtualizamos seu Diário de Mentoria com as atividades e materiais do nosso encontro. Acesse seu Portal do Aluno para conferir e marcar suas tarefas concluídas:\n${link}`;
       window.open(gerarLinkWhatsApp(alunoAtual.whatsapp, msg), '_blank');
     }
 

@@ -310,6 +310,8 @@ function attachModelFallback(Model, collectionName) {
     return { deletedCount: antes - db[collectionName].length };
   };
 
+  Model.deleteOne = Model.deleteMany;
+
   Model.aggregate = async (pipeline = []) => {
     const db = carregarEstado();
     const list = db[collectionName] || [];

@@ -133,6 +133,25 @@
     <!-- ABA 1: AGENDAMENTO AUTÔNOMO -->
     <div id="aba-conteudo-agendar" class="flex flex-col gap-4">
 
+      <!-- Card Destaque: Atividades & Materiais enviados pela Consultora -->
+      <div id="card-resumo-atividades-home" class="hidden p-4 rounded-2xl bg-amber-50/90 border-2 border-secondary-container/40 shadow-sm flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-secondary-container text-white flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-xl">checklist</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-secondary-container block">Atividades da Mentoria</span>
+              <h3 class="font-headline font-bold text-xs text-on-surface" id="resumo-atividades-titulo">Sua consultora enviou tarefas práticas!</h3>
+            </div>
+          </div>
+          <button onclick="mudarAbaPortal('materiais')" class="px-3 py-2 rounded-xl bg-secondary-container hover:brightness-105 text-white font-headline font-bold text-xs shadow-sm transition-all shrink-0 flex items-center gap-1">
+            <span>Abrir Tarefas</span>
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Card: Meu Próximo Encontro Confirmado (Exibido quando já possui agendamento ativo) -->
       <div id="card-meu-agendamento-ativo" class="hidden p-5 rounded-2xl bg-white border-2 border-emerald-500 shadow-md flex-col gap-4">
         <div class="flex items-center justify-between">
@@ -343,21 +362,6 @@
             document.getElementById('badge-duracao').textContent = '2 horas';
             document.getElementById('icone-etapa').textContent = 'psychology';
             document.getElementById('subtitulo-portal-topo').textContent = 'Agende seu próximo encontro, acompanhe sua trilha e acesse suas metas e materiais.';
-
-            // Exibe barra de progresso e abas Minha Trilha / Metas & PDFs apenas para quem já passou da 1ª entrevista
-            const blocoProgresso = document.getElementById('bloco-progresso-portal');
-            blocoProgresso.classList.remove('hidden');
-            blocoProgresso.classList.add('flex');
-
-            const navAbas = document.getElementById('nav-portal-abas');
-            navAbas.classList.remove('hidden');
-            navAbas.classList.add('grid');
-
-            const resDiario = await apiFetch(`/diarios/portal/${token}`);
-            if (resDiario.sucesso) {
-              diarioMentorado = resDiario.dados;
-              renderizarTrilhaEMateriais(diarioMentorado.encontros || []);
-            }
           } else {
             tipoAtual = 'entrevista_1h';
             document.getElementById('subtitulo-etapa').textContent = '1º Encontro Obrigatório';
@@ -365,6 +369,28 @@
             document.getElementById('badge-duracao').textContent = '1 hora';
             document.getElementById('icone-etapa').textContent = 'quiz';
             document.getElementById('subtitulo-portal-topo').textContent = 'Escolha abaixo o melhor dia e horário para sua entrevista inicial obrigatória.';
+          }
+
+          // Sempre carrega o diário e exibe as abas (Agendar, Minha Trilha, Metas & PDFs)
+          const blocoProgresso = document.getElementById('bloco-progresso-portal');
+          blocoProgresso.classList.remove('hidden');
+          blocoProgresso.classList.add('flex');
+
+          const navAbas = document.getElementById('nav-portal-abas');
+          navAbas.classList.remove('hidden');
+          navAbas.classList.add('grid');
+
+          try {
+            const resDiario = await apiFetch(`/diarios/portal/${token}`);
+            if (resDiario.sucesso) {
+              diarioMentorado = resDiario.dados;
+              renderizarTrilhaEMateriais(diarioMentorado.encontros || []);
+            }
+          } catch (eDiario) {}
+
+          const abaUrl = new URLSearchParams(window.location.search).get('aba');
+          if (abaUrl === 'materiais' || abaUrl === 'trilha') {
+            mudarAbaPortal(abaUrl);
           }
 
           if (mentorado.bloqueadoPorAssiduidade) {
@@ -481,6 +507,21 @@
             </a>
           </div>
         `).join('');
+      }
+
+      // 4. Atualiza o card de destaque de atividades na aba principal
+      const cardResumoHome = document.getElementById('card-resumo-atividades-home');
+      const tituloResumoHome = document.getElementById('resumo-atividades-titulo');
+      if (cardResumoHome && (comMetas.length > 0 || todosArquivos.length > 0)) {
+        const totalTarefas = encontros.reduce((acc, e) => acc + ((e.checklistMetas || []).length), 0);
+        const concluidas = encontros.reduce((acc, e) => acc + ((e.checklistMetas || []).filter(m => m.concluida).length), 0);
+        if (totalTarefas > 0) {
+          tituloResumoHome.textContent = `${concluidas} de ${totalTarefas} atividade(s) concluída(s) • Clique para conferir`;
+        } else {
+          tituloResumoHome.textContent = `Você possui metas ou materiais disponíveis na sua trilha!`;
+        }
+        cardResumoHome.classList.remove('hidden');
+        cardResumoHome.classList.add('flex');
       }
     }
 

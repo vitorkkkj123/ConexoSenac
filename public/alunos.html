@@ -615,10 +615,8 @@
           window.__abaInicializada = true;
         }
 
-        const [resEmp, resAgendamentos] = await Promise.all([
-          apiFetch('/empreendedores'),
-          apiFetch('/agendamentos/todos?status=agendado').catch(() => ({ dados: [] }))
-        ]);
+        const resEmp = await apiFetch('/empreendedores');
+        const resAgendamentos = await apiFetch('/agendamentos/todos?status=agendado').catch(() => ({ dados: [] }));
 
         todosEmpreendedores = resEmp.dados || resEmp.itens || [];
         agendamentosAtivosPorAluno = {};
@@ -942,10 +940,17 @@
           })
         });
 
+        const empAtual = todosEmpreendedores.find(x => String(x._id) === String(id)) || {};
+
         // 2. Atualiza statusPrograma para 'em_mentoria' e salva a maturidade inicial
         await apiFetch(`/empreendedores/${id}`, {
           method: 'PUT',
           body: JSON.stringify({
+            nomeCompleto: empAtual.nomeCompleto,
+            cpf: empAtual.cpf,
+            whatsapp: empAtual.whatsapp,
+            email: empAtual.email,
+            negocio: empAtual.negocio,
             statusPrograma: 'em_mentoria',
             maturidadeInicial: notasIniciais,
             maturidade: notasIniciais

@@ -363,6 +363,60 @@ function attachModelFallback(Model, collectionName) {
   };
 }
 
+let modoServerlessAtivo = false;
+
+function isServerlessFallbackAtivo() {
+  return modoServerlessAtivo;
+}
+
+function exportarEstadoSync() {
+  const db = carregarEstado();
+  return {
+    entrepreneurs: db.entrepreneurs || [],
+    schedules: db.schedules || [],
+    diaries: db.diaries || []
+  };
+}
+
+function mesclarColecaoPorId(listaServidor = [], listaCliente = []) {
+  const mapa = new Map();
+  listaServidor.forEach(doc => {
+    if (doc && doc._id) mapa.set(String(doc._id), doc);
+  });
+  listaCliente.forEach(docCliente => {
+    if (!docCliente || !docCliente._id) return;
+    const id = String(docCliente._id);
+    const docSrv = mapa.get(id);
+    if (!docSrv) {
+      mapa.set(id, docCliente);
+    } else {
+      const tCliente = new Date(docCliente.updatedAt || 0).getTime();
+      const tSrv = new Date(docSrv.updatedAt || 0).getTime();
+      if (tCliente >= tSrv) {
+        mapa.set(id, { ...docSrv, ...docCliente });
+      }
+    }
+  });
+  return Array.from(mapa.values());
+}
+
+function mesclarEstadoSync(clienteState) {
+  if (!clienteState || typeof clienteState !== 'object') return;
+  const db = carregarEstado();
+  let alterou = false;
+
+  ['entrepreneurs', 'schedules', 'diaries'].forEach(col => {
+    if (Array.isArray(clienteState[col]) && clienteState[col].length > 0) {
+      db[col] = mesclarColecaoPorId(db[col] || [], clienteState[col]);
+      alterou = true;
+    }
+  });
+
+  if (alterou) {
+    salvarEstado(db);
+  }
+}
+
 function ativarModoServerlessFallback() {
   const User = require('../models/User');
   const Entrepreneur = require('../models/Entrepreneur');
@@ -376,7 +430,13 @@ function ativarModoServerlessFallback() {
   attachModelFallback(Schedule, 'schedules');
   attachModelFallback(MentorshipDiary, 'diaries');
   attachModelFallback(AuditLog, 'auditLogs');
+  modoServerlessAtivo = true;
   console.log('[Database] Modo Serverless Cloud Fallback (/tmp) ativado com sucesso.');
 }
 
-module.exports = { ativarModoServerlessFallback };
+module.exports = {
+  ativarModoServerlessFallback,
+  isServerlessFallbackAtivo,
+  exportarEstadoSync,
+  mesclarEstadoSync
+};

@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit');
 
 const apiRoutes = require('./routes/api');
 const connectDB = require('./config/database');
+const { isServerlessFallbackAtivo, exportarEstadoSync, mesclarEstadoSync } = require('./utils/serverlessStore');
 const errorHandler = require('./middlewares/errorHandler');
 const { NotFoundError } = require('./utils/errors');
 
@@ -48,6 +49,25 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api', async (req, res, next) => {
   try {
     await connectDB();
+
+    if (isServerlessFallbackAtivo()) {
+      const syncHeader = req.headers['x-conexo-sync'];
+      if (syncHeader && typeof syncHeader === 'string') {
+        try {
+          const decoded = Buffer.from(syncHeader, 'base64').toString('utf8');
+          mesclarEstadoSync(JSON.parse(decoded));
+        } catch (eSync) {}
+      }
+
+      const originalJson = res.json.bind(res);
+      res.json = (body) => {
+        if (body && typeof body === 'object' && !Array.isArray(body)) {
+          body._syncState = exportarEstadoSync();
+        }
+        return originalJson(body);
+      };
+    }
+
     next();
   } catch (err) {
     next(err);

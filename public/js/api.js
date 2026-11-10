@@ -104,6 +104,10 @@ async function apiFetch(endpoint, options = {}) {
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
+  const syncState = localStorage.getItem('conexo_sync_state');
+  if (syncState) {
+    headers['x-conexo-sync'] = syncState;
+  }
   const isPortalExterno = window.location.pathname.endsWith('agendar.html');
   if (!isPortalExterno && currentUser && currentUser.role) {
     headers['x-mock-role'] = currentUser.role;
@@ -116,6 +120,13 @@ async function apiFetch(endpoint, options = {}) {
     });
 
     const data = await response.json();
+
+    if (data && data._syncState) {
+      try {
+        const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data._syncState))));
+        localStorage.setItem('conexo_sync_state', b64);
+      } catch (eSync) {}
+    }
 
     if (!response.ok) {
       const errorMessage = data.erro || data.detalhes?.map(d => d.mensagem).join(', ') || 'Erro ao processar requisição';
